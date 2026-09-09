@@ -1,15 +1,29 @@
-// import LoginPage from "./pages/LoginPage";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-// function App() {
-//   return <LoginPage />;
-// }
-
-// export default App;
-
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
+import AttendancePage from "./pages/AttendancePage";
 
 function App() {
-  return <DashboardPage />;
+  return (
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route path="/dashboard" element={<DashboardPage />} />
+
+      <Route path="/attendance" element={<AttendancePage />} />
+
+      <Route
+        path="/"
+        element={<Navigate to="/login" replace />}
+      />
+
+      <Route
+        path="*"
+        element={<Navigate to="/login" replace />}
+      />
+    </Routes>
+  );
 }
 
 export default App;
