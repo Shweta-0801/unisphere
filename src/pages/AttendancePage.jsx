@@ -14,9 +14,7 @@ import SubjectDetails from "../components/attendance/SubjectDetails";
 function AttendancePage() {
   const [activeSection, setActiveSection] = useState("Overview");
 
-  const navigate = useNavigate();
-
-  const subjects = [
+  const [subjects, setSubjects] = useState([
     {
       id: 1,
       name: "Data Structures",
@@ -41,7 +39,9 @@ function AttendancePage() {
       attended: 15,
       total: 18
     }
-  ];
+  ]);
+
+  const navigate = useNavigate();
 
   const totalClasses = subjects.reduce(
     (total, subject) => total + subject.total,
@@ -56,7 +56,6 @@ function AttendancePage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      {/* Back Button */}
       <button
         onClick={() => navigate("/dashboard")}
         className="mb-6 text-blue-600 font-medium hover:underline"
@@ -64,10 +63,8 @@ function AttendancePage() {
         ← Back to Dashboard
       </button>
 
-      {/* Header */}
       <AttendanceHeader />
 
-      {/* Navigation */}
       <div className="mt-8">
         <AttendanceNavigation
           activeSection={activeSection}
@@ -75,7 +72,6 @@ function AttendancePage() {
         />
       </div>
 
-      {/* Overview */}
       {activeSection === "Overview" && (
         <>
           <OverallStats
@@ -89,7 +85,6 @@ function AttendancePage() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
               {subjects.map((subject) => (
                 <SubjectCard
                   key={subject.id}
@@ -98,33 +93,30 @@ function AttendancePage() {
                   total={subject.total}
                 />
               ))}
-
             </div>
           </div>
         </>
       )}
 
-      {/* Calendar */}
       {activeSection === "Calendar" && (
         <AttendanceCalendar />
       )}
 
-      {/* Record Attendance */}
       {activeSection === "Record Attendance" && (
-        <RecordAttendance />
+        <RecordAttendance
+          subjects={subjects}
+          setSubjects={setSubjects}
+        />
       )}
 
-      {/* Calculator */}
       {activeSection === "Calculator" && (
         <AttendanceCalculator />
       )}
 
-      {/* Predictor */}
       {activeSection === "Predictor" && (
         <AttendancePredictor />
       )}
 
-      {/* Subject Details */}
       {activeSection === "Subject Details" && (
         <SubjectDetails />
       )}
