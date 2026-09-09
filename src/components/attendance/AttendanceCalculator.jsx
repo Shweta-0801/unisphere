@@ -3,11 +3,10 @@ import { useState } from "react";
 function AttendanceCalculator() {
   const [attended, setAttended] = useState("");
   const [total, setTotal] = useState("");
-  const [requiredPercentage, setRequiredPercentage] = useState(75);
-
+  const [requiredPercentage, setRequiredPercentage] = useState("75");
   const [result, setResult] = useState(null);
 
-  function calculateClasses() {
+  function calculateAttendance() {
     const attendedClasses = Number(attended);
     const totalClasses = Number(total);
     const required = Number(requiredPercentage);
@@ -15,13 +14,11 @@ function AttendanceCalculator() {
     if (
       totalClasses <= 0 ||
       attendedClasses < 0 ||
-      attendedClasses > totalClasses ||
-      required <= 0 ||
-      required >= 100
+      attendedClasses > totalClasses
     ) {
       setResult({
         type: "error",
-        message: "Please enter valid values."
+        message: "Please enter valid attendance values."
       });
 
       return;
@@ -53,29 +50,26 @@ function AttendanceCalculator() {
     setResult({
       type: "result",
       currentPercentage: currentPercentage.toFixed(2),
-      classesNeeded: classesNeeded,
-      requiredPercentage: required
+      classesNeeded,
+      required
     });
   }
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6">
 
-      {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-gray-800">
           Attendance Calculator
         </h2>
 
         <p className="text-gray-500 mt-1">
-          Calculate how many classes you need to attend to reach your target.
+          Find out how many classes you need to attend to reach your target.
         </p>
       </div>
 
-      {/* Inputs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
-        {/* Attended */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Classes Attended
@@ -91,7 +85,6 @@ function AttendanceCalculator() {
           />
         </div>
 
-        {/* Total */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Total Classes
@@ -107,7 +100,6 @@ function AttendanceCalculator() {
           />
         </div>
 
-        {/* Required Percentage */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Required Attendance
@@ -129,15 +121,13 @@ function AttendanceCalculator() {
 
       </div>
 
-      {/* Calculate Button */}
       <button
-        onClick={calculateClasses}
+        onClick={calculateAttendance}
         className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
       >
         Calculate
       </button>
 
-      {/* Result */}
       {result && (
         <div className="mt-6 p-5 rounded-xl bg-blue-50">
 
@@ -155,7 +145,7 @@ function AttendanceCalculator() {
 
           {result.type === "result" && (
             <>
-              <p className="text-gray-500 text-sm">
+              <p className="text-sm text-gray-500">
                 Current Attendance
               </p>
 
@@ -170,7 +160,7 @@ function AttendanceCalculator() {
                 </span>{" "}
                 consecutive classes to reach{" "}
                 <span className="font-bold">
-                  {result.requiredPercentage}%
+                  {result.required}%
                 </span>.
               </p>
             </>
