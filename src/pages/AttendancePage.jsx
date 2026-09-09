@@ -118,7 +118,7 @@ function AttendancePage() {
       )}
 
       {activeSection === "Subject Details" && (
-        <SubjectDetails />
+        <SubjectDetails subjects={subjects}/>
       )}
 
     </div>
