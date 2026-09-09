@@ -43,6 +43,16 @@ function AttendancePage() {
     }
   ];
 
+  const totalClasses = subjects.reduce(
+    (total, subject) => total + subject.total,
+    0
+  );
+
+  const attendedClasses = subjects.reduce(
+    (total, subject) => total + subject.attended,
+    0
+  );
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
@@ -68,7 +78,10 @@ function AttendancePage() {
       {/* Overview */}
       {activeSection === "Overview" && (
         <>
-          <OverallStats />
+          <OverallStats
+            totalClasses={totalClasses}
+            attendedClasses={attendedClasses}
+          />
 
           <div className="mt-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
