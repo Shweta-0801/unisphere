@@ -13,34 +13,32 @@ function RecordAttendance({ subjects, setSubjects }) {
       return;
     }
 
-    const updatedSubjects = subjects.map((subject) => {
-      if (subject.id === Number(selectedSubject)) {
-        if (status === "present") {
-          return {
-            ...subject,
-            attended: subject.attended + 1,
-            total: subject.total + 1
-          };
-        }
+    const subjectId = Number(selectedSubject);
 
-        return {
-          ...subject,
-          total: subject.total + 1
-        };
+    const selectedSubjectData = subjects.find(
+      (subject) => subject.id === subjectId
+    );
+
+    const updatedSubjects = subjects.map((subject) => {
+      if (subject.id !== subjectId) {
+        return subject;
       }
 
-      return subject;
+      return {
+        ...subject,
+        attended:
+          status === "present"
+            ? subject.attended + 1
+            : subject.attended,
+        total: subject.total + 1
+      };
     });
 
     setSubjects(updatedSubjects);
 
-    const subject = subjects.find(
-      (item) => item.id === Number(selectedSubject)
-    );
-
     setMessage(
       `${status === "present" ? "Present" : "Absent"} marked for ${
-        subject.name
+        selectedSubjectData.name
       }.`
     );
 
@@ -57,12 +55,13 @@ function RecordAttendance({ subjects, setSubjects }) {
         </h2>
 
         <p className="text-gray-500 mt-1">
-          Mark your attendance for a class
+          Mark your attendance for a class.
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
 
+        {/* Subject */}
         <div className="mb-5">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Select Subject
@@ -70,7 +69,10 @@ function RecordAttendance({ subjects, setSubjects }) {
 
           <select
             value={selectedSubject}
-            onChange={(event) => setSelectedSubject(event.target.value)}
+            onChange={(event) => {
+              setSelectedSubject(event.target.value);
+              setMessage("");
+            }}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">
@@ -85,6 +87,7 @@ function RecordAttendance({ subjects, setSubjects }) {
           </select>
         </div>
 
+        {/* Status */}
         <div className="mb-5">
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Attendance Status
@@ -123,6 +126,7 @@ function RecordAttendance({ subjects, setSubjects }) {
           </div>
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
@@ -132,6 +136,7 @@ function RecordAttendance({ subjects, setSubjects }) {
 
       </form>
 
+      {/* Message */}
       {message && (
         <div className="mt-5 p-4 bg-blue-50 rounded-xl">
           <p className="text-blue-700 font-medium">
