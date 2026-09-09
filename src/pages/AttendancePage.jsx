@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AttendanceHeader from "../components/attendance/AttendanceHeader";
@@ -14,34 +14,49 @@ import SubjectDetails from "../components/attendance/SubjectDetails";
 function AttendancePage() {
   const [activeSection, setActiveSection] = useState("Overview");
 
-  const [subjects, setSubjects] = useState([
-    {
-      id: 1,
-      name: "Data Structures",
-      attended: 18,
-      total: 20
-    },
-    {
-      id: 2,
-      name: "Database Management",
-      attended: 16,
-      total: 20
-    },
-    {
-      id: 3,
-      name: "Java Programming",
-      attended: 19,
-      total: 22
-    },
-    {
-      id: 4,
-      name: "Computer Networks",
-      attended: 15,
-      total: 18
+  const [subjects, setSubjects] = useState(() => {
+    const savedSubjects = localStorage.getItem("attendanceSubjects");
+
+    if (savedSubjects) {
+      return JSON.parse(savedSubjects);
     }
-  ]);
+
+    return [
+      {
+        id: 1,
+        name: "Data Structures",
+        attended: 18,
+        total: 20
+      },
+      {
+        id: 2,
+        name: "Database Management",
+        attended: 16,
+        total: 20
+      },
+      {
+        id: 3,
+        name: "Java Programming",
+        attended: 19,
+        total: 22
+      },
+      {
+        id: 4,
+        name: "Computer Networks",
+        attended: 15,
+        total: 18
+      }
+    ];
+  });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem(
+      "attendanceSubjects",
+      JSON.stringify(subjects)
+    );
+  }, [subjects]);
 
   const totalClasses = subjects.reduce(
     (total, subject) => total + subject.total,
@@ -56,6 +71,7 @@ function AttendancePage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
+      {/* Back Button */}
       <button
         onClick={() => navigate("/dashboard")}
         className="mb-6 text-blue-600 font-medium hover:underline"
@@ -63,8 +79,10 @@ function AttendancePage() {
         ← Back to Dashboard
       </button>
 
+      {/* Header */}
       <AttendanceHeader />
 
+      {/* Navigation */}
       <div className="mt-8">
         <AttendanceNavigation
           activeSection={activeSection}
@@ -72,6 +90,7 @@ function AttendancePage() {
         />
       </div>
 
+      {/* Overview */}
       {activeSection === "Overview" && (
         <>
           <OverallStats
@@ -98,10 +117,12 @@ function AttendancePage() {
         </>
       )}
 
+      {/* Calendar */}
       {activeSection === "Calendar" && (
         <AttendanceCalendar />
       )}
 
+      {/* Record Attendance */}
       {activeSection === "Record Attendance" && (
         <RecordAttendance
           subjects={subjects}
@@ -109,16 +130,19 @@ function AttendancePage() {
         />
       )}
 
+      {/* Calculator */}
       {activeSection === "Calculator" && (
         <AttendanceCalculator />
       )}
 
+      {/* Predictor */}
       {activeSection === "Predictor" && (
         <AttendancePredictor />
       )}
 
+      {/* Subject Details */}
       {activeSection === "Subject Details" && (
-        <SubjectDetails subjects={subjects}/>
+        <SubjectDetails subjects={subjects} />
       )}
 
     </div>
