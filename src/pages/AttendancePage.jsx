@@ -1,57 +1,71 @@
+import AttendanceHeader from "../components/attendance/AttendanceHeader";
 import OverallStats from "../components/attendance/OverallStats";
 import SubjectCard from "../components/attendance/SubjectCard";
 import AttendanceCalendar from "../components/attendance/AttendanceCalendar";
 import AttendancePredictor from "../components/attendance/AttendancePredictor";
+import RecordAttendance from "../components/attendance/RecordAttendance";
+import AttendanceCalculator from "../components/attendance/AttendanceCalculator";
+import SubjectDetails from "../components/attendance/SubjectDetails";
 
 function AttendancePage() {
+  const subjects = [
+    {
+      id: 1,
+      name: "Data Structures",
+      attended: 18,
+      total: 20
+    },
+    {
+      id: 2,
+      name: "Database Management",
+      attended: 16,
+      total: 20
+    },
+    {
+      id: 3,
+      name: "Java Programming",
+      attended: 19,
+      total: 22
+    },
+    {
+      id: 4,
+      name: "Computer Networks",
+      attended: 15,
+      total: 18
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Attendance
-        </h1>
+      {/* Header */}
+      <AttendanceHeader />
 
-        <p className="text-gray-500 mt-2">
-          Track and manage your attendance
-        </p>
+      {/* Overall Statistics */}
+      <div className="mt-8">
+        <OverallStats />
       </div>
-
-      {/* Overall Attendance */}
-      <OverallStats />
 
       {/* Subject Attendance */}
       <div className="mt-8">
+
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">
           Subject-wise Attendance
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <SubjectCard
-            subject="Data Structures"
-            attended={18}
-            total={20}
-          />
 
-          <SubjectCard
-            subject="Database Management"
-            attended={16}
-            total={20}
-          />
+          {subjects.map((subject) => (
+            <SubjectCard
+              key={subject.id}
+              subject={subject.name}
+              attended={subject.attended}
+              total={subject.total}
+            />
+          ))}
 
-          <SubjectCard
-            subject="Java Programming"
-            attended={19}
-            total={22}
-          />
-
-          <SubjectCard
-            subject="Computer Networks"
-            attended={15}
-            total={18}
-          />
         </div>
+
       </div>
 
       {/* Calendar */}
@@ -59,9 +73,24 @@ function AttendancePage() {
         <AttendanceCalendar />
       </div>
 
+      {/* Record Attendance */}
+      <div className="mt-8">
+        <RecordAttendance />
+      </div>
+
+      {/* Attendance Calculator */}
+      <div className="mt-8">
+        <AttendanceCalculator />
+      </div>
+
       {/* Attendance Predictor */}
       <div className="mt-8">
         <AttendancePredictor />
+      </div>
+
+      {/* Subject Details */}
+      <div className="mt-8">
+        <SubjectDetails />
       </div>
 
     </div>
