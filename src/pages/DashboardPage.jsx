@@ -1,12 +1,9 @@
-import {
-  CalendarCheck,
-  MessageSquare,
-  Search,
-  BookOpen,
-  LogOut
-} from "lucide-react";
+import { CalendarCheck, MessageSquare, Search, BookOpen, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function DashboardPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gray-100">
 
@@ -24,7 +21,6 @@ function DashboardPage() {
 
       </nav>
 
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
 
@@ -38,7 +34,6 @@ function DashboardPage() {
             Your smart campus management platform
           </p>
         </div>
-
 
         {/* Module Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -58,12 +53,14 @@ function DashboardPage() {
               Check your attendance and track your classes.
             </p>
 
-            <button className="mt-5 text-blue-600 font-medium hover:underline">
+            <button
+              onClick={() => navigate("/attendance")}
+              className="mt-5 text-blue-600 font-medium hover:underline"
+            >
               Open Attendance →
             </button>
 
           </div>
-
 
           {/* Complaints */}
           <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
@@ -86,7 +83,6 @@ function DashboardPage() {
 
           </div>
 
-
           {/* Lost & Found */}
           <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
 
@@ -107,7 +103,6 @@ function DashboardPage() {
             </button>
 
           </div>
-
 
           {/* Notes */}
           <div className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
