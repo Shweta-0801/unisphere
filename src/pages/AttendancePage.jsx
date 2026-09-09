@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import AttendanceHeader from "../components/attendance/AttendanceHeader";
 import AttendanceNavigation from "../components/attendance/AttendanceNavigation";
@@ -12,6 +13,8 @@ import SubjectDetails from "../components/attendance/SubjectDetails";
 
 function AttendancePage() {
   const [activeSection, setActiveSection] = useState("Overview");
+
+  const navigate = useNavigate();
 
   const subjects = [
     {
@@ -43,8 +46,18 @@ function AttendancePage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="mb-6 text-blue-600 font-medium hover:underline"
+      >
+        ← Back to Dashboard
+      </button>
+
+      {/* Header */}
       <AttendanceHeader />
 
+      {/* Navigation */}
       <div className="mt-8">
         <AttendanceNavigation
           activeSection={activeSection}
@@ -52,6 +65,7 @@ function AttendancePage() {
         />
       </div>
 
+      {/* Overview */}
       {activeSection === "Overview" && (
         <>
           <OverallStats />
@@ -62,6 +76,7 @@ function AttendancePage() {
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
               {subjects.map((subject) => (
                 <SubjectCard
                   key={subject.id}
@@ -70,27 +85,33 @@ function AttendancePage() {
                   total={subject.total}
                 />
               ))}
+
             </div>
           </div>
         </>
       )}
 
+      {/* Calendar */}
       {activeSection === "Calendar" && (
         <AttendanceCalendar />
       )}
 
+      {/* Record Attendance */}
       {activeSection === "Record Attendance" && (
         <RecordAttendance />
       )}
 
+      {/* Calculator */}
       {activeSection === "Calculator" && (
         <AttendanceCalculator />
       )}
 
+      {/* Predictor */}
       {activeSection === "Predictor" && (
         <AttendancePredictor />
       )}
 
+      {/* Subject Details */}
       {activeSection === "Subject Details" && (
         <SubjectDetails />
       )}
