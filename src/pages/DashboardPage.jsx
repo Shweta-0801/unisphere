@@ -77,7 +77,10 @@ function DashboardPage() {
               Submit and track your campus complaints.
             </p>
 
-            <button className="mt-5 text-purple-600 font-medium hover:underline">
+            <button
+              onClick={() => navigate("/complaints")}
+              className="mt-5 text-purple-600 font-medium hover:underline"
+            >
               Open Complaints →
             </button>
 
@@ -98,7 +101,10 @@ function DashboardPage() {
               Report and find lost items around campus.
             </p>
 
-            <button className="mt-5 text-green-600 font-medium hover:underline">
+            <button
+              onClick={() => navigate("/lost-found")}
+              className="mt-5 text-green-600 font-medium hover:underline"
+            >
               Open Lost & Found →
             </button>
 
@@ -119,7 +125,10 @@ function DashboardPage() {
               Find and share useful study notes.
             </p>
 
-            <button className="mt-5 text-orange-600 font-medium hover:underline">
+            <button
+              onClick={() => navigate("/notes")}
+              className="mt-5 text-orange-600 font-medium hover:underline"
+            >
               Open Notes →
             </button>
 
