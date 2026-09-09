@@ -1,6 +1,10 @@
 function SubjectCard({ subject, attended, total }) {
-  const percentage = Math.round((attended / total) * 100);
   const missed = total - attended;
+
+  const percentage =
+    total > 0
+      ? Math.round((attended / total) * 100)
+      : 0;
 
   let status = "Good";
   let statusColor = "text-green-600";
@@ -20,6 +24,7 @@ function SubjectCard({ subject, attended, total }) {
     <div className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition">
 
       <div className="flex items-start justify-between">
+
         <div>
           <h3 className="text-xl font-semibold text-gray-800">
             {subject}
@@ -33,6 +38,7 @@ function SubjectCard({ subject, attended, total }) {
         <p className="text-2xl font-bold text-gray-800">
           {percentage}%
         </p>
+
       </div>
 
       {/* Progress Bar */}
@@ -45,7 +51,7 @@ function SubjectCard({ subject, attended, total }) {
         </div>
       </div>
 
-      {/* Statistics */}
+      {/* Attendance Information */}
       <div className="grid grid-cols-2 gap-4 mt-5">
 
         <div className="bg-green-50 rounded-xl p-3">
