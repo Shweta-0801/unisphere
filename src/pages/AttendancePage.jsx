@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 import AttendanceHeader from "../components/attendance/AttendanceHeader";
+import AttendanceNavigation from "../components/attendance/AttendanceNavigation";
 import OverallStats from "../components/attendance/OverallStats";
 import SubjectCard from "../components/attendance/SubjectCard";
 import AttendanceCalendar from "../components/attendance/AttendanceCalendar";
@@ -8,6 +11,8 @@ import AttendanceCalculator from "../components/attendance/AttendanceCalculator"
 import SubjectDetails from "../components/attendance/SubjectDetails";
 
 function AttendancePage() {
+  const [activeSection, setActiveSection] = useState("Overview");
+
   const subjects = [
     {
       id: 1,
@@ -38,60 +43,57 @@ function AttendancePage() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      {/* Header */}
       <AttendanceHeader />
 
-      {/* Overall Statistics */}
       <div className="mt-8">
-        <OverallStats />
+        <AttendanceNavigation
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+        />
       </div>
 
-      {/* Subject Attendance */}
-      <div className="mt-8">
+      {activeSection === "Overview" && (
+        <>
+          <OverallStats />
 
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-          Subject-wise Attendance
-        </h2>
+          <div className="mt-8">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Subject-wise Attendance
+            </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {subjects.map((subject) => (
+                <SubjectCard
+                  key={subject.id}
+                  subject={subject.name}
+                  attended={subject.attended}
+                  total={subject.total}
+                />
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
-          {subjects.map((subject) => (
-            <SubjectCard
-              key={subject.id}
-              subject={subject.name}
-              attended={subject.attended}
-              total={subject.total}
-            />
-          ))}
-
-        </div>
-
-      </div>
-
-      {/* Calendar */}
-      <div className="mt-8">
+      {activeSection === "Calendar" && (
         <AttendanceCalendar />
-      </div>
+      )}
 
-      {/* Record Attendance */}
-      <div className="mt-8">
+      {activeSection === "Record Attendance" && (
         <RecordAttendance />
-      </div>
+      )}
 
-      {/* Attendance Calculator */}
-      <div className="mt-8">
+      {activeSection === "Calculator" && (
         <AttendanceCalculator />
-      </div>
+      )}
 
-      {/* Attendance Predictor */}
-      <div className="mt-8">
+      {activeSection === "Predictor" && (
         <AttendancePredictor />
-      </div>
+      )}
 
-      {/* Subject Details */}
-      <div className="mt-8">
+      {activeSection === "Subject Details" && (
         <SubjectDetails />
-      </div>
+      )}
 
     </div>
   );
