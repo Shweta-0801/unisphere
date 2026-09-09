@@ -1,7 +1,6 @@
 function SubjectCard({ subject, attended, total }) {
-  const missed = total - attended;
-
   const percentage = Math.round((attended / total) * 100);
+  const missed = total - attended;
 
   let status = "Good";
   let statusColor = "text-green-600";
@@ -18,40 +17,35 @@ function SubjectCard({ subject, attended, total }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm p-6">
+    <div className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition">
 
-      {/* Subject Name */}
-      <div className="flex justify-between items-start">
+      <div className="flex items-start justify-between">
         <div>
           <h3 className="text-xl font-semibold text-gray-800">
             {subject}
           </h3>
 
-          <p className={`text-sm mt-1 font-medium ${statusColor}`}>
+          <p className={`text-sm font-medium mt-1 ${statusColor}`}>
             {status} attendance
           </p>
         </div>
 
-        <span className="text-2xl font-bold text-gray-800">
+        <p className="text-2xl font-bold text-gray-800">
           {percentage}%
-        </span>
+        </p>
       </div>
-
 
       {/* Progress Bar */}
       <div className="mt-5">
-
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full h-2 bg-gray-200 rounded-full">
           <div
-            className={`${progressColor} h-2 rounded-full`}
+            className={`h-2 rounded-full ${progressColor}`}
             style={{ width: `${percentage}%` }}
           ></div>
         </div>
-
       </div>
 
-
-      {/* Class Information */}
+      {/* Statistics */}
       <div className="grid grid-cols-2 gap-4 mt-5">
 
         <div className="bg-green-50 rounded-xl p-3">
@@ -63,7 +57,6 @@ function SubjectCard({ subject, attended, total }) {
             {attended}
           </p>
         </div>
-
 
         <div className="bg-red-50 rounded-xl p-3">
           <p className="text-sm text-gray-500">
@@ -77,11 +70,9 @@ function SubjectCard({ subject, attended, total }) {
 
       </div>
 
-
-      {/* Total Classes */}
-      <div className="mt-4 text-sm text-gray-500">
+      <p className="text-sm text-gray-500 mt-4">
         Total classes: {total}
-      </div>
+      </p>
 
     </div>
   );
