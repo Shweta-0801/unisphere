@@ -2,29 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   UNISPHERE LUXE - BURGUNDY + CREAM + CHAMPAGNE TAUPE PALETTE
+   Sophisticated editorial design meets modern academic SaaS.
+   ========================================================================== */
+
+:root {
+  /* Brand Core */
+  --primary-burgundy: #6B1E2D;
+  --dark-burgundy: #48121E;
+  --deep-wine: #351019;
+
+  /* Refined Champagne / Warm Taupe Accent */
+  --champagne-accent: #B8A08A;
+  --champagne-light: #D8CBBE;
+  --champagne-subtle: #EFEAE4;
+
+  /* Surfaces & Backgrounds */
+  --cream: #F8F3EA;
+  --cream-light: #FAF6F0;
+  --cream-dark: #EFE8DC;
+  --warm-white: #FFFDF8;
+
+  /* Typography */
+  --dark-text: #241A1C;
+  --muted-text: #75666A;
+
+  /* Borders & Dividers */
+  --light-border: #E5DCD4;
+
+  /* Functional Status */
+  --success: #4F7A5A;
+  --error: #A63D40;
+
+  /* Standard Element Defaults */
+  --bg-main: var(--cream);
+  --bg-surface: var(--warm-white);
+  --text-main: var(--dark-text);
+  --text-muted: var(--muted-text);
+  --border-subtle: var(--light-border);
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--dark-text);
+  background-color: var(--cream);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
 * {
   box-sizing: border-box;
 }
 
-:root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: #1f2937;
-  background: #f4f7fb;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+::selection {
+  background-color: #D8CBBE;
+  color: #351019;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #f4f7fb;
+  background-color: var(--cream);
+  color: var(--dark-text);
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font-family: inherit;
 }
 
@@ -37,7 +83,45 @@ button {
   width: 100%;
 }
 
-/* Modern Utility animations & helpers */
+/* ================= UTILITY CLASSES ================= */
+
+/* Standard UniSphere Button Classes */
+.unisphere-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.unisphere-btn-primary {
+  background-color: var(--primary-burgundy);
+  color: #ffffff;
+  border-color: var(--primary-burgundy);
+}
+
+.unisphere-btn-primary:hover {
+  background-color: var(--dark-burgundy);
+  border-color: var(--dark-burgundy);
+}
+
+.unisphere-btn-outline {
+  background-color: var(--warm-white);
+  color: var(--dark-text);
+  border-color: var(--light-border);
+}
+
+.unisphere-btn-outline:hover {
+  background-color: var(--cream);
+  border-color: var(--champagne-accent);
+  color: var(--primary-burgundy);
+}
+
+/* Elegant Animation Utilities */
 @keyframes fadeIn {
   from {
     opacity: 0;
