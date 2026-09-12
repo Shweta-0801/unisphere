@@ -5,50 +5,54 @@
    ========================================================================== */
 
 :root {
-  --att-primary: #2563eb;
-  --att-primary-hover: #1d4ed8;
-  --att-primary-light: #eff6ff;
-  --att-primary-border: #bfdbfe;
-  --att-primary-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #0284c7 100%);
-  --att-primary-glow: rgba(37, 99, 235, 0.18);
+  --att-primary: #6B1E2D;
+  --att-primary-hover: #48121E;
+  --att-primary-light: #FAF2F3;
+  --att-primary-border: #E5DCD4;
+  --att-primary-gradient: linear-gradient(135deg, #48121E 0%, #6B1E2D 50%, #351019 100%);
+  --att-primary-glow: rgba(107, 30, 45, 0.16);
 
-  --att-indigo-gradient: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
-  --att-emerald-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
-  --att-rose-gradient: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  --att-accent: #B8A08A;
+  --att-accent-light: #D8CBBE;
+  --att-accent-subtle: #EFEAE4;
 
-  --att-success: #10b981;
-  --att-success-hover: #059669;
-  --att-success-light: #ecfdf5;
-  --att-success-border: #a7f3d0;
-  --att-success-text: #065f46;
+  --att-indigo-gradient: linear-gradient(135deg, #48121E 0%, #6B1E2D 100%);
+  --att-emerald-gradient: linear-gradient(135deg, #3A5F44 0%, #4F7A5A 100%);
+  --att-rose-gradient: linear-gradient(135deg, #872E31 0%, #A63D40 100%);
 
-  --att-danger: #ef4444;
-  --att-danger-hover: #dc2626;
-  --att-danger-light: #fff1f2;
-  --att-danger-border: #fecdd3;
-  --att-danger-text: #9f1239;
+  --att-success: #4F7A5A;
+  --att-success-hover: #3A5F44;
+  --att-success-light: #F0F5F2;
+  --att-success-border: #C8DACD;
+  --att-success-text: #2D4C35;
 
-  --att-warning: #f59e0b;
-  --att-warning-light: #fffbeb;
-  --att-warning-border: #fde68a;
-  --att-warning-text: #92400e;
+  --att-danger: #A63D40;
+  --att-danger-hover: #872E31;
+  --att-danger-light: #FAF0F0;
+  --att-danger-border: #ECCBCB;
+  --att-danger-text: #682224;
 
-  --att-bg: #f4f7fb;
-  --att-surface: #ffffff;
-  --att-surface-subtle: #f8fafc;
-  --att-surface-alt: #f1f5f9;
-  --att-border: #e2e8f0;
-  --att-border-subtle: #edf2f7;
+  --att-warning: #B8A08A;
+  --att-warning-light: #FAF6F0;
+  --att-warning-border: #D8CBBE;
+  --att-warning-text: #75666A;
 
-  --att-text-main: #0f172a;
-  --att-text-muted: #64748b;
-  --att-text-subtle: #94a3b8;
+  --att-bg: #F8F3EA;
+  --att-surface: #FFFDF8;
+  --att-surface-subtle: #FAF6F0;
+  --att-surface-alt: #EFE8DC;
+  --att-border: #E5DCD4;
+  --att-border-subtle: #EFEAE4;
 
-  --att-shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --att-shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.06);
-  --att-shadow-md: 0 6px 14px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
-  --att-shadow-lg: 0 14px 28px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.05);
-  --att-shadow-xl: 0 24px 38px -6px rgba(15, 23, 42, 0.12), 0 8px 16px -4px rgba(15, 23, 42, 0.06);
+  --att-text-main: #241A1C;
+  --att-text-muted: #75666A;
+  --att-text-subtle: #B8A08A;
+
+  --att-shadow-xs: 0 1px 2px rgba(36, 26, 28, 0.04);
+  --att-shadow-sm: 0 2px 4px rgba(36, 26, 28, 0.06);
+  --att-shadow-md: 0 6px 14px -2px rgba(36, 26, 28, 0.08), 0 2px 4px -1px rgba(36, 26, 28, 0.04);
+  --att-shadow-lg: 0 14px 28px -4px rgba(36, 26, 28, 0.1), 0 4px 8px -2px rgba(36, 26, 28, 0.05);
+  --att-shadow-xl: 0 24px 38px -6px rgba(36, 26, 28, 0.12), 0 8px 16px -4px rgba(36, 26, 28, 0.06);
 
   --att-radius-xs: 6px;
   --att-radius-sm: 10px;
