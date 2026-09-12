@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
-
-import CampusMap from "./lostfound/CampusMap";
-import MyReportsPoints from "./lostfound/MyReportsPoints";
-import ReportItemForm from "./lostfound/ReportItemForm";
-
-
-// ============================================================
-// DATA
-// ============================================================
+import CampusMap from "./components/lostfound/CampusMap";
+import MyReportsPoints from "./components/lostfound/MyReportsPoints";
+import ReportItemForm from "./components/lostfound/ReportItemForm";
 
 const CURRENT_STUDENT = {
   name: "Aanvi",
@@ -15,7 +9,6 @@ const CURRENT_STUDENT = {
   department: "Computer Science & Engineering",
   semester: "4th Semester",
 };
-
 
 const CAMPUS_BUILDINGS = [
   {
@@ -83,7 +76,6 @@ const CAMPUS_BUILDINGS = [
   },
 ];
 
-
 const LOCATION_COORDINATES = {
   Library: { x: 50, y: 48 },
   "Turing Block": { x: 74, y: 28 },
@@ -93,11 +85,6 @@ const LOCATION_COORDINATES = {
   "Main Gate": { x: 18, y: 84 },
   "Sports Ground": { x: 86, y: 48 },
 };
-
-
-// ============================================================
-// DEFAULT REPORTS
-// ============================================================
 
 const DEFAULT_REPORTS = [
   {
@@ -161,11 +148,6 @@ const DEFAULT_REPORTS = [
   },
 ];
 
-
-// ============================================================
-// HELPER FUNCTIONS
-// ============================================================
-
 function formatTimeAgo(timestamp) {
   const diff = Math.floor(
     (Date.now() - timestamp) / (60 * 1000)
@@ -195,7 +177,6 @@ function formatTimeAgo(timestamp) {
     : `${days} days ago`;
 }
 
-
 function formatDate(timestamp) {
   return new Date(timestamp).toLocaleDateString(
     "en-IN",
@@ -209,23 +190,8 @@ function formatDate(timestamp) {
   );
 }
 
-
-// ============================================================
-// MAIN APP
-// ============================================================
-
 function App() {
-
-  // ----------------------------------------------------------
-  // NAVIGATION
-  // ----------------------------------------------------------
-
   const [activeSection, setActiveSection] = useState("map");
-
-
-  // ----------------------------------------------------------
-  // REPORTS
-  // ----------------------------------------------------------
 
   const [reports, setReports] = useState(() => {
     const saved = localStorage.getItem(
@@ -237,11 +203,6 @@ function App() {
       : DEFAULT_REPORTS;
   });
 
-
-  // ----------------------------------------------------------
-  // POINTS
-  // ----------------------------------------------------------
-
   const [points, setPoints] = useState(() => {
     const saved = localStorage.getItem(
       "unisphere_aanvi_points"
@@ -251,11 +212,6 @@ function App() {
       ? parseInt(saved, 10)
       : 900;
   });
-
-
-  // ----------------------------------------------------------
-  // REWARD
-  // ----------------------------------------------------------
 
   const [reward, setReward] = useState(() => {
     const saved = localStorage.getItem(
@@ -267,11 +223,6 @@ function App() {
       : null;
   });
 
-
-  // ----------------------------------------------------------
-  // MAP
-  // ----------------------------------------------------------
-
   const [mapFilter, setMapFilter] = useState("all");
 
   const [
@@ -279,17 +230,7 @@ function App() {
     setSelectedMarkerReport,
   ] = useState(null);
 
-
-  // ----------------------------------------------------------
-  // REPORT FILTER
-  // ----------------------------------------------------------
-
   const [reportsFilter, setReportsFilter] = useState("all");
-
-
-  // ----------------------------------------------------------
-  // FORM
-  // ----------------------------------------------------------
 
   const [formType, setFormType] = useState("lost");
 
@@ -305,11 +246,6 @@ function App() {
 
   const [formError, setFormError] = useState("");
 
-
-  // ==========================================================
-  // LOCAL STORAGE
-  // ==========================================================
-
   useEffect(() => {
     localStorage.setItem(
       "unisphere_lostfound_reports",
@@ -317,14 +253,12 @@ function App() {
     );
   }, [reports]);
 
-
   useEffect(() => {
     localStorage.setItem(
       "unisphere_aanvi_points",
       points.toString()
     );
   }, [points]);
-
 
   useEffect(() => {
     if (reward) {
@@ -335,24 +269,13 @@ function App() {
     }
   }, [reward]);
 
-
-  // ==========================================================
-  // REPORT EXPIRY
-  // ==========================================================
-
   const THREE_HOURS = 3 * 60 * 60 * 1000;
 
   const isReportExpired = (item) => {
     return Date.now() - item.createdAt > THREE_HOURS;
   };
 
-
-  // ==========================================================
-  // ACTIVE MAP REPORTS
-  // ==========================================================
-
   const activeMapReports = reports.filter((item) => {
-
     if (item.status === "resolved") {
       return false;
     }
@@ -372,13 +295,7 @@ function App() {
     return true;
   });
 
-
-  // ==========================================================
-  // MARK ITEM AS FOUND / RESOLVED
-  // ==========================================================
-
   const handleMarkAsFound = (reportId) => {
-
     const target = reports.find(
       (item) => item.id === reportId
     );
@@ -388,7 +305,6 @@ function App() {
     }
 
     const shouldAward = !target.pointsAwarded;
-
 
     setReports((current) =>
       current.map((item) =>
@@ -402,9 +318,7 @@ function App() {
       )
     );
 
-
     setSelectedMarkerReport((current) => {
-
       if (
         !current ||
         current.id !== reportId
@@ -419,7 +333,6 @@ function App() {
       };
     });
 
-
     if (shouldAward) {
       setPoints(
         (current) => current + 100
@@ -427,13 +340,7 @@ function App() {
     }
   };
 
-
-  // ==========================================================
-  // PHOTO UPLOAD
-  // ==========================================================
-
   const handlePhotoUpload = (e) => {
-
     const file = e.target.files[0];
 
     if (!file) {
@@ -449,15 +356,8 @@ function App() {
     reader.readAsDataURL(file);
   };
 
-
-  // ==========================================================
-  // CREATE REPORT
-  // ==========================================================
-
   const handleCreateReport = (e) => {
-
     e.preventDefault();
-
 
     if (!formItemName.trim()) {
       setFormError(
@@ -466,7 +366,6 @@ function App() {
       return;
     }
 
-
     if (!formDescription.trim()) {
       setFormError(
         "Please provide a description."
@@ -474,9 +373,7 @@ function App() {
       return;
     }
 
-
     setFormError("");
-
 
     const newReport = {
       id: `rep-${Date.now()}`,
@@ -492,12 +389,10 @@ function App() {
       pointsAwarded: false,
     };
 
-
     setReports((current) => [
       newReport,
       ...current,
     ]);
-
 
     setFormItemName("");
     setFormDescription("");
@@ -507,11 +402,6 @@ function App() {
     setActiveSection("map");
   };
 
-
-  // ==========================================================
-  // COUNTERS
-  // ==========================================================
-
   const resolvedCount = reports.filter(
     (item) => item.status === "resolved"
   ).length;
@@ -520,20 +410,12 @@ function App() {
 
   const totalReportsCount = reports.length;
 
-
-  // ==========================================================
-  // REWARD
-  // ==========================================================
-
   const isRewardExpired = reward
     ? Date.now() > reward.expiresAt
     : false;
 
-
   useEffect(() => {
-
     if (points >= 1000 && !reward) {
-
       const issuedAt = Date.now();
 
       const newReward = {
@@ -549,18 +431,10 @@ function App() {
 
       setReward(newReward);
     }
-
   }, [points, reward]);
-
-
-  // ==========================================================
-  // RENDER
-  // ==========================================================
 
   return (
     <div className="lostfound-container">
-
-      {/* TABS */}
 
       <div className="lostfound-tabs-nav">
 
@@ -577,7 +451,6 @@ function App() {
           Campus Map
         </button>
 
-
         <button
           className={`lostfound-tab-btn ${
             activeSection === "report"
@@ -591,7 +464,6 @@ function App() {
           Report Item
         </button>
 
-
         <button
           className={`lostfound-tab-btn ${
             activeSection === "my-reports"
@@ -604,7 +476,6 @@ function App() {
         >
           My Reports
         </button>
-
 
         <button
           className={`lostfound-tab-btn ${
@@ -620,11 +491,6 @@ function App() {
         </button>
 
       </div>
-
-
-      {/* =====================================================
-          CAMPUS MAP
-          ===================================================== */}
 
       {activeSection === "map" && (
         <CampusMap
@@ -651,11 +517,6 @@ function App() {
           }
         />
       )}
-
-
-      {/* =====================================================
-          REPORT FORM
-          ===================================================== */}
 
       {activeSection === "report" && (
         <ReportItemForm
@@ -686,11 +547,6 @@ function App() {
         />
       )}
 
-
-      {/* =====================================================
-          MY REPORTS
-          ===================================================== */}
-
       {activeSection === "my-reports" && (
         <MyReportsPoints
           activeSection={activeSection}
@@ -717,11 +573,6 @@ function App() {
           }
         />
       )}
-
-
-      {/* =====================================================
-          MY POINTS
-          ===================================================== */}
 
       {activeSection === "my-points" && (
         <MyReportsPoints
@@ -753,6 +604,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;
