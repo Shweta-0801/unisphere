@@ -1,64 +1,51 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard,
   CalendarCheck,
   MessageSquare,
   Search,
   BookOpen,
-  LogOut,
-  ExternalLink,
   Bell,
-  CheckCircle2,
   Clock,
-  MapPin,
   ChevronRight,
-  Menu,
-  X,
-  GraduationCap,
-  ArrowUpRight
+  Sparkles
 } from "lucide-react";
+import AppLayout from "../components/layout/AppLayout";
+import { useAuth } from "../context/AuthContext";
 
 function DashboardPage() {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-  const navItems = [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard", active: true },
-    { label: "Attendance Hub", icon: CalendarCheck, path: "/attendance" },
-    { label: "Complaints Portal", icon: MessageSquare, path: "/complaints" },
-    { label: "Lost & Found", icon: Search, path: "/lost-found" },
-    { label: "Study Notes", icon: BookOpen, path: "/notes" }
-  ];
+  const firstName = user?.name ? user.name.split(" ")[0] : "Student";
+  const deptText = user?.department || "Computer Science & Engineering";
+  const semText = user?.semester || "4th Semester";
 
   const modules = [
     {
       id: "attendance",
-      title: "Attendance Hub",
-      description: "Track lecture percentages, calculate safe bunks, and verify exam eligibility.",
+      title: "Attendance & Exam Hub",
+      description: "Track lecture percentages, calculate safe bunks, and verify end-semester exam eligibility.",
       icon: CalendarCheck,
-      color: "blue",
-      stat: "88.4% Overall",
+      stat: "88.4% Aggregate",
       route: "/attendance",
-      btnText: "Open Attendance →"
+      btnText: "Open Attendance Hub →"
     },
     {
       id: "complaints",
-      title: "Complaints & Redressal",
-      description: "Report hostel, lab, cafeteria, or academic issues with real-time tracking.",
+      title: "Grievances & Redressal",
+      description: "Report hostel, lab, cafeteria, or academic issues with transparent real-time tracking.",
       icon: MessageSquare,
-      color: "purple",
       stat: "0 Pending Tickets",
       route: "/complaints",
-      btnText: "Open Complaints →"
+      btnText: "Open Complaints Portal →"
     },
     {
       id: "lostfound",
       title: "Lost & Found Network",
-      description: "Post missing belongings or search found student items by campus zones.",
+      description: "Post missing belongings or inspect found student items plotted on the interactive campus map.",
       icon: Search,
-      color: "emerald",
       stat: "120+ Recovered",
       route: "/lost-found",
       btnText: "Open Lost & Found →"
@@ -66,10 +53,9 @@ function DashboardPage() {
     {
       id: "notes",
       title: "Study Notes & Circle",
-      description: "Access semester study resources, lecture summaries, and peer study groups.",
+      description: "Access semester study resources, unit summaries, and collaborate with peer study groups.",
       icon: BookOpen,
-      color: "amber",
-      stat: "450+ Uploads",
+      stat: "450+ Verified",
       route: "/notes",
       btnText: "Open Study Notes →"
     }
@@ -81,12 +67,12 @@ function DashboardPage() {
       subject: "Data Structures & Algorithms",
       code: "CS-301",
       faculty: "Dr. Rajesh Sharma",
-      room: "Room 302",
+      room: "Hall 302",
       status: "Attended"
     },
     {
       time: "11:15 AM",
-      subject: "DBMS Practical Lab",
+      subject: "DBMS Practical Laboratory",
       code: "CS-302L",
       faculty: "Prof. Sunita Rao",
       room: "Lab 4",
@@ -94,10 +80,10 @@ function DashboardPage() {
     },
     {
       time: "02:30 PM",
-      subject: "Computer Networks",
+      subject: "Computer Networks & Security",
       code: "CS-304",
       faculty: "Prof. Priya Nair",
-      room: "Hall 105",
+      room: "Auditorium 105",
       status: "Upcoming"
     }
   ];
@@ -114,447 +100,273 @@ function DashboardPage() {
       date: "Sep 09, 2026"
     },
     {
-      tag: "Notice",
-      title: "Cafeteria Block B renovation completed",
+      tag: "Academic",
+      title: "Hostel Wi-Fi Upgrade Completed in Block B",
       date: "Sep 08, 2026"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex font-sans antialiased">
-      {/* ================= SIDEBAR (DESKTOP) ================= */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 shrink-0 sticky top-0 h-screen justify-between z-30">
+    <AppLayout activePath="/dashboard">
+      {/* Top Header Bar */}
+      <header className="sticky top-0 z-20 bg-[#FFFDF8]/90 backdrop-blur-md border-b border-[#E5DCD4] h-16 flex items-center justify-between px-6 shrink-0">
         <div>
-          {/* Brand Header */}
-          <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
-              <GraduationCap size={20} />
-            </div>
-            <div>
-              <span className="font-extrabold text-base tracking-tight text-slate-900 block leading-none">
-                Uni<span className="text-blue-600">Sphere</span>
-              </span>
-              <span className="text-[10px] font-semibold text-slate-400">
-                Campus Student Portal
-              </span>
-            </div>
-          </div>
-
-          {/* Nav List */}
-          <div className="p-4 space-y-1">
-            <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Navigation
-            </div>
-
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.label}
-                  onClick={() => navigate(item.path)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                    item.active
-                      ? "bg-blue-50 text-blue-700 font-bold"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                  }`}
-                >
-                  <Icon size={17} className={item.active ? "text-blue-600" : "text-slate-400"} />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-
-            {/* Public Section */}
-            <div className="pt-5 px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Overview
-            </div>
-
-            <button
-              onClick={() => navigate("/")}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition cursor-pointer"
-            >
-              <div className="flex items-center gap-3">
-                <ExternalLink size={17} className="text-slate-400" />
-                <span>Public Home Page</span>
-              </div>
-              <ArrowUpRight size={14} className="text-slate-400" />
-            </button>
-          </div>
+          <h1 className="text-base font-black text-[#241A1C] leading-none">
+            Academic Dashboard
+          </h1>
+          <p className="text-[11px] font-bold text-[#75666A] mt-1">
+            {semText} • {deptText}
+          </p>
         </div>
 
-        {/* User Profile Box */}
-        <div className="p-4 border-t border-slate-100">
-          <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/70">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0">
-                AS
-              </div>
-              <div className="min-w-0">
-                <div className="text-xs font-bold text-slate-800 truncate">Alex Sharma</div>
-                <div className="text-[10px] text-slate-400 truncate">CSE • Semester 4</div>
-              </div>
-            </div>
-
+        {/* Top Actions */}
+        <div className="flex items-center gap-3">
+          <div className="relative">
             <button
-              onClick={() => navigate("/login")}
-              title="Logout"
-              className="text-slate-400 hover:text-red-600 p-1.5 rounded-lg hover:bg-white transition cursor-pointer shrink-0"
+              onClick={() => setNotificationsOpen(!notificationsOpen)}
+              className="p-2 rounded-xl text-[#75666A] hover:text-[#241A1C] hover:bg-[#FAF6F0] transition relative cursor-pointer"
             >
-              <LogOut size={16} />
+              <Bell size={18} />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#6B1E2D]" />
             </button>
-          </div>
-        </div>
-      </aside>
 
-      {/* ================= MOBILE SIDEBAR DRAWER ================= */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex md:hidden">
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs"
-          />
-          <div className="relative w-64 bg-white h-full flex flex-col justify-between p-4 z-10 shadow-2xl">
-            <div>
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
-                    <GraduationCap size={18} />
-                  </div>
-                  <span className="font-bold text-slate-900">UniSphere</span>
-                </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:bg-slate-100"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="mt-4 space-y-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={item.label}
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        navigate(item.path);
-                      }}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold ${
-                        item.active
-                          ? "bg-blue-50 text-blue-700 font-bold"
-                          : "text-slate-600 hover:bg-slate-50"
-                      }`}
-                    >
-                      <Icon size={16} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    navigate("/");
-                  }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 mt-4 border-t border-slate-100"
-                >
-                  <ExternalLink size={16} />
-                  <span>Public Home Page</span>
-                </button>
-              </div>
-            </div>
-
-            <button
-              onClick={() => navigate("/login")}
-              className="flex items-center gap-2 text-xs font-bold text-red-600 p-2.5 rounded-xl bg-red-50 hover:bg-red-100 transition"
-            >
-              <LogOut size={16} />
-              <span>Log Out</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MAIN WRAPPER ================= */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Navbar */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-2 -ml-2 rounded-lg text-slate-500 hover:bg-slate-100 md:hidden cursor-pointer"
-            >
-              <Menu size={20} />
-            </button>
-            <div>
-              <h1 className="text-base font-bold text-slate-900 leading-none">
-                Dashboard Overview
-              </h1>
-              <span className="text-[11px] text-slate-400">
-                Academic Year 2025–26 • Term II
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-200">
-              <Clock size={13} className="text-slate-400" />
-              <span>Thursday, Sep 10, 2026</span>
-            </div>
-
-            {/* Notification Bell */}
-            <div className="relative">
-              <button
-                onClick={() => setNotificationsOpen(!notificationsOpen)}
-                className="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center text-slate-600 transition cursor-pointer relative"
-              >
-                <Bell size={17} />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-600 rounded-full" />
-              </button>
-
-              {notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-4 z-50">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100 text-xs font-bold text-slate-900">
-                    <span>Notifications</span>
-                    <span className="text-[10px] text-blue-600 cursor-pointer">Clear</span>
-                  </div>
-                  <div className="mt-2 text-xs space-y-2 text-slate-600">
-                    <p className="p-2 rounded-lg bg-slate-50">
-                      Attendance logged for CS-301 (Present).
-                    </p>
-                    <p className="p-2 rounded-lg bg-slate-50">
-                      Midterm schedule announced.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <button
-              onClick={() => navigate("/login")}
-              className="text-xs font-semibold text-slate-600 hover:text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 transition cursor-pointer"
-            >
-              Sign Out
-            </button>
-          </div>
-        </header>
-
-        {/* Page Content */}
-        <main className="p-6 md:p-8 max-w-7xl w-full mx-auto space-y-8">
-          {/* CLEAN WELCOME STRIP */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
-            <div>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-                Welcome back, Alex 👋
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Here is your campus summary for today. Everything is running smoothly.
-              </p>
-            </div>
-
-            <button
-              onClick={() => navigate("/attendance")}
-              className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition shadow-xs cursor-pointer"
-            >
-              <CalendarCheck size={15} />
-              <span>Mark Today's Attendance</span>
-            </button>
-          </div>
-
-          {/* 4 DISTINCT METRIC CARDS (NON-REPETITIVE) */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Attendance Status
-              </div>
-              <div className="text-2xl font-black text-blue-600 mt-1">
-                88.4%
-              </div>
-              <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>Safely above 75%</span>
-              </div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Today's Lectures
-              </div>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                3 Classes
-              </div>
-              <div className="mt-1 text-xs text-slate-500">
-                1 attended • 2 upcoming
-              </div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Active Grievances
-              </div>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                0 Pending
-              </div>
-              <div className="mt-1 text-xs text-emerald-600 font-medium">
-                All campus tickets resolved
-              </div>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                Study Materials
-              </div>
-              <div className="text-2xl font-black text-slate-900 mt-1">
-                450+ Notes
-              </div>
-              <div className="mt-1 text-xs text-slate-500">
-                Semester 4 repository live
-              </div>
-            </div>
-          </div>
-
-          {/* 4 CORE GATEWAYS */}
-          <div>
-            <div className="mb-4">
-              <h3 className="text-base font-bold text-slate-900">
-                Campus Modules
-              </h3>
-              <p className="text-xs text-slate-500">
-                Quick access to all four integrated university tools.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {modules.map((m) => {
-                const Icon = m.icon;
-                return (
-                  <div
-                    key={m.id}
-                    className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-blue-200 hover:shadow-md transition flex flex-col justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center">
-                          <Icon size={20} className={`text-${m.color}-600`} />
-                        </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
-                          {m.stat}
-                        </span>
-                      </div>
-
-                      <h4 className="text-base font-bold text-slate-900">
-                        {m.title}
-                      </h4>
-
-                      <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                        {m.description}
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => navigate(m.route)}
-                      className="mt-5 w-full py-2 px-3 rounded-xl bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 font-semibold text-xs border border-slate-200 hover:border-blue-200 transition cursor-pointer flex items-center justify-center gap-1.5"
-                    >
-                      <span>{m.btnText}</span>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2-COLUMN SECTION: TODAY'S SCHEDULE + CAMPUS NOTICES */}
-          <div className="grid lg:grid-cols-12 gap-6">
-            {/* Today's Schedule */}
-            <div className="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <Clock size={16} className="text-blue-600" />
-                  <h4 className="text-sm font-bold text-slate-900">
-                    Today's Lecture Schedule
-                  </h4>
-                </div>
-                <span className="text-[11px] text-slate-400">
-                  3 Lectures Scheduled
-                </span>
-              </div>
-
-              <div className="mt-4 space-y-2.5">
-                {todayClasses.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-800">
-                          {item.subject}
-                        </span>
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white text-slate-500 border border-slate-200">
-                          {item.code}
-                        </span>
-                      </div>
-                      <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-3">
-                        <span>{item.time}</span>
-                        <span>•</span>
-                        <span>{item.room}</span>
-                        <span>•</span>
-                        <span>{item.faculty}</span>
-                      </div>
-                    </div>
-
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                        item.status === "Attended"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
-                    >
-                      {item.status}
+            {notificationsOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-20"
+                  onClick={() => setNotificationsOpen(false)}
+                />
+                <div className="absolute right-0 mt-2 w-80 bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl shadow-xl p-4 z-30 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="flex items-center justify-between pb-3 border-b border-[#E5DCD4]">
+                    <span className="text-xs font-black text-[#241A1C]">Campus Alerts</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F8F1F2] text-[#6B1E2D]">
+                      3 Unread
                     </span>
                   </div>
-                ))}
+                  <div className="mt-3 space-y-2.5">
+                    {notices.map((n, i) => (
+                      <div key={i} className="p-2.5 rounded-xl hover:bg-[#FAF6F0] transition text-xs border border-[#E5DCD4]/60">
+                        <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider block">
+                          {n.tag}
+                        </span>
+                        <span className="font-bold text-[#241A1C] block mt-0.5">{n.title}</span>
+                        <span className="text-[10px] text-[#75666A] mt-1 block">{n.date}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={() => navigate("/attendance")}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold transition shadow-xs active:scale-95 cursor-pointer"
+          >
+            <CalendarCheck size={14} />
+            <span>Attendance Hub</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Dashboard Body */}
+      <main className="p-6 md:p-8 space-y-8 max-w-7xl">
+        {/* Welcome Banner */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#48121E] via-[#6B1E2D] to-[#351019] text-white p-6 md:p-8 shadow-md shadow-[#6B1E2D]/15">
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 -mb-16 w-64 h-64 rounded-full bg-[#B8A08A]/10 blur-2xl pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#D8CBBE] text-xs font-bold border border-white/10">
+                <Sparkles size={13} className="text-[#B8A08A]" />
+                <span>Academic Overview • Spring 2026</span>
               </div>
+              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                Welcome back, {firstName}!
+              </h2>
+              <p className="text-xs md:text-sm text-[#D8CBBE] leading-relaxed">
+                Your academic attendance stands safely at <strong>88.4%</strong> across all enrolled subjects. No shortage warnings active.
+              </p>
             </div>
 
-            {/* Campus Notices */}
-            <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200 shadow-2xs">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <Bell size={16} className="text-amber-500" />
-                  <h4 className="text-sm font-bold text-slate-900">
-                    Campus Noticeboard
-                  </h4>
-                </div>
-                <span className="text-[11px] text-slate-400">
-                  Latest Announcements
-                </span>
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center">
+                <span className="text-2xl font-black text-white block leading-none">88.4%</span>
+                <span className="text-[10px] font-bold text-[#D8CBBE] uppercase tracking-wider mt-1 block">Overall</span>
               </div>
-
-              <div className="mt-4 space-y-2.5">
-                {notices.map((n, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-xl bg-slate-50 border border-slate-200/70"
-                  >
-                    <div className="flex items-center justify-between text-[10px] mb-1">
-                      <span className="font-bold text-blue-600 uppercase tracking-wider">
-                        {n.tag}
-                      </span>
-                      <span className="text-slate-400">{n.date}</span>
-                    </div>
-                    <p className="text-xs font-semibold text-slate-800 leading-snug">
-                      {n.title}
-                    </p>
-                  </div>
-                ))}
+              <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center">
+                <span className="text-2xl font-black text-[#D8CBBE] block leading-none">4/4</span>
+                <span className="text-[10px] font-bold text-[#D8CBBE] uppercase tracking-wider mt-1 block">Courses Safe</span>
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
+        </div>
+
+        {/* 4 Pillars Modules Grid */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-black text-[#241A1C] tracking-tight">
+                Campus Service Modules
+              </h3>
+              <p className="text-xs text-[#75666A]">
+                Centralized access to all campus services and student tools.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {modules.map((mod) => {
+              const Icon = mod.icon;
+              return (
+                <div
+                  key={mod.id}
+                  className="bg-[#FFFDF8] rounded-3xl p-6 border border-[#E5DCD4] shadow-xs hover:border-[#B8A08A] hover:shadow-sm transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-10 h-10 rounded-2xl bg-[#FAF6F0] text-[#6B1E2D] border border-[#E5DCD4] flex items-center justify-center">
+                        <Icon size={20} />
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#FAF6F0] text-[#75666A] border border-[#E5DCD4]">
+                        {mod.stat}
+                      </span>
+                    </div>
+
+                    <h4 className="text-base font-bold text-[#241A1C] mb-2">{mod.title}</h4>
+                    <p className="text-xs text-[#75666A] leading-relaxed mb-6">
+                      {mod.description}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => navigate(mod.route)}
+                    className="w-full py-2.5 rounded-xl bg-[#FAF6F0] hover:bg-[#6B1E2D] text-[#6B1E2D] hover:text-white border border-[#E5DCD4] hover:border-[#6B1E2D] text-xs font-bold transition-all flex items-center justify-center gap-1.5 group cursor-pointer"
+                  >
+                    <span>{mod.btnText}</span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Two Column Grid: Today's Classes & University Notices */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* Today's Schedule Card */}
+          <div className="lg:col-span-7 bg-[#FFFDF8] rounded-3xl p-6 md:p-7 border border-[#E5DCD4] shadow-xs space-y-5">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF6F0] text-[#6B1E2D] flex items-center justify-center border border-[#E5DCD4]">
+                  <Clock size={16} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-[#241A1C]">Today's Schedule</h3>
+                  <p className="text-[11px] font-semibold text-[#75666A]">
+                    Thursday • 3 Lectures Scheduled
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => navigate("/attendance")}
+                className="text-xs font-bold text-[#6B1E2D] hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>View Attendance</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {todayClasses.map((cls, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#E5DCD4] hover:bg-white transition"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-12 text-center shrink-0">
+                      <span className="text-[11px] font-black text-[#241A1C] block leading-tight">
+                        {cls.time.split(" ")[0]}
+                      </span>
+                      <span className="text-[10px] font-bold text-[#75666A] block">
+                        {cls.time.split(" ")[1]}
+                      </span>
+                    </div>
+
+                    <div className="w-px h-8 bg-[#E5DCD4]" />
+
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#FFFDF8] text-[#6B1E2D] border border-[#E5DCD4]">
+                          {cls.code}
+                        </span>
+                        <span className="text-xs font-bold text-[#241A1C] truncate">{cls.subject}</span>
+                      </div>
+                      <div className="text-[11px] text-[#75666A] mt-0.5">
+                        {cls.faculty} • {cls.room}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                      cls.status === "Attended"
+                        ? "bg-[#F0F5F2] text-[#4F7A5A] border border-[#C8DACD]"
+                        : "bg-[#FAF6F0] text-[#75666A] border border-[#E5DCD4]"
+                    }`}>
+                      {cls.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Notice Board & Important Updates */}
+          <div className="lg:col-span-5 bg-[#FFFDF8] rounded-3xl p-6 md:p-7 border border-[#E5DCD4] shadow-xs space-y-5">
+            <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#FAF6F0] text-[#6B1E2D] flex items-center justify-center border border-[#E5DCD4]">
+                  <Bell size={16} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-[#241A1C]">
+                    University Notices
+                  </h3>
+                  <p className="text-[11px] font-semibold text-[#75666A]">
+                    Dean & Department Bulletins
+                  </p>
+                </div>
+              </div>
+
+              <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">
+                Verified
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {notices.map((nt, idx) => (
+                <div
+                  key={idx}
+                  className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#E5DCD4] hover:bg-white transition"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#F8F1F2] px-2 py-0.5 rounded border border-[#E5DCD4]">
+                      {nt.tag}
+                    </span>
+                    <span className="text-[10px] text-[#75666A] font-semibold">{nt.date}</span>
+                  </div>
+                  <h5 className="text-xs font-bold text-[#241A1C] mt-2 leading-snug">
+                    {nt.title}
+                  </h5>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+    </AppLayout>
   );
 }
 
