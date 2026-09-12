@@ -7,7 +7,9 @@ import {
   RotateCcw,
   CheckCircle2,
   AlertCircle,
-  BookOpen
+  BookOpen,
+  Filter,
+  GraduationCap
 } from "lucide-react";
 
 import AttendanceHeader from "../components/attendance/AttendanceHeader";
@@ -21,9 +23,8 @@ import AttendanceCalculator from "../components/attendance/AttendanceCalculator"
 import SubjectDetails from "../components/attendance/SubjectDetails";
 import AddSubjectModal from "../components/attendance/AddSubjectModal";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
-
-// Pure CSS3 Stylesheet for the attendance module
-import "../components/attendance/Attendance.css";
+import AppLayout from "../components/layout/AppLayout";
+import { useAuth } from "../context/AuthContext";
 
 const DEFAULT_SUBJECTS = [
   {
@@ -205,54 +206,41 @@ function AttendancePage() {
   }
 
   return (
-    <div className="att-page">
-      {/* Top Navigation Bar */}
-      <header className="att-top-bar">
-        <div className="att-top-bar-inner">
-          <div className="att-top-bar-left">
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="att-back-btn"
-            >
-              <ArrowLeft style={{ width: "1rem", height: "1rem" }} />
-              <span>Dashboard</span>
-            </button>
-            <div className="att-breadcrumb-divider" />
-            <span className="att-breadcrumb-text">
-              Academic Performance • Attendance
-            </span>
+    <AppLayout activePath="/attendance">
+      {/* Top Sticky Header */}
+      <header className="sticky top-0 z-20 bg-[#FFFDF8]/95 backdrop-blur-md border-b border-[#E5DCD4] px-4 md:px-8 py-3.5 shadow-xs">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-[#6B1E2D] text-white flex items-center justify-center shadow-xs">
+              <GraduationCap size={18} />
+            </div>
+            <div>
+              <h1 className="text-sm font-black text-[#241A1C] leading-none">
+                Attendance & Performance Hub
+              </h1>
+              <p className="text-[11px] font-bold text-[#75666A] mt-0.5">
+                Academic Session 2026 • 75% Minimum Cutoff Defense
+              </p>
+            </div>
           </div>
 
-          <div>
+          <div className="flex items-center gap-2">
             <button
               onClick={() => {
                 setSubjectToEdit(null);
                 setIsAddModalOpen(true);
               }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.4rem",
-                padding: "0.5rem 1rem",
-                borderRadius: "var(--att-radius-sm)",
-                fontSize: "0.75rem",
-                fontWeight: 700,
-                color: "#ffffff",
-                background: "var(--att-primary)",
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 2px 6px rgba(37, 99, 235, 0.25)"
-              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold shadow-sm shadow-[#6B1E2D]/20 transition-all active:scale-95 cursor-pointer"
             >
-              <Plus style={{ width: "0.875rem", height: "0.875rem", strokeWidth: 2.5 }} />
-              <span>New Subject</span>
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>New Course</span>
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="att-main">
+      <main className="max-w-7xl mx-auto px-4 md:px-8 pt-6 space-y-6">
         
         {/* Header Hero Banner */}
         <AttendanceHeader
@@ -275,7 +263,7 @@ function AttendancePage() {
 
         {/* ================= OVERVIEW SECTION ================= */}
         {activeSection === "Overview" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+          <div className="space-y-8">
             {/* Overall Statistics & Gauge */}
             <OverallStats
               totalClasses={totalClasses}
@@ -283,50 +271,64 @@ function AttendancePage() {
               targetPercentage={targetPercentage}
             />
 
-            {/* Subject Section Controls */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div className="att-toolbar">
-                <div className="att-section-title-wrap">
-                  <h2>
-                    <span>Enrolled Course Attendance</span>
-                    <span className="att-count-pill">
-                      {filteredSubjects.length} {filteredSubjects.length === 1 ? "Subject" : "Subjects"}
+            {/* Courses Toolbar & Grid */}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-black text-[#241A1C] tracking-tight">
+                      Enrolled Courses
+                    </h2>
+                    <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-[#EFE8DC] text-[#75666A]">
+                      {filteredSubjects.length} {filteredSubjects.length === 1 ? "Course" : "Courses"}
                     </span>
-                  </h2>
-                  <p>
-                    Click + Present or + Absent on any card for instant 1-click recording.
+                  </div>
+                  <p className="text-xs text-[#75666A] mt-0.5">
+                    Click + Present or + Absent on any card for immediate 1-click attendance recording.
                   </p>
                 </div>
 
                 {/* Search & Filter pills */}
-                <div className="att-controls-group">
-                  <div className="att-search-input-wrap">
-                    <Search className="att-search-icon" />
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <div className="relative min-w-[200px]">
+                    <Search className="w-4 h-4 text-[#B8A08A] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
-                      placeholder="Search subject..."
+                      placeholder="Search courses..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="att-search-input"
+                      className="w-full pl-9 pr-3 py-2 bg-[#FFFDF8] border border-[#E5DCD4] rounded-xl text-xs font-medium text-[#241A1C] placeholder-[#75666A]/60 focus:outline-none focus:ring-2 focus:ring-[#B8A08A] focus:border-[#B8A08A] shadow-xs"
                     />
                   </div>
 
-                  <div className="att-filter-pill-box">
+                  <div className="inline-flex p-1 rounded-xl bg-[#EFE8DC]">
                     <button
                       onClick={() => setFilterStatus("all")}
-                      className={`att-filter-pill-btn all ${filterStatus === "all" ? "active" : ""}`}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                        filterStatus === "all"
+                          ? "bg-[#FFFDF8] text-[#6B1E2D] shadow-xs"
+                          : "text-[#75666A] hover:text-[#241A1C]"
+                      }`}
                     >
                       All
                     </button>
                     <button
                       onClick={() => setFilterStatus("safe")}
-                      className={`att-filter-pill-btn safe ${filterStatus === "safe" ? "active" : ""}`}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                        filterStatus === "safe"
+                          ? "bg-[#FFFDF8] text-[#4F7A5A] shadow-xs"
+                          : "text-[#75666A] hover:text-[#241A1C]"
+                      }`}
                     >
                       Safe
                     </button>
                     <button
                       onClick={() => setFilterStatus("risk")}
-                      className={`att-filter-pill-btn risk ${filterStatus === "risk" ? "active" : ""}`}
+                      className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                        filterStatus === "risk"
+                          ? "bg-[#FFFDF8] text-[#A63D40] shadow-xs"
+                          : "text-[#75666A] hover:text-[#241A1C]"
+                      }`}
                     >
                       At Risk
                     </button>
@@ -336,40 +338,26 @@ function AttendancePage() {
 
               {/* Subject Cards Grid */}
               {filteredSubjects.length === 0 ? (
-                <div style={{
-                  background: "var(--att-surface)",
-                  borderRadius: "var(--att-radius-xl)",
-                  padding: "3rem 1.5rem",
-                  textAlign: "center",
-                  border: "1px solid var(--att-border)",
-                  boxShadow: "var(--att-shadow-xs)"
-                }}>
-                  <BookOpen style={{ width: "2.5rem", height: "2.5rem", color: "var(--att-text-subtle)", margin: "0 auto 0.75rem auto" }} />
-                  <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>No subjects found</h3>
-                  <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", margin: "0.35rem auto 1rem auto", maxWidth: "20rem" }}>
-                    No courses match your query or filter. Try clearing the search or add a new subject.
+                <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-12 text-center shadow-sm">
+                  <BookOpen className="w-10 h-10 text-[#B8A08A] mx-auto mb-3" />
+                  <h3 className="text-base font-bold text-[#241A1C]">
+                    No courses found
+                  </h3>
+                  <p className="text-xs text-[#75666A] mt-1 max-w-sm mx-auto">
+                    No enrolled courses match your current search query or filter. Try resetting filters.
                   </p>
                   <button
                     onClick={() => {
                       setSearchQuery("");
                       setFilterStatus("all");
                     }}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      fontSize: "0.75rem",
-                      fontWeight: 700,
-                      color: "var(--att-primary)",
-                      background: "var(--att-primary-light)",
-                      border: "none",
-                      borderRadius: "var(--att-radius-sm)",
-                      cursor: "pointer"
-                    }}
+                    className="mt-4 px-4 py-2 bg-[#FAF2F3] text-[#6B1E2D] hover:bg-[#FAF2F3]/80 text-xs font-bold rounded-xl transition-all"
                   >
                     Reset Filters
                   </button>
                 </div>
               ) : (
-                <div className="att-subject-grid">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
                   {filteredSubjects.map((subject) => (
                     <SubjectCard
                       key={subject.id}
@@ -387,11 +375,18 @@ function AttendancePage() {
           </div>
         )}
 
-        {/* ================= CALENDAR SECTION ================= */}
-        {activeSection === "Calendar" && (
-          <AttendanceCalendar
+        {/* ================= PREDICTOR SECTION ================= */}
+        {activeSection === "Predictor" && (
+          <AttendancePredictor
             subjects={subjects}
-            onQuickLog={handleQuickLog}
+            targetPercentage={targetPercentage}
+          />
+        )}
+
+        {/* ================= CALCULATOR SECTION ================= */}
+        {activeSection === "Calculator" && (
+          <AttendanceCalculator
+            subjects={subjects}
           />
         )}
 
@@ -403,18 +398,11 @@ function AttendancePage() {
           />
         )}
 
-        {/* ================= CALCULATOR SECTION ================= */}
-        {activeSection === "Calculator" && (
-          <AttendanceCalculator
+        {/* ================= CALENDAR SECTION ================= */}
+        {activeSection === "Calendar" && (
+          <AttendanceCalendar
             subjects={subjects}
-          />
-        )}
-
-        {/* ================= PREDICTOR SECTION ================= */}
-        {activeSection === "Predictor" && (
-          <AttendancePredictor
-            subjects={subjects}
-            targetPercentage={targetPercentage}
+            onQuickLog={handleQuickLog}
           />
         )}
 
@@ -444,30 +432,30 @@ function AttendancePage() {
         subjectToEdit={subjectToEdit}
       />
 
-      {/* Floating Action Toast */}
+      {/* Floating Action Toast with Undo */}
       {toast && (
-        <div className="att-floating-toast">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#241A1C]/95 text-[#FFFDF8] shadow-2xl backdrop-blur-md border border-[#B8A08A]/30 text-xs font-medium animate-in fade-in slide-in-from-bottom-5 duration-200">
           {toast.type === "success" ? (
-            <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "#34d399", flexShrink: 0 }} />
+            <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
           ) : (
-            <AlertCircle style={{ width: "1rem", height: "1rem", color: "#60a5fa", flexShrink: 0 }} />
+            <AlertCircle className="w-4 h-4 text-[#B8A08A] shrink-0" />
           )}
-          <span style={{ fontSize: "0.75rem", fontWeight: 600 }}>{toast.message}</span>
+          <span>{toast.message}</span>
           {toast.canUndo && lastUndoAction && (
             <button
               onClick={() => {
                 lastUndoAction();
                 setToast(null);
               }}
-              className="att-undo-link"
+              className="ml-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#B8A08A]/20 hover:bg-[#B8A08A]/35 text-[#FFFDF8] font-bold text-[11px] transition-colors cursor-pointer"
             >
-              <RotateCcw style={{ width: "0.75rem", height: "0.75rem", display: "inline", verticalAlign: "middle", marginRight: "2px" }} />
+              <RotateCcw className="w-3 h-3" />
               Undo
             </button>
           )}
         </div>
       )}
-    </div>
+    </AppLayout>
   );
 }
 
