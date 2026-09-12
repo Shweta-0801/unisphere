@@ -1,16 +1,5 @@
 import { useState } from "react";
-import {
-  User,
-  ShieldCheck,
-  AlertCircle,
-  CheckCircle2,
-  XCircle,
-  Edit2,
-  Clock,
-  Plus,
-  BookOpen,
-  Calendar
-} from "lucide-react";
+import {User,ShieldCheck,AlertCircle,CheckCircle2,XCircle,Edit2,Clock,Plus,BookOpen,Calendar} from "lucide-react";
 
 function SubjectDetails({
   subjects,
