@@ -6,10 +6,10 @@ import {
   CheckCircle2,
   XCircle,
   Flame,
-  Info,
-  Sparkles
+  Info
 } from "lucide-react";
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
+import "./Attendance.css";
 
 function AttendanceCalendar({ subjects = [], onQuickLog }) {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -122,91 +122,100 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
   const todayStr = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="space-y-6">
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <div className="att-gauge-card" style={{ padding: "1.75rem 2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {/* Header Navigation */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E5DCD4]">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#FAF2F3] text-[#6B1E2D] flex items-center justify-center">
-              <CalendarIcon className="w-6 h-6" />
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--att-border)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "3rem", height: "3rem", borderRadius: "var(--att-radius-md)", background: "var(--att-primary-light)", color: "var(--att-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <CalendarIcon style={{ width: "1.5rem", height: "1.5rem" }} />
             </div>
             <div>
-              <h2 className="text-xl md:text-2xl font-black text-[#241A1C] tracking-tight">
-                Academic Calendar & Logs
+              <h2 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0, letterSpacing: "-0.02em" }}>
+                Academic Calendar &amp; Logs
               </h2>
-              <p className="text-xs md:text-sm text-[#75666A] mt-0.5">
+              <p style={{ fontSize: "0.8125rem", color: "var(--att-text-muted)", margin: "0.25rem 0 0 0" }}>
                 Inspect past lecture logs or register roll calls by day.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <button
               onClick={jumpToToday}
-              className="px-3.5 py-1.5 rounded-xl bg-[#F8F3EA] hover:bg-[#EFE8DC] text-[#241A1C] text-xs font-bold transition-all cursor-pointer"
+              style={{
+                padding: "0.45rem 0.85rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-bg)",
+                color: "var(--att-text-main)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "1px solid var(--att-border)",
+                cursor: "pointer"
+              }}
             >
               Today
             </button>
-            <div className="flex items-center rounded-xl bg-[#F8F3EA] p-1 border border-[#E5DCD4]">
+            <div style={{ display: "flex", alignItems: "center", borderRadius: "var(--att-radius-sm)", background: "var(--att-bg)", padding: "0.25rem", border: "1px solid var(--att-border)" }}>
               <button
                 onClick={prevMonth}
-                className="p-1 rounded-lg text-[#75666A] hover:bg-[#FFFDF8] hover:text-[#241A1C] transition-all cursor-pointer"
+                style={{ padding: "0.25rem", borderRadius: "4px", color: "var(--att-text-muted)", background: "transparent", border: "none", cursor: "pointer" }}
                 aria-label="Previous month"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft style={{ width: "1rem", height: "1rem" }} />
               </button>
-              <span className="px-3 text-xs font-bold text-[#241A1C] min-w-[120px] text-center">
+              <span style={{ padding: "0 0.75rem", fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-main)", minWidth: "110px", textAlign: "center" }}>
                 {monthNames[month]} {year}
               </span>
               <button
                 onClick={nextMonth}
-                className="p-1 rounded-lg text-[#75666A] hover:bg-[#FFFDF8] hover:text-[#241A1C] transition-all cursor-pointer"
+                style={{ padding: "0.25rem", borderRadius: "4px", color: "var(--att-text-muted)", background: "transparent", border: "none", cursor: "pointer" }}
                 aria-label="Next month"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight style={{ width: "1rem", height: "1rem" }} />
               </button>
             </div>
           </div>
         </div>
 
         {/* Streak & Status Legend Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-[#F8F3EA] border border-[#E5DCD4]">
-          <div className="inline-flex items-center gap-2 text-xs font-black text-[#6B1E2D]">
-            <Flame className="w-4 h-4 text-[#B8A08A] fill-[#B8A08A]" />
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem", padding: "0.85rem 1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-bg)", border: "1px solid var(--att-border)" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.75rem", fontWeight: 900, color: "var(--att-primary)" }}>
+            <Flame style={{ width: "1rem", height: "1rem", color: "var(--att-accent)" }} />
             <span>5-Day Perfect Attendance Streak!</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-[#75666A]">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#4F7A5A]" />
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1rem", fontSize: "0.75rem", fontWeight: 500, color: "var(--att-text-muted)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "50%", background: "var(--att-success)" }} />
               <span>Full Attendance</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#B8A08A]" />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "50%", background: "var(--att-accent)" }} />
               <span>Partial</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#A63D40]" />
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+              <span style={{ width: "0.625rem", height: "0.625rem", borderRadius: "50%", background: "var(--att-danger)" }} />
               <span>Absent</span>
             </div>
           </div>
         </div>
 
         {/* Calendar Grid & Side Inspector */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem" }}>
           
           {/* Calendar Grid */}
-          <div className="lg:col-span-7">
-            <div className="grid grid-cols-7 gap-1 text-center font-bold text-[11px] text-[#75666A] uppercase tracking-wider mb-2">
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.25rem", textAlign: "center", fontWeight: 700, fontSize: "11px", color: "var(--att-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.5rem" }}>
               {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => (
-                <div key={d} className="py-1">{d}</div>
+                <div key={d} style={{ padding: "0.25rem 0" }}>{d}</div>
               ))}
             </div>
 
-            <div className="grid grid-cols-7 gap-1.5">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: "0.35rem" }}>
               {/* Empty leading days */}
               {Array.from({ length: firstDayIndex }).map((_, i) => (
-                <div key={`empty-${i}`} className="h-12 rounded-xl bg-transparent" />
+                <div key={`empty-${i}`} style={{ height: "3rem", borderRadius: "var(--att-radius-sm)", background: "transparent" }} />
               ))}
 
               {/* Month days */}
@@ -221,26 +230,35 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
                   <button
                     key={dateString}
                     onClick={() => setSelectedDateStr(dateString)}
-                    className={`h-12 rounded-xl text-xs font-bold flex flex-col items-center justify-center relative transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-[#6B1E2D] text-white shadow-md shadow-[#6B1E2D]/20"
-                        : isToday
-                        ? "bg-[#FAF2F3] text-[#6B1E2D] border border-[#B8A08A]"
-                        : "bg-[#F8F3EA] text-[#241A1C] hover:bg-[#EFE8DC]"
-                    }`}
+                    style={{
+                      height: "3rem",
+                      borderRadius: "var(--att-radius-sm)",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "relative",
+                      cursor: "pointer",
+                      border: isToday ? "1px solid var(--att-accent)" : "1px solid transparent",
+                      background: isSelected ? "var(--att-primary)" : isToday ? "var(--att-primary-light)" : "var(--att-bg)",
+                      color: isSelected ? "#ffffff" : isToday ? "var(--att-primary)" : "var(--att-text-main)",
+                      boxShadow: isSelected ? "var(--att-shadow-sm)" : "none"
+                    }}
                   >
                     <span>{dayNum}</span>
 
                     {/* Status Dot */}
-                    <div className="mt-1">
+                    <div style={{ marginTop: "0.2rem" }}>
                       {status === "present" && (
-                        <span className={`block w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-[#4F7A5A]"}`} />
+                        <span style={{ display: "block", width: "5px", height: "5px", borderRadius: "50%", background: isSelected ? "#ffffff" : "var(--att-success)" }} />
                       )}
                       {status === "absent" && (
-                        <span className={`block w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-[#A63D40]"}`} />
+                        <span style={{ display: "block", width: "5px", height: "5px", borderRadius: "50%", background: isSelected ? "#ffffff" : "var(--att-danger)" }} />
                       )}
                       {status === "partial" && (
-                        <span className={`block w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-[#B8A08A]"}`} />
+                        <span style={{ display: "block", width: "5px", height: "5px", borderRadius: "50%", background: isSelected ? "#ffffff" : "var(--att-accent)" }} />
                       )}
                     </div>
                   </button>
@@ -250,14 +268,14 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
           </div>
 
           {/* Daily Inspector Panel */}
-          <div className="lg:col-span-5 bg-[#F8F3EA] rounded-2xl p-5 border border-[#E5DCD4] flex flex-col justify-between space-y-4">
+          <div style={{ background: "var(--att-bg)", borderRadius: "var(--att-radius-lg)", padding: "1.25rem", border: "1px solid var(--att-border)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1rem" }}>
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5DCD4]">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.75rem", borderBottom: "1px solid var(--att-border)" }}>
                 <div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-[#75666A]">
+                  <span style={{ fontSize: "10px", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                     Day Details
                   </span>
-                  <h3 className="text-sm font-bold text-[#241A1C]">
+                  <h3 style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
                     {new Date(selectedDateStr + "T00:00:00").toLocaleDateString(undefined, {
                       weekday: "short",
                       month: "short",
@@ -267,20 +285,20 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
                   </h3>
                 </div>
                 {selectedDateStr === todayStr && (
-                  <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#6B1E2D] text-white">
+                  <span style={{ padding: "0.15rem 0.5rem", fontSize: "10px", fontWeight: 700, borderRadius: "9999px", background: "var(--att-primary)", color: "#ffffff" }}>
                     Today
                   </span>
                 )}
               </div>
 
               {/* Subject Attendance for Selected Date */}
-              <div className="space-y-2 mt-4">
-                <p className="text-xs font-semibold text-[#75666A]">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginTop: "1rem" }}>
+                <p style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--att-text-muted)", margin: 0 }}>
                   Scheduled class status for this day:
                 </p>
 
                 {subjects.length === 0 ? (
-                  <p className="text-xs text-[#75666A] italic">No courses added yet.</p>
+                  <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", fontStyle: "italic", margin: 0 }}>No courses added yet.</p>
                 ) : (
                   subjects.map((sub) => {
                     const status = selectedRecord[sub.id];
@@ -288,39 +306,55 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
                     return (
                       <div
                         key={sub.id}
-                        className="bg-[#FFFDF8] p-2.5 rounded-xl border border-[#E5DCD4] flex items-center justify-between gap-2"
+                        style={{ background: "var(--att-surface)", padding: "0.65rem 0.75rem", borderRadius: "var(--att-radius-sm)", border: "1px solid var(--att-border)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}
                       >
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-[#241A1C] truncate">
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {sub.name}
                           </p>
-                          <span className="text-[10px] text-[#75666A] font-semibold uppercase">
+                          <span style={{ fontSize: "10px", color: "var(--att-text-muted)", fontWeight: 600, textTransform: "uppercase" }}>
                             {sub.code || "SUB"}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexShrink: 0 }}>
                           <button
                             onClick={() => toggleSubjectStatus(sub.id, "present")}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                              status === "present"
-                                ? "bg-[#4F7A5A] text-white"
-                                : "bg-[#F8F3EA] text-[#75666A] hover:bg-[#EFE8DC]"
-                            }`}
+                            style={{
+                              padding: "0.25rem 0.65rem",
+                              borderRadius: "4px",
+                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.25rem",
+                              cursor: "pointer",
+                              border: "none",
+                              background: status === "present" ? "var(--att-success)" : "var(--att-bg)",
+                              color: status === "present" ? "#ffffff" : "var(--att-text-muted)"
+                            }}
                           >
-                            <CheckCircle2 className="w-3 h-3" />
+                            <CheckCircle2 style={{ width: "0.75rem", height: "0.75rem" }} />
                             <span>Present</span>
                           </button>
 
                           <button
                             onClick={() => toggleSubjectStatus(sub.id, "absent")}
-                            className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                              status === "absent"
-                                ? "bg-[#A63D40] text-white"
-                                : "bg-[#F8F3EA] text-[#75666A] hover:bg-[#EFE8DC]"
-                            }`}
+                            style={{
+                              padding: "0.25rem 0.65rem",
+                              borderRadius: "4px",
+                              fontSize: "0.75rem",
+                              fontWeight: 700,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.25rem",
+                              cursor: "pointer",
+                              border: "none",
+                              background: status === "absent" ? "var(--att-danger)" : "var(--att-bg)",
+                              color: status === "absent" ? "#ffffff" : "var(--att-text-muted)"
+                            }}
                           >
-                            <XCircle className="w-3 h-3" />
+                            <XCircle style={{ width: "0.75rem", height: "0.75rem" }} />
                             <span>Absent</span>
                           </button>
                         </div>
@@ -331,27 +365,28 @@ function AttendanceCalendar({ subjects = [], onQuickLog }) {
               </div>
 
               {/* Day Note Section */}
-              <div className="mt-4">
-                <label className="block text-[11px] font-bold text-[#75666A] mb-1">
+              <div style={{ marginTop: "1rem" }}>
+                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, color: "var(--att-text-muted)", marginBottom: "0.25rem" }}>
                   Day Memo / Reason for Absence
                 </label>
-                <div className="flex gap-2">
+                <div style={{ display: "flex", gap: "0.5rem" }}>
                   <input
                     type="text"
                     value={selectedRecord.note || ""}
                     onChange={(e) => handleNoteChange(e.target.value)}
                     placeholder="e.g. Attended guest lecture, sick leave..."
-                    className="w-full px-3 py-1.5 bg-[#FFFDF8] border border-[#E5DCD4] rounded-xl text-xs text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A]"
+                    className="att-form-control"
+                    style={{ padding: "0.45rem 0.65rem", fontSize: "0.75rem" }}
                   />
-                  <span className="px-2.5 py-1.5 rounded-xl bg-[#EFE8DC] text-[#75666A] text-[10px] font-bold whitespace-nowrap flex items-center">
+                  <span style={{ padding: "0.45rem 0.65rem", borderRadius: "var(--att-radius-sm)", background: "var(--att-surface-alt)", color: "var(--att-text-muted)", fontSize: "10px", fontWeight: 700, whiteSpace: "nowrap", display: "flex", alignItems: "center" }}>
                     Saved
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[#E5DCD4] flex items-center gap-2 text-[11px] text-[#75666A]">
-              <Info className="w-3.5 h-3.5 text-[#B8A08A] shrink-0" />
+            <div style={{ paddingTop: "0.75rem", borderTop: "1px solid var(--att-border)", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "11px", color: "var(--att-text-muted)" }}>
+              <Info style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)", flexShrink: 0 }} />
               <span>Marking attendance here synchronizes directly with your course totals.</span>
             </div>
           </div>

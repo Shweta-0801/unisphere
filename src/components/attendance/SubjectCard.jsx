@@ -8,10 +8,9 @@ import {
   TrendingUp,
   User,
   ShieldCheck,
-  AlertCircle,
-  Clock,
-  Sparkles
+  AlertCircle
 } from "lucide-react";
+import "./Attendance.css";
 
 function SubjectCard({
   subject,
@@ -66,56 +65,52 @@ function SubjectCard({
   const radius = 22;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percentage)) / 100) * circumference;
-  const ringColor = isSafe ? "#4F7A5A" : percentage >= targetPercentage - 5 ? "#B8A08A" : "#A63D40";
+  const ringColor = isSafe ? "var(--att-success)" : percentage >= targetPercentage - 5 ? "var(--att-accent)" : "var(--att-danger)";
 
   return (
-    <div className="group relative bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 shadow-xs hover:border-[#B8A08A] hover:shadow-sm transition-all duration-300 flex flex-col justify-between">
+    <div className="att-subject-card">
       <div>
         {/* Top Header Row */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="px-2.5 py-1 text-[11px] font-black uppercase tracking-wider rounded-xl border bg-[#F8F1F2] text-[#6B1E2D] border-[#E5DCD4]">
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "1rem" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
+            <span className="att-code-tag blue">
               {subject.code || "SUB-101"}
             </span>
-            <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold rounded-xl ${
-              isSafe
-                ? "bg-[#F0F5F2] text-[#4F7A5A] border border-[#C8DACD]"
-                : "bg-[#FAF0F0] text-[#A63D40] border border-[#ECCBCB]"
-            }`}>
+            <span className={`att-pill-badge ${isSafe ? "safe" : "danger"}`} style={{ padding: "0.2rem 0.6rem", fontSize: "11px" }}>
               {isSafe ? (
-                <ShieldCheck className="w-3.5 h-3.5" />
+                <ShieldCheck style={{ width: "0.875rem", height: "0.875rem" }} />
               ) : (
-                <AlertCircle className="w-3.5 h-3.5" />
+                <AlertCircle style={{ width: "0.875rem", height: "0.875rem" }} />
               )}
               {percentage}%
             </span>
           </div>
 
           {/* Action Menu (Kebab) */}
-          <div className="relative">
+          <div className="att-card-menu-box" style={{ position: "relative" }}>
             <button
               onClick={() => setShowMenu(!showMenu)}
-              className="p-1.5 rounded-xl text-[#75666A] hover:text-[#241A1C] hover:bg-[#FAF6F0] transition-all cursor-pointer"
+              className="att-btn-dots"
               aria-label="Course options"
             >
-              <MoreVertical className="w-4 h-4" />
+              <MoreVertical style={{ width: "1rem", height: "1rem" }} />
             </button>
 
             {showMenu && (
               <>
                 <div
-                  className="fixed inset-0 z-20"
+                  style={{ position: "fixed", inset: 0, zIndex: 20 }}
                   onClick={() => setShowMenu(false)}
                 />
-                <div className="absolute right-0 mt-1 w-44 bg-[#FFFDF8] rounded-2xl shadow-xl border border-[#E5DCD4] py-1.5 z-30 animate-in fade-in zoom-in-95 duration-100">
+                <div className="att-dropdown-menu" style={{ position: "absolute", right: 0, marginTop: "0.25rem", width: "11rem", zIndex: 30 }}>
                   <button
                     onClick={() => {
                       setShowMenu(false);
                       onViewDetails(subject.id);
                     }}
-                    className="w-full px-3.5 py-2 text-left text-xs font-bold text-[#241A1C] hover:bg-[#FAF6F0] flex items-center gap-2 cursor-pointer"
+                    className="att-dropdown-item"
                   >
-                    <TrendingUp className="w-3.5 h-3.5 text-[#6B1E2D]" />
+                    <TrendingUp style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-primary)" }} />
                     Full Analytics
                   </button>
                   <button
@@ -123,20 +118,20 @@ function SubjectCard({
                       setShowMenu(false);
                       onEdit(subject);
                     }}
-                    className="w-full px-3.5 py-2 text-left text-xs font-bold text-[#75666A] hover:bg-[#FAF6F0] flex items-center gap-2 cursor-pointer"
+                    className="att-dropdown-item"
                   >
-                    <Edit2 className="w-3.5 h-3.5 text-[#B8A08A]" />
+                    <Edit2 style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
                     Edit Subject
                   </button>
-                  <div className="my-1 border-t border-[#E5DCD4]" />
+                  <div style={{ margin: "0.25rem 0", borderTop: "1px solid var(--att-border)" }} />
                   <button
                     onClick={() => {
                       setShowMenu(false);
                       onDelete(subject.id);
                     }}
-                    className="w-full px-3.5 py-2 text-left text-xs font-bold text-[#A63D40] hover:bg-[#FAF0F0] flex items-center gap-2 cursor-pointer"
+                    className="att-dropdown-item delete"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 style={{ width: "0.875rem", height: "0.875rem" }} />
                     Delete Subject
                   </button>
                 </div>
@@ -146,29 +141,30 @@ function SubjectCard({
         </div>
 
         {/* Subject Title & Faculty */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "0.75rem", marginBottom: "1rem" }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
             <h3
               onClick={() => onViewDetails(subject.id)}
-              className="text-base font-black text-[#241A1C] hover:text-[#6B1E2D] transition-colors cursor-pointer line-clamp-1"
+              className="att-card-subject-name"
               title={subject.name}
+              style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
             >
               {subject.name}
             </h3>
-            <div className="flex items-center gap-1.5 text-xs text-[#75666A] mt-1">
-              <User className="w-3.5 h-3.5 text-[#B8A08A] shrink-0" />
-              <span className="truncate">{subject.faculty || "Course Faculty"}</span>
+            <div className="att-card-faculty">
+              <User style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)", flexShrink: 0 }} />
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{subject.faculty || "Course Faculty"}</span>
             </div>
           </div>
 
           {/* Mini Ring Gauge */}
-          <div className="relative w-12 h-12 shrink-0 flex items-center justify-center">
-            <svg className="w-12 h-12 -rotate-90" viewBox="0 0 54 54">
+          <div style={{ position: "relative", width: "3rem", height: "3rem", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg style={{ width: "3rem", height: "3rem", transform: "rotate(-90deg)" }} viewBox="0 0 54 54">
               <circle
                 cx="27"
                 cy="27"
                 r={radius}
-                className="stroke-[#E5DCD4]"
+                stroke="var(--att-border)"
                 strokeWidth="4"
                 fill="transparent"
               />
@@ -185,95 +181,92 @@ function SubjectCard({
                 style={{ transition: "stroke-dashoffset 0.6s ease" }}
               />
             </svg>
-            <span className="absolute text-[11px] font-black text-[#241A1C]">
+            <span style={{ position: "absolute", fontSize: "11px", fontWeight: 900, color: "var(--att-text-main)" }}>
               {Math.round(percentage)}%
             </span>
           </div>
         </div>
 
         {/* Progress Bar & Class Ratios */}
-        <div className="space-y-2 mt-4">
-          <div className="flex justify-between text-xs">
-            <span className="font-semibold text-[#75666A]">
+        <div style={{ marginTop: "1rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem" }}>
+            <span style={{ fontWeight: 600, color: "var(--att-text-muted)" }}>
               Attendance Progress
             </span>
-            <span className="font-bold text-[#241A1C]">
-              {attended} <span className="text-[#75666A] font-normal">/ {total} sessions</span>
+            <span style={{ fontWeight: 700, color: "var(--att-text-main)" }}>
+              {attended} <span style={{ color: "var(--att-text-muted)", fontWeight: "normal" }}>/ {total} sessions</span>
             </span>
           </div>
 
-          <div className="relative w-full h-2.5 bg-[#EFE8DC] rounded-full overflow-hidden">
+          <div style={{ position: "relative", width: "100%", height: "0.625rem", background: "var(--att-surface-alt)", borderRadius: "9999px", overflow: "hidden", marginTop: "0.35rem" }}>
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isSafe ? "bg-[#4F7A5A]" : "bg-[#A63D40]"
-              }`}
-              style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
+              style={{
+                height: "100%",
+                borderRadius: "9999px",
+                transition: "all 0.5s ease",
+                backgroundColor: isSafe ? "var(--att-success)" : "var(--att-danger)",
+                width: `${Math.min(100, Math.max(0, percentage))}%`
+              }}
             />
             {/* Target 75% Pin */}
             <div
-              className="absolute top-0 bottom-0 w-0.5 bg-[#6B1E2D] z-10 opacity-70"
-              style={{ left: `${targetPercentage}%` }}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                width: "2px",
+                backgroundColor: "var(--att-primary)",
+                zIndex: 10,
+                opacity: 0.7,
+                left: `${targetPercentage}%`
+              }}
               title={`Target: ${targetPercentage}%`}
             />
           </div>
 
-          <div className="flex justify-between text-[10px] font-bold text-[#75666A]">
+          <div className="att-progress-labels">
             <span>0%</span>
-            <span className="text-[#6B1E2D]">Goal: {targetPercentage}%</span>
+            <span style={{ color: "var(--att-primary)", fontWeight: 700 }}>Goal: {targetPercentage}%</span>
             <span>100%</span>
           </div>
         </div>
 
         {/* Attended & Missed Chips */}
-        <div className="grid grid-cols-2 gap-2 mt-4">
-          <div className="p-2 rounded-xl bg-[#FAF6F0] border border-[#E5DCD4] flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#75666A]">Present</span>
-            <span className="text-xs font-black text-[#4F7A5A]">{attended}</span>
+        <div className="att-stat-chips-row">
+          <div className="att-stat-chip attended" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span className="att-stat-chip-label">Present</span>
+            <span className="att-stat-chip-val" style={{ fontSize: "0.875rem" }}>{attended}</span>
           </div>
-          <div className="p-2 rounded-xl bg-[#FAF6F0] border border-[#E5DCD4] flex items-center justify-between">
-            <span className="text-[11px] font-bold text-[#75666A]">Missed</span>
-            <span className="text-xs font-black text-[#A63D40]">{missed}</span>
+          <div className="att-stat-chip missed" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <span className="att-stat-chip-label">Missed</span>
+            <span className="att-stat-chip-val" style={{ fontSize: "0.875rem" }}>{missed}</span>
           </div>
         </div>
 
         {/* Smart Bunk / Catch-Up Advice Tag */}
-        <div className={`mt-3.5 px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-between ${
-          adviceType === "safe"
-            ? "bg-[#F0F5F2] text-[#2D4C35] border border-[#C8DACD]"
-            : adviceType === "warning"
-            ? "bg-[#FAF6F0] text-[#75666A] border border-[#D8CBBE]"
-            : "bg-[#FAF0F0] text-[#682224] border border-[#ECCBCB]"
-        }`}>
-          <span className="truncate">{adviceText}</span>
-          <span className="text-[10px] uppercase tracking-wider opacity-90 px-1.5 py-0.5 rounded bg-white/70 border border-current shrink-0 ml-1">
+        <div className={`att-bunk-chip ${adviceType}`}>
+          <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{adviceText}</span>
+          <span style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.9, padding: "0.1rem 0.35rem", borderRadius: "4px", background: "rgba(255,255,255,0.7)", border: "1px solid currentColor", flexShrink: 0, marginLeft: "0.25rem" }}>
             {adviceType === "safe" ? "Relax" : adviceType === "warning" ? "Caution" : "At Risk"}
           </span>
         </div>
       </div>
 
       {/* Quick Attendance Action Buttons */}
-      <div className="grid grid-cols-2 gap-2 mt-5 pt-4 border-t border-[#E5DCD4]">
+      <div className="att-quick-actions-bar">
         <button
           onClick={() => handleAction("present")}
-          className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-            justMarked === "present"
-              ? "bg-[#4F7A5A] text-white shadow-xs"
-              : "bg-[#F0F5F2] hover:bg-[#4F7A5A] text-[#4F7A5A] hover:text-white border border-[#C8DACD]"
-          }`}
+          className={`att-btn-quick present ${justMarked === "present" ? "marked" : ""}`}
         >
-          <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+          <Check style={{ width: "0.875rem", height: "0.875rem", strokeWidth: 2.5 }} />
           <span>{justMarked === "present" ? "Marked!" : "+ Present"}</span>
         </button>
 
         <button
           onClick={() => handleAction("absent")}
-          className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer ${
-            justMarked === "absent"
-              ? "bg-[#A63D40] text-white shadow-xs"
-              : "bg-[#FAF0F0] hover:bg-[#A63D40] text-[#A63D40] hover:text-white border border-[#ECCBCB]"
-          }`}
+          className={`att-btn-quick absent ${justMarked === "absent" ? "marked" : ""}`}
         >
-          <X className="w-3.5 h-3.5 stroke-[2.5]" />
+          <X style={{ width: "0.875rem", height: "0.875rem", strokeWidth: 2.5 }} />
           <span>{justMarked === "absent" ? "Marked!" : "+ Absent"}</span>
         </button>
       </div>

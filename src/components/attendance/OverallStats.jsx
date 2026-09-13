@@ -1,4 +1,5 @@
-import { CheckCircle, AlertTriangle, XCircle, ShieldCheck, TrendingUp, Sparkles, BookOpenCheck, Flame } from "lucide-react";
+import { CheckCircle, AlertTriangle, XCircle, ShieldCheck, TrendingUp, Sparkles, Flame } from "lucide-react";
+import "./Attendance.css";
 
 function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) {
   const missedClasses = Math.max(0, totalClasses - attendedClasses);
@@ -37,43 +38,39 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percentage)) / 100) * circumference;
 
-  let gaugeColor = "#4F7A5A"; // success
+  let gaugeColor = "var(--att-success)"; // success
   if (percentage < targetPercentage) {
-    gaugeColor = "#A63D40"; // error
+    gaugeColor = "var(--att-danger)"; // error
   } else if (percentage < targetPercentage + 5) {
-    gaugeColor = "#B8A08A"; // champagne taupe
+    gaugeColor = "var(--att-accent)"; // champagne taupe
   }
 
   return (
-    <div className="space-y-5">
+    <div className="att-overall-wrapper">
       {/* Main Grid: Hero Gauge Card + 4 Mini Stat Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <div className="att-overall-grid">
         
         {/* Hero Gauge & Standing Card */}
-        <div className="lg:col-span-5 bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-7 shadow-xs flex flex-col justify-between">
+        <div className="att-gauge-card">
           <div>
-            <div className="flex items-center justify-between gap-3 pb-4 border-b border-[#E5DCD4]">
+            <div className="att-card-header-flex" style={{ paddingBottom: "1rem", borderBottom: "1px solid var(--att-border)" }}>
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#B8A08A]">
+                <span className="att-card-tagline">
                   Aggregate Standing
                 </span>
-                <h3 className="text-lg font-black text-[#241A1C] mt-0.5">
+                <h3 style={{ fontSize: "1.125rem", fontWeight: 900, color: "var(--att-text-main)", margin: "0.25rem 0 0 0" }}>
                   Semester Performance
                 </h3>
               </div>
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
-                isSafe
-                  ? "bg-[#F0F5F2] text-[#4F7A5A] border border-[#C8DACD]"
-                  : "bg-[#FAF0F0] text-[#A63D40] border border-[#ECCBCB]"
-              }`}>
+              <span className={`att-pill-badge ${isSafe ? "safe" : "danger"}`}>
                 {isSafe ? (
                   <>
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#4F7A5A]" />
+                    <ShieldCheck style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-success)" }} />
                     Exam Eligible
                   </>
                 ) : (
                   <>
-                    <AlertTriangle className="w-3.5 h-3.5 text-[#A63D40]" />
+                    <AlertTriangle style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-danger)" }} />
                     Shortage Risk
                   </>
                 )}
@@ -81,15 +78,15 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
             </div>
 
             {/* Circular Gauge Center & Ratios */}
-            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-6 my-6">
+            <div className="att-gauge-body" style={{ flexWrap: "wrap", justifyContent: "space-around" }}>
               {/* Radial Progress Ring */}
-              <div className="relative w-32 h-32 shrink-0 flex items-center justify-center">
-                <svg className="w-32 h-32 -rotate-90" viewBox="0 0 120 120">
+              <div className="att-gauge-svg-wrap">
+                <svg viewBox="0 0 120 120">
                   <circle
                     cx="60"
                     cy="60"
                     r={radius}
-                    className="stroke-[#E5DCD4]"
+                    stroke="var(--att-border)"
                     strokeWidth="9"
                     fill="transparent"
                   />
@@ -106,47 +103,41 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
                     style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1)" }}
                   />
                 </svg>
-                <div className="absolute flex flex-col items-center justify-center text-center">
-                  <span className="text-3xl font-black text-[#241A1C] tracking-tight">
+                <div className="att-gauge-center-text">
+                  <span className="att-gauge-percentage">
                     {percentage}%
                   </span>
-                  <span className="text-[10px] font-bold text-[#75666A] uppercase tracking-wider">
+                  <span className="att-gauge-target-label">
                     Goal: {targetPercentage}%
                   </span>
                 </div>
               </div>
 
               {/* Ratios Breakdown */}
-              <div className="space-y-2.5 w-full sm:w-auto">
-                <div className="flex items-center justify-between sm:justify-start gap-3 text-xs">
-                  <span className="inline-flex items-center gap-1.5 font-medium text-[#75666A]">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#4F7A5A] shrink-0" />
-                    Present Ratio:
-                  </span>
-                  <span className="font-black text-[#241A1C]">
+              <div className="att-gauge-ratios" style={{ minWidth: "160px" }}>
+                <div className="att-ratio-item">
+                  <span className="att-dot emerald" />
+                  <span>Present Ratio:</span>
+                  <strong>
                     {totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 0}%
-                  </span>
+                  </strong>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-start gap-3 text-xs">
-                  <span className="inline-flex items-center gap-1.5 font-medium text-[#75666A]">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#A63D40] shrink-0" />
-                    Absence Ratio:
-                  </span>
-                  <span className="font-black text-[#241A1C]">
+                <div className="att-ratio-item">
+                  <span className="att-dot rose" />
+                  <span>Absence Ratio:</span>
+                  <strong>
                     {totalClasses > 0 ? Math.round((missedClasses / totalClasses) * 100) : 0}%
-                  </span>
+                  </strong>
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-start gap-3 text-xs">
-                  <span className="inline-flex items-center gap-1.5 font-medium text-[#75666A]">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#6B1E2D] shrink-0" />
-                    Target Clearance:
-                  </span>
-                  <span className={`font-black ${isSafe ? "text-[#4F7A5A]" : "text-[#A63D40]"}`}>
+                <div className="att-ratio-item">
+                  <span className="att-dot blue" />
+                  <span>Target Clearance:</span>
+                  <strong style={{ color: isSafe ? "var(--att-success)" : "var(--att-danger)" }}>
                     {percentage >= targetPercentage ? "+" : ""}
                     {(percentage - targetPercentage).toFixed(1)}%
-                  </span>
+                  </strong>
                 </div>
               </div>
             </div>
@@ -154,130 +145,120 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
 
           {/* Mini Linear Progress Bar */}
           <div>
-            <div className="w-full h-2 bg-[#EFE8DC] rounded-full overflow-hidden">
+            <div className="att-progress-linear-wrap">
               <div
-                className="h-full rounded-full transition-all duration-700"
+                className="att-progress-linear-fill"
                 style={{
                   width: `${Math.min(100, percentage)}%`,
                   backgroundColor: gaugeColor
                 }}
               />
             </div>
-            <div className="flex justify-between text-[10px] font-bold text-[#75666A] mt-1.5">
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", fontWeight: 700, color: "var(--att-text-muted)", marginTop: "0.35rem" }}>
               <span>0%</span>
-              <span className="text-[#6B1E2D]">{targetPercentage}% Passing Cutoff</span>
+              <span style={{ color: "var(--att-primary)" }}>{targetPercentage}% Passing Cutoff</span>
               <span>100%</span>
             </div>
           </div>
         </div>
 
         {/* 4 Crisp Metric Cards */}
-        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="att-stats-4col">
           
           {/* Attended Card */}
-          <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#75666A]">
+          <div className="att-metric-card-clean">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                 Classes Attended
               </span>
-              <div className="w-9 h-9 rounded-2xl bg-[#F0F5F2] text-[#4F7A5A] border border-[#C8DACD] flex items-center justify-center">
-                <CheckCircle className="w-4 h-4" />
+              <div className="icon-wrap" style={{ background: "var(--att-success-light)", color: "var(--att-success)", border: "1px solid var(--att-success-border)" }}>
+                <CheckCircle style={{ width: "1rem", height: "1rem" }} />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-[#241A1C]">
-                  {attendedClasses}
-                </span>
-                <span className="text-xs font-bold text-[#4F7A5A]">
-                  {totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 0}% rate
-                </span>
-              </div>
-              <p className="text-xs text-[#75666A] mt-1">
-                Completed lecture & practical sessions
-              </p>
+            <div className="val-row">
+              <span className="val-num">
+                {attendedClasses}
+              </span>
+              <span className="val-sub" style={{ color: "var(--att-success)" }}>
+                {totalClasses > 0 ? Math.round((attendedClasses / totalClasses) * 100) : 0}% rate
+              </span>
             </div>
+            <p className="card-desc">
+              Completed lecture &amp; practical sessions
+            </p>
           </div>
 
           {/* Missed Card */}
-          <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#75666A]">
+          <div className="att-metric-card-clean">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                 Classes Missed
               </span>
-              <div className="w-9 h-9 rounded-2xl bg-[#FAF0F0] text-[#A63D40] border border-[#ECCBCB] flex items-center justify-center">
-                <XCircle className="w-4 h-4" />
+              <div className="icon-wrap" style={{ background: "var(--att-danger-light)", color: "var(--att-danger)", border: "1px solid var(--att-danger-border)" }}>
+                <XCircle style={{ width: "1rem", height: "1rem" }} />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-[#241A1C]">
-                  {missedClasses}
-                </span>
-                <span className="text-xs font-bold text-[#A63D40]">
-                  {totalClasses > 0 ? Math.round((missedClasses / totalClasses) * 100) : 0}% missed
-                </span>
-              </div>
-              <p className="text-xs text-[#75666A] mt-1">
-                Absences, leaves, and missed roll calls
-              </p>
+            <div className="val-row">
+              <span className="val-num">
+                {missedClasses}
+              </span>
+              <span className="val-sub" style={{ color: "var(--att-danger)" }}>
+                {totalClasses > 0 ? Math.round((missedClasses / totalClasses) * 100) : 0}% missed
+              </span>
             </div>
+            <p className="card-desc">
+              Absences, leaves, and missed roll calls
+            </p>
           </div>
 
           {/* Total Classes Card */}
-          <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#75666A]">
+          <div className="att-metric-card-clean">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                 Total Classes
               </span>
-              <div className="w-9 h-9 rounded-2xl bg-[#FAF6F0] text-[#6B1E2D] border border-[#E5DCD4] flex items-center justify-center">
-                <TrendingUp className="w-4 h-4" />
+              <div className="icon-wrap" style={{ background: "var(--att-surface-subtle)", color: "var(--att-primary)", border: "1px solid var(--att-border)" }}>
+                <TrendingUp style={{ width: "1rem", height: "1rem" }} />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-[#241A1C]">
-                  {totalClasses}
-                </span>
-                <span className="text-xs font-bold text-[#6B1E2D]">
-                  Conducted
-                </span>
-              </div>
-              <p className="text-xs text-[#75666A] mt-1">
-                Total delivered sessions this term
-              </p>
+            <div className="val-row">
+              <span className="val-num">
+                {totalClasses}
+              </span>
+              <span className="val-sub" style={{ color: "var(--att-primary)" }}>
+                Conducted
+              </span>
             </div>
+            <p className="card-desc">
+              Total delivered sessions this term
+            </p>
           </div>
 
           {/* Safe Bunk Buffer / Remedial Required Card */}
-          <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-5 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#75666A]">
+          <div className="att-metric-card-clean">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                 {isSafe ? "Safe Bunk Allowance" : "Catch-Up Classes"}
               </span>
-              <div className={`w-9 h-9 rounded-2xl flex items-center justify-center border ${
-                isSafe
-                  ? "bg-[#FAF6F0] text-[#B8A08A] border-[#D8CBBE]"
-                  : "bg-[#FAF0F0] text-[#A63D40] border-[#ECCBCB]"
-              }`}>
-                {isSafe ? <Sparkles className="w-4 h-4" /> : <Flame className="w-4 h-4" />}
+              <div className="icon-wrap" style={{
+                background: isSafe ? "var(--att-surface-subtle)" : "var(--att-danger-light)",
+                color: isSafe ? "var(--att-accent)" : "var(--att-danger)",
+                border: isSafe ? "1px solid var(--att-warning-border)" : "1px solid var(--att-danger-border)"
+              }}>
+                {isSafe ? <Sparkles style={{ width: "1rem", height: "1rem" }} /> : <Flame style={{ width: "1rem", height: "1rem" }} />}
               </div>
             </div>
-            <div className="mt-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl font-black text-[#241A1C]">
-                  {isSafe ? safeBunksCount : classesNeededCount}
-                </span>
-                <span className={`text-xs font-bold ${
-                  isSafe ? "text-[#4F7A5A]" : "text-[#A63D40]"
-                }`}>
-                  {isSafe ? "Classes can be skipped" : "Consecutive needed"}
-                </span>
-              </div>
-              <p className="text-xs text-[#75666A] mt-1">
-                {isSafe ? `Without dropping below ${targetPercentage}%` : "To restore standard eligibility"}
-              </p>
+            <div className="val-row">
+              <span className="val-num">
+                {isSafe ? safeBunksCount : classesNeededCount}
+              </span>
+              <span className="val-sub" style={{ color: isSafe ? "var(--att-success)" : "var(--att-danger)" }}>
+                {isSafe ? "Classes can be skipped" : "Consecutive needed"}
+              </span>
             </div>
+            <p className="card-desc">
+              {isSafe ? `Without dropping below ${targetPercentage}%` : "To restore standard eligibility"}
+            </p>
           </div>
 
         </div>
@@ -285,37 +266,36 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
       </div>
 
       {/* Smart Academic Advisor Banner */}
-      <div className={`p-4 md:p-5 rounded-2xl border flex items-start gap-4 transition-all ${
-        advisorType === "safe"
-          ? "bg-[#F0F5F2] border-[#C8DACD] text-[#2D4C35]"
-          : advisorType === "warning"
-          ? "bg-[#FAF6F0] border-[#D8CBBE] text-[#75666A]"
-          : "bg-[#FAF0F0] border-[#ECCBCB] text-[#682224]"
-      }`}>
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-          advisorType === "safe"
-            ? "bg-white text-[#4F7A5A] border border-[#C8DACD]"
-            : advisorType === "warning"
-            ? "bg-white text-[#B8A08A] border border-[#D8CBBE]"
-            : "bg-white text-[#A63D40] border border-[#ECCBCB]"
-        }`}>
+      <div className={`att-advisor-banner ${advisorType}`}>
+        <div className="att-advisor-icon" style={{
+          background: "#ffffff",
+          color: advisorType === "safe" ? "var(--att-success)" : advisorType === "warning" ? "var(--att-accent)" : "var(--att-danger)",
+          border: `1px solid ${advisorType === "safe" ? "var(--att-success-border)" : advisorType === "warning" ? "var(--att-warning-border)" : "var(--att-danger-border)"}`,
+          width: "2.5rem",
+          height: "2.5rem",
+          borderRadius: "var(--att-radius-md)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0
+        }}>
           {advisorType === "safe" ? (
-            <ShieldCheck className="w-5 h-5" />
+            <ShieldCheck style={{ width: "1.25rem", height: "1.25rem" }} />
           ) : (
-            <AlertTriangle className="w-5 h-5" />
+            <AlertTriangle style={{ width: "1.25rem", height: "1.25rem" }} />
           )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h4 className="text-sm font-black tracking-tight text-[#241A1C]">
-              Institutional Attendance Guidelines & Insights
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
+            <h4 className="att-advisor-title">
+              Institutional Attendance Guidelines &amp; Insights
             </h4>
-            <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/70 border border-current">
+            <span style={{ fontSize: "10px", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em", padding: "0.15rem 0.5rem", borderRadius: "9999px", background: "rgba(255,255,255,0.7)", border: "1px solid currentColor" }}>
               {advisorType === "safe" ? "Safe Zone" : advisorType === "warning" ? "Caution" : "Action Required"}
             </span>
           </div>
-          <p className="text-xs md:text-sm mt-1 leading-relaxed opacity-90">
+          <p className="att-advisor-text">
             {advisorMessage}
           </p>
         </div>

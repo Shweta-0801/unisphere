@@ -9,6 +9,7 @@ import {
   Zap,
   Info
 } from "lucide-react";
+import "./Attendance.css";
 
 function AttendanceCalculator({ subjects = [] }) {
   const [mode, setMode] = useState("subject"); // 'subject' | 'custom'
@@ -63,48 +64,60 @@ function AttendanceCalculator({ subjects = [] }) {
   const enrolledCourseName = selectedSub ? selectedSub.name : "Custom";
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Top Banner & Mode Selector */}
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-8 shadow-sm transition-all">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E5DCD4]">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#FAF2F3] text-[#6B1E2D] flex items-center justify-center shadow-xs">
-              <Calculator className="w-6 h-6" />
+      <div className="att-gauge-card" style={{ padding: "1.75rem 2rem" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem", paddingBottom: "1.5rem", borderBottom: "1px solid var(--att-border)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "3rem", height: "3rem", borderRadius: "var(--att-radius-md)", background: "var(--att-primary-light)", color: "var(--att-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Calculator style={{ width: "1.5rem", height: "1.5rem" }} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl md:text-2xl font-black text-[#241A1C] tracking-tight">
-                  Smart Attendance & Bunk Calculator
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <h2 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0, letterSpacing: "-0.02em" }}>
+                  Smart Attendance &amp; Bunk Calculator
                 </h2>
-                <span className="hidden sm:inline-flex px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#EFE8DC] text-[#75666A]">
+                <span style={{ fontSize: "11px", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "9999px", background: "var(--att-surface-alt)", color: "var(--att-text-muted)" }}>
                   Real-time Math
                 </span>
               </div>
-              <p className="text-xs md:text-sm text-[#75666A] mt-0.5">
+              <p style={{ fontSize: "0.8125rem", color: "var(--att-text-muted)", marginTop: "0.25rem", margin: "0.25rem 0 0 0" }}>
                 Calculate exact safe bunk allowances, consecutive catch-up requirements, and test what-if class attendance.
               </p>
             </div>
           </div>
 
           {/* Mode Switcher */}
-          <div className="inline-flex p-1 rounded-2xl bg-[#EFE8DC] self-start md:self-auto">
+          <div style={{ display: "inline-flex", padding: "0.25rem", borderRadius: "var(--att-radius-md)", background: "var(--att-surface-alt)" }}>
             <button
               onClick={() => setMode("subject")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                mode === "subject"
-                  ? "bg-[#FFFDF8] text-[#6B1E2D] shadow-xs"
-                  : "text-[#75666A] hover:text-[#241A1C]"
-              }`}
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "var(--att-radius-sm)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "none",
+                cursor: "pointer",
+                background: mode === "subject" ? "var(--att-surface)" : "transparent",
+                color: mode === "subject" ? "var(--att-primary)" : "var(--att-text-muted)",
+                boxShadow: mode === "subject" ? "var(--att-shadow-xs)" : "none"
+              }}
             >
               Enrolled Courses
             </button>
             <button
               onClick={() => setMode("custom")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                mode === "custom"
-                  ? "bg-[#FFFDF8] text-[#6B1E2D] shadow-xs"
-                  : "text-[#75666A] hover:text-[#241A1C]"
-              }`}
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "var(--att-radius-sm)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "none",
+                cursor: "pointer",
+                background: mode === "custom" ? "var(--att-surface)" : "transparent",
+                color: mode === "custom" ? "var(--att-primary)" : "var(--att-text-muted)",
+                boxShadow: mode === "custom" ? "var(--att-shadow-xs)" : "none"
+              }}
             >
               Custom Numbers
             </button>
@@ -112,16 +125,17 @@ function AttendanceCalculator({ subjects = [] }) {
         </div>
 
         {/* Configuration Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-6">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.25rem", paddingTop: "1.5rem" }}>
           {mode === "subject" ? (
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#75666A] mb-2">
+              <label className="att-input-label">
                 Select Enrolled Course
               </label>
               <select
                 value={selectedSubjectId || (selectedSub?.id || "")}
                 onChange={(e) => setSelectedSubjectId(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#F8F3EA] border border-[#E5DCD4] rounded-xl text-sm font-semibold text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A] transition-all cursor-pointer"
+                className="att-form-control"
+                style={{ cursor: "pointer" }}
               >
                 {subjects.map((sub) => {
                   const subPct = sub.total > 0 ? ((sub.attended / sub.total) * 100).toFixed(1) : 0;
@@ -135,7 +149,7 @@ function AttendanceCalculator({ subjects = [] }) {
             </div>
           ) : (
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#75666A] mb-2">
+              <label className="att-input-label">
                 Classes Attended
               </label>
               <input
@@ -144,13 +158,13 @@ function AttendanceCalculator({ subjects = [] }) {
                 value={customAttended}
                 onChange={(e) => setCustomAttended(e.target.value)}
                 placeholder="e.g. 18"
-                className="w-full px-3.5 py-2.5 bg-[#F8F3EA] border border-[#E5DCD4] rounded-xl text-sm font-semibold text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A] transition-all"
+                className="att-form-control"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-[#75666A] mb-2">
+            <label className="att-input-label">
               Total Classes Conducted
             </label>
             <input
@@ -160,29 +174,35 @@ function AttendanceCalculator({ subjects = [] }) {
               onChange={(e) => setCustomTotal(e.target.value)}
               disabled={mode === "subject"}
               placeholder="e.g. 24"
-              className={`w-full px-3.5 py-2.5 border rounded-xl text-sm font-semibold transition-all ${
-                mode === "subject"
-                  ? "bg-[#EFE8DC]/60 text-[#75666A] border-[#E5DCD4] cursor-not-allowed"
-                  : "bg-[#F8F3EA] border-[#E5DCD4] text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A]"
-              }`}
+              className="att-form-control"
+              style={{
+                background: mode === "subject" ? "var(--att-surface-alt)" : "var(--att-surface)",
+                cursor: mode === "subject" ? "not-allowed" : "text"
+              }}
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-[#75666A] mb-2">
+            <label className="att-input-label">
               Target Attendance Goal
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.5rem" }}>
               {[65, 75, 80, 85].map((pct) => (
                 <button
                   key={pct}
                   type="button"
                   onClick={() => setTargetPercentage(pct)}
-                  className={`py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
-                    targetPercentage === pct
-                      ? "bg-[#6B1E2D] text-white border-[#6B1E2D] shadow-xs"
-                      : "bg-[#F8F3EA] text-[#75666A] border-[#E5DCD4] hover:border-[#B8A08A]"
-                  }`}
+                  style={{
+                    padding: "0.55rem 0.25rem",
+                    fontSize: "0.75rem",
+                    fontWeight: 700,
+                    borderRadius: "var(--att-radius-sm)",
+                    border: "1px solid",
+                    cursor: "pointer",
+                    background: targetPercentage === pct ? "var(--att-primary)" : "var(--att-bg)",
+                    color: targetPercentage === pct ? "#ffffff" : "var(--att-text-muted)",
+                    borderColor: targetPercentage === pct ? "var(--att-primary)" : "var(--att-border)"
+                  }}
                 >
                   {pct}%
                 </button>
@@ -193,83 +213,101 @@ function AttendanceCalculator({ subjects = [] }) {
 
         {/* Primary Calculation Dashboard */}
         {isValid ? (
-          <div className="mt-8 pt-8 border-t border-[#E5DCD4] space-y-6">
+          <div style={{ marginTop: "2rem", paddingTop: "2rem", borderTop: "1px solid var(--att-border)", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
             
             {/* Top Cards: Standing & Safe Bunks / Catch-Up */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
               
               {/* Left Card: Current Performance Gauge */}
-              <div className={`lg:col-span-5 rounded-2xl p-6 border transition-all ${
-                isAboveTarget
-                  ? "bg-[#4F7A5A]/5 border-[#4F7A5A]/30"
-                  : "bg-[#A63D40]/5 border-[#A63D40]/30"
-              }`}>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-black uppercase tracking-wider text-[#75666A]">
+              <div style={{
+                borderRadius: "var(--att-radius-lg)",
+                padding: "1.5rem",
+                border: "1px solid",
+                background: isAboveTarget ? "var(--att-success-light)" : "var(--att-danger-light)",
+                borderColor: isAboveTarget ? "var(--att-success-border)" : "var(--att-danger-border)"
+              }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: "0.75rem", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                     Current Performance
                   </span>
-                  <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black ${
-                    isAboveTarget
-                      ? "bg-[#4F7A5A]/15 text-[#4F7A5A]"
-                      : "bg-[#A63D40]/15 text-[#A63D40]"
-                  }`}>
+                  <span style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.25rem",
+                    padding: "0.25rem 0.65rem",
+                    borderRadius: "9999px",
+                    fontSize: "0.75rem",
+                    fontWeight: 900,
+                    background: isAboveTarget ? "var(--att-success-light)" : "var(--att-danger-light)",
+                    color: isAboveTarget ? "var(--att-success-text)" : "var(--att-danger-text)"
+                  }}>
                     {isAboveTarget ? (
                       <>
-                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <ShieldCheck style={{ width: "0.875rem", height: "0.875rem" }} />
                         Above Target
                       </>
                     ) : (
                       <>
-                        <AlertTriangle className="w-3.5 h-3.5" />
+                        <AlertTriangle style={{ width: "0.875rem", height: "0.875rem" }} />
                         Shortage Warning
                       </>
                     )}
                   </span>
                 </div>
 
-                <div className="mt-4 flex items-baseline gap-3">
-                  <span className="text-4xl md:text-5xl font-black text-[#241A1C] tracking-tight">
+                <div style={{ marginTop: "1rem", display: "flex", alignItems: "baseline", gap: "0.75rem" }}>
+                  <span style={{ fontSize: "2.75rem", fontWeight: 900, color: "var(--att-text-main)", letterSpacing: "-0.02em" }}>
                     {currentPercentage.toFixed(1)}%
                   </span>
-                  <span className="text-xs font-bold text-[#75666A]">
+                  <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-muted)" }}>
                     ({attendedNum} attended of {totalNum})
                   </span>
                 </div>
 
                 {/* Progress bar */}
-                <div className="mt-4">
-                  <div className="relative w-full h-3 bg-[#EFE8DC] rounded-full overflow-hidden">
+                <div style={{ marginTop: "1rem" }}>
+                  <div style={{ position: "relative", width: "100%", height: "0.75rem", background: "var(--att-surface-alt)", borderRadius: "9999px", overflow: "hidden" }}>
                     <div
-                      className={`h-full rounded-full transition-all duration-700 ${
-                        isAboveTarget ? "bg-[#4F7A5A]" : "bg-[#A63D40]"
-                      }`}
-                      style={{ width: `${Math.min(100, currentPercentage)}%` }}
+                      style={{
+                        height: "100%",
+                        borderRadius: "9999px",
+                        transition: "all 0.7s ease",
+                        background: isAboveTarget ? "var(--att-success)" : "var(--att-danger)",
+                        width: `${Math.min(100, currentPercentage)}%`
+                      }}
                     />
                     {/* Target Pin */}
                     <div
-                      className="absolute top-0 bottom-0 w-0.5 bg-[#241A1C] z-10"
-                      style={{ left: `${target}%` }}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        bottom: 0,
+                        width: "2px",
+                        background: "var(--att-text-main)",
+                        zIndex: 10,
+                        left: `${target}%`
+                      }}
                       title={`Target: ${target}%`}
                     />
                   </div>
-                  <div className="flex justify-between text-[10px] font-bold text-[#75666A] mt-1.5">
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", fontWeight: 700, color: "var(--att-text-muted)", marginTop: "0.35rem" }}>
                     <span>0%</span>
-                    <span className="text-[#6B1E2D] font-extrabold">Target: {target}%</span>
+                    <span style={{ color: "var(--att-primary)", fontWeight: 800 }}>Target: {target}%</span>
                     <span>100%</span>
                   </div>
                 </div>
 
                 {/* Context Advice */}
-                <div className="mt-5 p-3.5 rounded-xl bg-[#FFFDF8] border border-[#E5DCD4] text-xs">
-                  <div className="flex items-center gap-2 font-bold text-[#241A1C]">
-                    <BookmarkCheck className="w-4 h-4 text-[#B8A08A]" />
+                <div style={{ marginTop: "1.25rem", padding: "0.85rem", borderRadius: "var(--att-radius-sm)", background: "var(--att-surface)", border: "1px solid var(--att-border)", fontSize: "0.75rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 700, color: "var(--att-text-main)" }}>
+                    <BookmarkCheck style={{ width: "1rem", height: "1rem", color: "var(--att-accent)" }} />
                     <span>Target Difference:</span>
-                    <span className={currentPercentage >= target ? "text-[#4F7A5A]" : "text-[#A63D40]"}>
+                    <span style={{ color: currentPercentage >= target ? "var(--att-success)" : "var(--att-danger)" }}>
                       {currentPercentage >= target ? "+" : ""}
                       {(currentPercentage - target).toFixed(1)}%
                     </span>
                   </div>
-                  <p className="text-[#75666A] mt-1 leading-relaxed">
+                  <p style={{ color: "var(--att-text-muted)", marginTop: "0.25rem", lineHeight: 1.5, margin: "0.25rem 0 0 0" }}>
                     {isAboveTarget
                       ? `You are safely meeting the ${target}% threshold required for standard semester exam admittance.`
                       : `You are ${(target - currentPercentage).toFixed(1)}% short of the ${target}% cutoff. Remedial attendance required.`}
@@ -278,31 +316,31 @@ function AttendanceCalculator({ subjects = [] }) {
               </div>
 
               {/* Right Card: Safe Bunk vs Catch-up Action Engine */}
-              <div className="lg:col-span-7 flex flex-col justify-between bg-[#F8F3EA] rounded-2xl p-6 border border-[#E5DCD4]">
+              <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", background: "var(--att-bg)", borderRadius: "var(--att-radius-lg)", padding: "1.5rem", border: "1px solid var(--att-border)" }}>
                 <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <Zap className="w-5 h-5 text-[#B8A08A]" />
-                    <h3 className="text-base font-bold text-[#241A1C]">
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
+                    <Zap style={{ width: "1.25rem", height: "1.25rem", color: "var(--att-accent)" }} />
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
                       Action Recommendation Engine
                     </h3>
                   </div>
 
                   {isAboveTarget ? (
-                    <div className="space-y-4">
-                      <div className="p-4 rounded-xl bg-[#4F7A5A]/10 border border-[#4F7A5A]/30 flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-[#4F7A5A]/20 text-[#4F7A5A] flex items-center justify-center shrink-0 mt-0.5">
-                          <ShieldCheck className="w-5 h-5" />
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-success-light)", border: "1px solid var(--att-success-border)", display: "flex", alignItems: "flex-start", gap: "0.85rem" }}>
+                        <div style={{ width: "2.25rem", height: "2.25rem", borderRadius: "var(--att-radius-sm)", background: "rgba(79, 122, 90, 0.2)", color: "var(--att-success-text)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "0.15rem" }}>
+                          <ShieldCheck style={{ width: "1.25rem", height: "1.25rem" }} />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-black text-[#241A1C]">
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <h4 style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0 }}>
                               Safe Bunk Buffer: Up to {safeBunks} class{safeBunks !== 1 ? "es" : ""}
                             </h4>
-                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#4F7A5A]/20 text-[#4F7A5A]">
+                            <span style={{ padding: "0.1rem 0.5rem", fontSize: "10px", fontWeight: 700, borderRadius: "9999px", background: "rgba(79, 122, 90, 0.2)", color: "var(--att-success-text)" }}>
                               Zero Risk
                             </span>
                           </div>
-                          <p className="text-xs text-[#75666A] mt-1 leading-relaxed">
+                          <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem", lineHeight: 1.5, margin: "0.25rem 0 0 0" }}>
                             {safeBunks > 0
                               ? `You can safely miss ${safeBunks} consecutive class${safeBunks > 1 ? "es" : ""} in ${enrolledCourseName} and your attendance will not fall below ${target}%.`
                               : `You are exactly at your minimum ${target}% threshold! Do not bunk any classes right now.`}
@@ -311,71 +349,71 @@ function AttendanceCalculator({ subjects = [] }) {
                       </div>
 
                       {safeBunks > 0 && (
-                        <div className="grid grid-cols-2 gap-3 text-xs">
-                          <div className="p-3 bg-[#FFFDF8] rounded-xl border border-[#E5DCD4]">
-                            <span className="text-[#75666A] block font-medium">After 1 Bunk:</span>
-                            <span className="text-base font-bold text-[#241A1C]">
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", fontSize: "0.75rem" }}>
+                          <div style={{ padding: "0.75rem", background: "var(--att-surface)", borderRadius: "var(--att-radius-sm)", border: "1px solid var(--att-border)" }}>
+                            <span style={{ color: "var(--att-text-muted)", display: "block", fontWeight: 500 }}>After 1 Bunk:</span>
+                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)" }}>
                               {(((attendedNum) / (totalNum + 1)) * 100).toFixed(1)}%
                             </span>
-                            <span className="text-[10px] text-[#4F7A5A] block font-bold">Still Safe</span>
+                            <span style={{ fontSize: "10px", color: "var(--att-success)", display: "block", fontWeight: 700 }}>Still Safe</span>
                           </div>
-                          <div className="p-3 bg-[#FFFDF8] rounded-xl border border-[#E5DCD4]">
-                            <span className="text-[#75666A] block font-medium">After {safeBunks} Bunks:</span>
-                            <span className="text-base font-bold text-[#241A1C]">
+                          <div style={{ padding: "0.75rem", background: "var(--att-surface)", borderRadius: "var(--att-radius-sm)", border: "1px solid var(--att-border)" }}>
+                            <span style={{ color: "var(--att-text-muted)", display: "block", fontWeight: 500 }}>After {safeBunks} Bunks:</span>
+                            <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)" }}>
                               {(((attendedNum) / (totalNum + safeBunks)) * 100).toFixed(1)}%
                             </span>
-                            <span className="text-[10px] text-[#B8A08A] block font-bold">Borderline Minimum</span>
+                            <span style={{ fontSize: "10px", color: "var(--att-accent)", display: "block", fontWeight: 700 }}>Borderline Minimum</span>
                           </div>
                         </div>
                       )}
                     </div>
                   ) : (
-                    <div className="space-y-4">
-                      <div className="p-4 rounded-xl bg-[#A63D40]/10 border border-[#A63D40]/30 flex items-start gap-3.5">
-                        <div className="w-9 h-9 rounded-xl bg-[#A63D40]/20 text-[#A63D40] flex items-center justify-center shrink-0 mt-0.5">
-                          <AlertTriangle className="w-5 h-5" />
+                    <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                      <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-danger-light)", border: "1px solid var(--att-danger-border)", display: "flex", alignItems: "flex-start", gap: "0.85rem" }}>
+                        <div style={{ width: "2.25rem", height: "2.25rem", borderRadius: "var(--att-radius-sm)", background: "rgba(166, 61, 64, 0.2)", color: "var(--att-danger-text)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: "0.15rem" }}>
+                          <AlertTriangle style={{ width: "1.25rem", height: "1.25rem" }} />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-black text-[#241A1C]">
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                            <h4 style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0 }}>
                               Must Attend Next {classesNeeded} Consecutive Class{classesNeeded !== 1 ? "es" : ""}
                             </h4>
-                            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-[#A63D40]/20 text-[#A63D40]">
+                            <span style={{ padding: "0.1rem 0.5rem", fontSize: "10px", fontWeight: 700, borderRadius: "9999px", background: "rgba(166, 61, 64, 0.2)", color: "var(--att-danger-text)" }}>
                               Required
                             </span>
                           </div>
-                          <p className="text-xs text-[#75666A] mt-1 leading-relaxed">
+                          <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem", lineHeight: 1.5, margin: "0.25rem 0 0 0" }}>
                             You must attend {classesNeeded} consecutive class${classesNeeded > 1 ? "es" : ""} without missing any to restore your standing in {enrolledCourseName} back to {target}%.
                           </p>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3 text-xs">
-                        <div className="p-3 bg-[#FFFDF8] rounded-xl border border-[#E5DCD4]">
-                          <span className="text-[#75666A] block font-medium">If you miss 1 more:</span>
-                          <span className="text-base font-bold text-[#A63D40]">
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", fontSize: "0.75rem" }}>
+                        <div style={{ padding: "0.75rem", background: "var(--att-surface)", borderRadius: "var(--att-radius-sm)", border: "1px solid var(--att-border)" }}>
+                          <span style={{ color: "var(--att-text-muted)", display: "block", fontWeight: 500 }}>If you miss 1 more:</span>
+                          <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-danger)" }}>
                             {(((attendedNum) / (totalNum + 1)) * 100).toFixed(1)}%
                           </span>
-                          <span className="text-[10px] text-[#A63D40] block font-bold">Drops deeper</span>
+                          <span style={{ fontSize: "10px", color: "var(--att-danger)", display: "block", fontWeight: 700 }}>Drops deeper</span>
                         </div>
-                        <div className="p-3 bg-[#FFFDF8] rounded-xl border border-[#E5DCD4]">
-                          <span className="text-[#75666A] block font-medium">After attending {classesNeeded}:</span>
-                          <span className="text-base font-bold text-[#4F7A5A]">
+                        <div style={{ padding: "0.75rem", background: "var(--att-surface)", borderRadius: "var(--att-radius-sm)", border: "1px solid var(--att-border)" }}>
+                          <span style={{ color: "var(--att-text-muted)", display: "block", fontWeight: 500 }}>After attending {classesNeeded}:</span>
+                          <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-success)" }}>
                             {(((attendedNum + classesNeeded) / (totalNum + classesNeeded)) * 100).toFixed(1)}%
                           </span>
-                          <span className="text-[10px] text-[#4F7A5A] block font-bold">Clears target!</span>
+                          <span style={{ fontSize: "10px", color: "var(--att-success)", display: "block", fontWeight: 700 }}>Clears target!</span>
                         </div>
                       </div>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#E5DCD4] flex items-center justify-between text-xs text-[#75666A]">
-                  <span className="inline-flex items-center gap-1.5">
-                    <Info className="w-3.5 h-3.5 text-[#B8A08A]" />
+                <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--att-border)", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.75rem", color: "var(--att-text-muted)" }}>
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}>
+                    <Info style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
                     University criteria: 75% required for end-semester registration
                   </span>
-                  <span className="font-bold text-[#241A1C]">
+                  <span style={{ fontWeight: 700, color: "var(--att-text-main)" }}>
                     Formula: (A + x) / (T + x) ≥ {target}%
                   </span>
                 </div>
@@ -384,35 +422,35 @@ function AttendanceCalculator({ subjects = [] }) {
             </div>
 
             {/* Bottom Interactive Sandbox: What-If Attendance Simulator */}
-            <div className="bg-gradient-to-br from-[#48121E] via-[#6B1E2D] to-[#351019] text-[#FFFDF8] rounded-2xl p-6 md:p-7 shadow-lg">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-5 border-b border-white/15">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-white/10 text-[#B8A08A] flex items-center justify-center">
-                    <Sliders className="w-4 h-4" />
+            <div className="att-header-hero" style={{ padding: "1.75rem", color: "#FFFDF8" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", paddingBottom: "1.25rem", borderBottom: "1px solid rgba(255,255,255,0.15)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                  <div style={{ width: "2rem", height: "2rem", borderRadius: "var(--att-radius-sm)", background: "rgba(255,255,255,0.1)", color: "var(--att-accent)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Sliders style={{ width: "1rem", height: "1rem" }} />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-[#FFFDF8] flex items-center gap-2">
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#FFFDF8", margin: 0 }}>
                       Interactive What-If Attendance Simulator
                     </h3>
-                    <p className="text-xs text-[#D8CBBE]">
+                    <p style={{ fontSize: "0.75rem", color: "var(--att-accent-light)", margin: "0.2rem 0 0 0" }}>
                       Simulate hypothetical future classes and see your projected attendance in real-time.
                     </p>
                   </div>
                 </div>
 
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs font-bold text-[#FFFDF8]">
-                  <Sparkles className="w-3.5 h-3.5 text-[#B8A08A]" />
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.35rem 0.75rem", borderRadius: "var(--att-radius-md)", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", fontSize: "0.75rem", fontWeight: 700, color: "#FFFDF8" }}>
+                  <Sparkles style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
                   Live Projection
                 </div>
               </div>
 
               {/* Sliders Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-5">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.5rem", paddingTop: "1.25rem" }}>
                 {/* Upcoming classes slider */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-bold">
-                    <span className="text-[#D8CBBE]">Number of Upcoming Classes:</span>
-                    <span className="text-white px-2 py-0.5 rounded bg-white/20 font-mono">
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", fontWeight: 700, marginBottom: "0.5rem" }}>
+                    <span style={{ color: "var(--att-accent-light)" }}>Number of Upcoming Classes:</span>
+                    <span style={{ color: "#ffffff", padding: "0.1rem 0.5rem", borderRadius: "4px", background: "rgba(255,255,255,0.2)", fontFamily: "monospace" }}>
                       {simN} classes
                     </span>
                   </div>
@@ -426,9 +464,9 @@ function AttendanceCalculator({ subjects = [] }) {
                       setSimulateNext(val);
                       if (simulateAttendCount > val) setSimulateAttendCount(val);
                     }}
-                    className="w-full accent-[#B8A08A] cursor-pointer h-2 bg-white/20 rounded-lg"
+                    style={{ width: "100%", accentColor: "var(--att-accent)", cursor: "pointer", height: "0.5rem" }}
                   />
-                  <div className="flex justify-between text-[10px] text-[#D8CBBE]/70 font-medium">
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--att-accent-light)", opacity: 0.7, fontWeight: 500, marginTop: "0.25rem" }}>
                     <span>1 class</span>
                     <span>15 classes</span>
                     <span>30 classes</span>
@@ -436,10 +474,10 @@ function AttendanceCalculator({ subjects = [] }) {
                 </div>
 
                 {/* Planned attendance slider */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-bold">
-                    <span className="text-[#D8CBBE]">Classes you plan to attend:</span>
-                    <span className="text-[#D8CBBE] px-2 py-0.5 rounded bg-white/20 border border-white/20 font-mono">
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", fontWeight: 700, marginBottom: "0.5rem" }}>
+                    <span style={{ color: "var(--att-accent-light)" }}>Classes you plan to attend:</span>
+                    <span style={{ color: "var(--att-accent-light)", padding: "0.1rem 0.5rem", borderRadius: "4px", background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.2)", fontFamily: "monospace" }}>
                       {simAtt} of {simN} ({simN > 0 ? Math.round((simAtt / simN) * 100) : 0}%)
                     </span>
                   </div>
@@ -449,9 +487,9 @@ function AttendanceCalculator({ subjects = [] }) {
                     max={simN}
                     value={simAtt}
                     onChange={(e) => setSimulateAttendCount(Number(e.target.value))}
-                    className="w-full accent-[#B8A08A] cursor-pointer h-2 bg-white/20 rounded-lg"
+                    style={{ width: "100%", accentColor: "var(--att-accent)", cursor: "pointer", height: "0.5rem" }}
                   />
-                  <div className="flex justify-between text-[10px] text-[#D8CBBE]/70 font-medium">
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--att-accent-light)", opacity: 0.7, fontWeight: 500, marginTop: "0.25rem" }}>
                     <span>0 (Miss all)</span>
                     <span>{Math.round(simN / 2)} (Attend half)</span>
                     <span>{simN} (Attend all)</span>
@@ -460,73 +498,77 @@ function AttendanceCalculator({ subjects = [] }) {
               </div>
 
               {/* Simulation Result Stat Matrix */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginTop: "1.5rem" }}>
                 
                 {/* Result under your plan */}
-                <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 flex flex-col justify-between">
+                <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "rgba(255,255,255,0.1)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#D8CBBE] block">
+                    <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-accent-light)", display: "block" }}>
                       Under Your Plan
                     </span>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-white">
+                    <div style={{ marginTop: "0.25rem", display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+                      <span style={{ fontSize: "1.875rem", fontWeight: 900, color: "#ffffff" }}>
                         {simulatedPct.toFixed(1)}%
                       </span>
-                      <span className={`text-xs font-bold ${simDelta >= 0 ? "text-[#4F7A5A]" : "text-[#A63D40]"}`}>
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: simDelta >= 0 ? "var(--att-success)" : "var(--att-danger)" }}>
                         {simDelta >= 0 ? "+" : ""}{simDelta.toFixed(1)}%
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                    <span className="text-[#D8CBBE]/80">
+                  <div style={{ marginTop: "0.75rem", paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.75rem" }}>
+                    <span style={{ color: "var(--att-accent-light)", opacity: 0.8 }}>
                       {simulatedAttended}/{simulatedTotal} total
                     </span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      simulatedPct >= target
-                        ? "bg-[#4F7A5A]/30 text-[#FFFDF8] border border-[#4F7A5A]/50"
-                        : "bg-[#A63D40]/30 text-[#FFFDF8] border border-[#A63D40]/50"
-                    }`}>
+                    <span style={{
+                      padding: "0.1rem 0.5rem",
+                      borderRadius: "4px",
+                      fontSize: "10px",
+                      fontWeight: 700,
+                      background: simulatedPct >= target ? "rgba(79, 122, 90, 0.3)" : "rgba(166, 61, 64, 0.3)",
+                      color: "#FFFDF8",
+                      border: `1px solid ${simulatedPct >= target ? "rgba(79, 122, 90, 0.5)" : "rgba(166, 61, 64, 0.5)"}`
+                    }}>
                       {simulatedPct >= target ? "Safe" : "Shortage"}
                     </span>
                   </div>
                 </div>
 
                 {/* Best Case (100% of upcoming) */}
-                <div className="p-4 rounded-xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#B8A08A] block">
+                    <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-accent)", display: "block" }}>
                       Best Case (Attend all {simN})
                     </span>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-white">
+                    <div style={{ marginTop: "0.25rem", display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+                      <span style={{ fontSize: "1.875rem", fontWeight: 900, color: "#ffffff" }}>
                         {bestPct.toFixed(1)}%
                       </span>
-                      <span className="text-xs font-bold text-[#4F7A5A]">
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-success)" }}>
                         +{(bestPct - currentPercentage).toFixed(1)}%
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-white/10 text-xs text-[#D8CBBE]/80">
+                  <div style={{ marginTop: "0.75rem", paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.1)", fontSize: "0.75rem", color: "var(--att-accent-light)", opacity: 0.8 }}>
                     Max achievable with next {simN} classes
                   </div>
                 </div>
 
                 {/* Worst Case (0% of upcoming) */}
-                <div className="p-4 rounded-xl bg-white/10 border border-white/10 flex flex-col justify-between">
+                <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#A63D40] block">
+                    <span style={{ fontSize: "11px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-danger)", display: "block" }}>
                       Worst Case (Miss all {simN})
                     </span>
-                    <div className="mt-1 flex items-baseline gap-2">
-                      <span className="text-3xl font-black text-[#A63D40]">
+                    <div style={{ marginTop: "0.25rem", display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+                      <span style={{ fontSize: "1.875rem", fontWeight: 900, color: "var(--att-danger)" }}>
                         {worstPct.toFixed(1)}%
                       </span>
-                      <span className="text-xs font-bold text-[#A63D40]">
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-danger)" }}>
                         -{(currentPercentage - worstPct).toFixed(1)}%
                       </span>
                     </div>
                   </div>
-                  <div className="mt-3 pt-2 border-t border-white/10 text-xs text-[#D8CBBE]/80">
+                  <div style={{ marginTop: "0.75rem", paddingTop: "0.5rem", borderTop: "1px solid rgba(255,255,255,0.1)", fontSize: "0.75rem", color: "var(--att-accent-light)", opacity: 0.8 }}>
                     Outcome if all upcoming classes are skipped
                   </div>
                 </div>
@@ -537,12 +579,12 @@ function AttendanceCalculator({ subjects = [] }) {
 
           </div>
         ) : (
-          <div className="mt-6 p-6 rounded-2xl bg-[#FAF2F3] border border-[#E5DCD4] text-center">
-            <AlertTriangle className="w-8 h-8 text-[#A63D40] mx-auto mb-2" />
-            <p className="text-sm font-bold text-[#241A1C]">
+          <div style={{ marginTop: "1.5rem", padding: "1.5rem", borderRadius: "var(--att-radius-md)", background: "var(--att-primary-light)", border: "1px solid var(--att-border)", textAlign: "center" }}>
+            <AlertTriangle style={{ width: "2rem", height: "2rem", color: "var(--att-danger)", margin: "0 auto 0.5rem auto" }} />
+            <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
               Please enter valid attendance numbers
             </p>
-            <p className="text-xs text-[#75666A] mt-1">
+            <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem", margin: "0.25rem 0 0 0" }}>
               Classes attended cannot exceed total classes conducted, and total classes must be greater than zero.
             </p>
           </div>

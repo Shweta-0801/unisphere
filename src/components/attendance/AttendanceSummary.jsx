@@ -1,3 +1,5 @@
+import "./Attendance.css";
+
 function AttendanceSummary() {
   const attendance = {
     present: 65,
@@ -10,76 +12,70 @@ function AttendanceSummary() {
   );
 
   return (
-    <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl shadow-sm p-6">
-
+    <div className="att-gauge-card" style={{ padding: "1.75rem" }}>
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-[#241A1C]">
+      <div style={{ marginBottom: "1.5rem" }}>
+        <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
           Attendance Summary
         </h2>
-
-        <p className="text-[#75666A] mt-1 text-sm">
+        <p style={{ fontSize: "0.875rem", color: "var(--att-text-muted)", marginTop: "0.25rem" }}>
           A quick overview of your attendance record
         </p>
       </div>
 
       {/* Progress */}
-      <div className="mb-6">
-
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-[#75666A]">
+      <div style={{ marginBottom: "1.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
+          <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "var(--att-text-muted)" }}>
             Overall Attendance
           </span>
-
-          <span className="text-lg font-bold text-[#4F7A5A]">
+          <span style={{ fontSize: "1.125rem", fontWeight: 800, color: "var(--att-success)" }}>
             {percentage}%
           </span>
         </div>
 
-        <div className="w-full h-3 bg-[#EFE8DC] rounded-full overflow-hidden">
+        <div style={{ width: "100%", height: "0.75rem", background: "var(--att-surface-alt)", borderRadius: "9999px", overflow: "hidden" }}>
           <div
-            className="h-3 bg-[#6B1E2D] rounded-full"
-            style={{ width: `${percentage}%` }}
-          ></div>
+            style={{
+              height: "100%",
+              backgroundColor: "var(--att-primary)",
+              borderRadius: "9999px",
+              width: `${percentage}%`,
+              transition: "width 0.6s ease"
+            }}
+          />
         </div>
-
       </div>
 
       {/* Statistics */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-
-        <div className="bg-[#4F7A5A]/10 border border-[#4F7A5A]/20 rounded-xl p-4">
-          <p className="text-xs font-semibold text-[#4F7A5A]">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "1rem" }}>
+        <div style={{ background: "var(--att-success-light)", border: "1px solid var(--att-success-border)", borderRadius: "var(--att-radius-md)", padding: "1rem" }}>
+          <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-success-text)", margin: 0 }}>
             Present
           </p>
-
-          <p className="text-2xl font-bold text-[#4F7A5A] mt-1">
+          <p style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--att-success-text)", margin: "0.25rem 0 0 0" }}>
             {attendance.present}
           </p>
         </div>
 
-        <div className="bg-[#A63D40]/10 border border-[#A63D40]/20 rounded-xl p-4">
-          <p className="text-xs font-semibold text-[#A63D40]">
+        <div style={{ background: "var(--att-danger-light)", border: "1px solid var(--att-danger-border)", borderRadius: "var(--att-radius-md)", padding: "1rem" }}>
+          <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-danger-text)", margin: 0 }}>
             Absent
           </p>
-
-          <p className="text-2xl font-bold text-[#A63D40] mt-1">
+          <p style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--att-danger-text)", margin: "0.25rem 0 0 0" }}>
             {attendance.absent}
           </p>
         </div>
 
-        <div className="bg-[#FAF2F3] border border-[#E5DCD4] rounded-xl p-4">
-          <p className="text-xs font-semibold text-[#6B1E2D]">
+        <div style={{ background: "var(--att-primary-light)", border: "1px solid var(--att-primary-border)", borderRadius: "var(--att-radius-md)", padding: "1rem" }}>
+          <p style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-primary)", margin: 0 }}>
             Total Classes
           </p>
-
-          <p className="text-2xl font-bold text-[#6B1E2D] mt-1">
+          <p style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--att-primary)", margin: "0.25rem 0 0 0" }}>
             {attendance.total}
           </p>
         </div>
-
       </div>
-
     </div>
   );
 }

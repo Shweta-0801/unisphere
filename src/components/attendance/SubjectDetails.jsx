@@ -1,5 +1,15 @@
 import { useState } from "react";
-import {User,ShieldCheck,AlertCircle,CheckCircle2,XCircle,Edit2,Clock,Plus,BookOpen,Calendar} from "lucide-react";
+import {
+  User,
+  ShieldCheck,
+  AlertCircle,
+  CheckCircle2,
+  XCircle,
+  Edit2,
+  Clock,
+  Plus
+} from "lucide-react";
+import "./Attendance.css";
 
 function SubjectDetails({
   subjects,
@@ -16,7 +26,7 @@ function SubjectDetails({
 
   if (!subject) {
     return (
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center text-slate-400">
+      <div className="att-gauge-card" style={{ padding: "3rem", textAlign: "center", color: "var(--att-text-muted)" }}>
         No courses available. Please add a course first.
       </div>
     );
@@ -54,10 +64,10 @@ function SubjectDetails({
   ];
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Subject Horizontal Selector Tabs */}
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-2 shadow-sm overflow-x-auto no-scrollbar">
-        <div className="flex items-center gap-2 min-w-max">
+      <div className="att-nav-bar">
+        <div className="att-nav-track">
           {subjects.map((sub) => {
             const isSelected = sub.id === subject.id;
             const subPct = sub.total > 0 ? Math.round((sub.attended / sub.total) * 100) : 0;
@@ -67,21 +77,27 @@ function SubjectDetails({
               <button
                 key={sub.id}
                 onClick={() => setSelectedSubjectId(sub.id)}
-                className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  isSelected
-                    ? "bg-[#6B1E2D] text-white shadow-sm shadow-[#6B1E2D]/20"
-                    : "bg-[#F8F3EA] text-[#75666A] hover:bg-[#EFE8DC]"
-                }`}
+                className={`att-nav-btn ${isSelected ? "active" : ""}`}
+                style={{ gap: "0.65rem" }}
               >
                 <span>{sub.name}</span>
                 <span
-                  className={`px-1.5 py-0.5 text-[10px] font-black rounded ${
-                    isSelected
-                      ? "bg-white/20 text-white"
+                  style={{
+                    padding: "0.15rem 0.45rem",
+                    fontSize: "10px",
+                    fontWeight: 900,
+                    borderRadius: "4px",
+                    background: isSelected
+                      ? "rgba(255, 255, 255, 0.2)"
                       : subSafe
-                      ? "bg-[#4F7A5A]/15 text-[#4F7A5A]"
-                      : "bg-[#A63D40]/15 text-[#A63D40]"
-                  }`}
+                      ? "var(--att-success-light)"
+                      : "var(--att-danger-light)",
+                    color: isSelected
+                      ? "#ffffff"
+                      : subSafe
+                      ? "var(--att-success-text)"
+                      : "var(--att-danger-text)"
+                  }}
                 >
                   {subPct}%
                 </span>
@@ -92,172 +108,213 @@ function SubjectDetails({
       </div>
 
       {/* Main Subject Detail Card */}
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+      <div className="att-gauge-card" style={{ padding: "1.75rem 2rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {/* Course Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#E5DCD4]">
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem", paddingBottom: "1.5rem", borderBottom: "1px solid var(--att-border)" }}>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-1 rounded-xl bg-[#FAF2F3] text-[#6B1E2D] border border-[#E5DCD4] text-[11px] font-black uppercase tracking-wider">
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span className="att-code-tag blue" style={{ fontSize: "11px", fontWeight: 900 }}>
                 {subject.code || "CS-301"}
               </span>
-              <span className="text-xs font-semibold text-[#75666A]">
+              <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--att-text-muted)" }}>
                 4 Credit Hours • Semester 4
               </span>
             </div>
-            <h2 className="text-2xl md:text-3xl font-black text-[#241A1C] mt-1">
+            <h2 style={{ fontSize: "1.75rem", fontWeight: 900, color: "var(--att-text-main)", marginTop: "0.25rem", margin: "0.25rem 0 0 0", letterSpacing: "-0.02em" }}>
               {subject.name}
             </h2>
-            <div className="flex items-center gap-1.5 text-xs text-[#75666A] mt-1">
-              <User className="w-3.5 h-3.5 text-[#B8A08A]" />
-              <span>Lead Faculty: <strong className="text-[#241A1C]">{subject.faculty || "Course Faculty"}</strong></span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem" }}>
+              <User style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
+              <span>Lead Faculty: <strong style={{ color: "var(--att-text-main)" }}>{subject.faculty || "Course Faculty"}</strong></span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
             <button
               onClick={() => onEditSubject && onEditSubject(subject)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F8F3EA] hover:bg-[#EFE8DC] text-[#241A1C] text-xs font-bold transition-all cursor-pointer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                padding: "0.5rem 0.85rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-bg)",
+                color: "var(--att-text-main)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "1px solid var(--att-border)",
+                cursor: "pointer"
+              }}
             >
-              <Edit2 className="w-3.5 h-3.5" />
+              <Edit2 style={{ width: "0.875rem", height: "0.875rem" }} />
               <span>Edit Course</span>
             </button>
 
             <button
               onClick={() => onQuickLog && onQuickLog(subject.id, "present")}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold shadow-sm shadow-[#6B1E2D]/20 transition-all active:scale-95 cursor-pointer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                padding: "0.5rem 1rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-primary)",
+                color: "#ffffff",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "var(--att-shadow-xs)"
+              }}
             >
-              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <Plus style={{ width: "0.875rem", height: "0.875rem", strokeWidth: 2.5 }} />
               <span>+ Log Present</span>
             </button>
           </div>
         </div>
 
         {/* 4 Metric Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="p-4 rounded-2xl bg-[#F8F3EA] border border-[#E5DCD4]">
-            <span className="text-xs font-bold text-[#75666A] block">Attendance Rate</span>
-            <span className="text-2xl md:text-3xl font-black text-[#241A1C] mt-1 block">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "1rem" }}>
+          <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-bg)", border: "1px solid var(--att-border)" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-muted)", display: "block" }}>Attendance Rate</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: 900, color: "var(--att-text-main)", display: "block", marginTop: "0.25rem" }}>
               {percentage}%
             </span>
-            <span className="text-[10px] font-bold text-[#75666A] mt-1 block">Goal: {targetPercentage}%</span>
+            <span style={{ fontSize: "10px", fontWeight: 700, color: "var(--att-text-muted)", display: "block", marginTop: "0.25rem" }}>Goal: {targetPercentage}%</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#4F7A5A]/5 border border-[#4F7A5A]/30">
-            <span className="text-xs font-bold text-[#4F7A5A] block">Attended Sessions</span>
-            <span className="text-2xl md:text-3xl font-black text-[#4F7A5A] mt-1 block">
+          <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-success-light)", border: "1px solid var(--att-success-border)" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-success-text)", display: "block" }}>Attended Sessions</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: 900, color: "var(--att-success-text)", display: "block", marginTop: "0.25rem" }}>
               {attended}
             </span>
-            <span className="text-[10px] font-bold text-[#4F7A5A] mt-1 block">Present</span>
+            <span style={{ fontSize: "10px", fontWeight: 700, color: "var(--att-success-text)", display: "block", marginTop: "0.25rem" }}>Present</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#A63D40]/5 border border-[#A63D40]/30">
-            <span className="text-xs font-bold text-[#A63D40] block">Missed Sessions</span>
-            <span className="text-2xl md:text-3xl font-black text-[#A63D40] mt-1 block">
+          <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-danger-light)", border: "1px solid var(--att-danger-border)" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-danger-text)", display: "block" }}>Missed Sessions</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: 900, color: "var(--att-danger-text)", display: "block", marginTop: "0.25rem" }}>
               {missed}
             </span>
-            <span className="text-[10px] font-bold text-[#A63D40] mt-1 block">Absences</span>
+            <span style={{ fontSize: "10px", fontWeight: 700, color: "var(--att-danger-text)", display: "block", marginTop: "0.25rem" }}>Absences</span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#FAF2F3] border border-[#E5DCD4]">
-            <span className="text-xs font-bold text-[#6B1E2D] block">Total Conducted</span>
-            <span className="text-2xl md:text-3xl font-black text-[#6B1E2D] mt-1 block">
+          <div style={{ padding: "1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-primary-light)", border: "1px solid var(--att-border)" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-primary)", display: "block" }}>Total Conducted</span>
+            <span style={{ fontSize: "1.75rem", fontWeight: 900, color: "var(--att-primary)", display: "block", marginTop: "0.25rem" }}>
               {total}
             </span>
-            <span className="text-[10px] font-bold text-[#6B1E2D] mt-1 block">Delivered</span>
+            <span style={{ fontSize: "10px", fontWeight: 700, color: "var(--att-primary)", display: "block", marginTop: "0.25rem" }}>Delivered</span>
           </div>
         </div>
 
         {/* Advisor & Exam Eligibility Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className={`p-4 rounded-2xl border flex items-start gap-3.5 ${
-            isSafe
-              ? "bg-[#4F7A5A]/10 border-[#4F7A5A]/30 text-[#4F7A5A]"
-              : "bg-[#A63D40]/10 border-[#A63D40]/30 text-[#A63D40]"
-          }`}>
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${
-              isSafe
-                ? "bg-[#4F7A5A]/20 text-[#4F7A5A]"
-                : "bg-[#A63D40]/20 text-[#A63D40]"
-            }`}>
-              {isSafe ? <ShieldCheck className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+          <div style={{
+            padding: "1rem 1.25rem",
+            borderRadius: "var(--att-radius-md)",
+            border: "1px solid",
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "0.85rem",
+            background: isSafe ? "var(--att-success-light)" : "var(--att-danger-light)",
+            borderColor: isSafe ? "var(--att-success-border)" : "var(--att-danger-border)"
+          }}>
+            <div style={{
+              width: "2.25rem",
+              height: "2.25rem",
+              borderRadius: "var(--att-radius-sm)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              marginTop: "0.15rem",
+              background: isSafe ? "rgba(79, 122, 90, 0.2)" : "rgba(166, 61, 64, 0.2)",
+              color: isSafe ? "var(--att-success-text)" : "var(--att-danger-text)"
+            }}>
+              {isSafe ? <ShieldCheck style={{ width: "1.25rem", height: "1.25rem" }} /> : <AlertCircle style={{ width: "1.25rem", height: "1.25rem" }} />}
             </div>
             <div>
-              <h4 className="text-xs font-black uppercase tracking-wider text-[#241A1C]">
+              <h4 style={{ fontSize: "0.75rem", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-main)", margin: 0 }}>
                 {isSafe ? "Course Standing: Safe Clearance" : "Course Standing: Shortage Alert"}
               </h4>
-              <p className="text-xs mt-1 leading-relaxed text-[#75666A]">
+              <p style={{ fontSize: "0.75rem", marginTop: "0.25rem", lineHeight: 1.5, color: "var(--att-text-muted)", margin: "0.25rem 0 0 0" }}>
                 {statusMessage}
               </p>
             </div>
           </div>
 
           {/* Exam Clearance Checklist */}
-          <div className="p-4 rounded-2xl bg-[#F8F3EA] border border-[#E5DCD4]">
-            <h4 className="text-[11px] font-black uppercase tracking-wider text-[#75666A] mb-3">
+          <div style={{ padding: "1rem 1.25rem", borderRadius: "var(--att-radius-md)", background: "var(--att-bg)", border: "1px solid var(--att-border)" }}>
+            <h4 style={{ fontSize: "11px", fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)", marginBottom: "0.75rem", margin: "0 0 0.75rem 0" }}>
               Semester Clearance Checklist
             </h4>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="flex items-center gap-2">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem", fontSize: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 {isSafe ? (
-                  <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
+                  <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "var(--att-success)", flexShrink: 0 }} />
                 ) : (
-                  <XCircle className="w-4 h-4 text-[#A63D40] shrink-0" />
+                  <XCircle style={{ width: "1rem", height: "1rem", color: "var(--att-danger)", flexShrink: 0 }} />
                 )}
-                <span className="font-semibold text-[#241A1C]">Min {targetPercentage}% Attendance</span>
+                <span style={{ fontWeight: 600, color: "var(--att-text-main)" }}>Min {targetPercentage}% Attendance</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
-                <span className="font-semibold text-[#241A1C]">Lab Experiments</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "var(--att-success)", flexShrink: 0 }} />
+                <span style={{ fontWeight: 600, color: "var(--att-text-main)" }}>Lab Experiments</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
-                <span className="font-semibold text-[#241A1C]">Internal Submissions</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "var(--att-success)", flexShrink: 0 }} />
+                <span style={{ fontWeight: 600, color: "var(--att-text-main)" }}>Internal Submissions</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
-                <span className="font-semibold text-[#241A1C]">Mid-Term Verified</span>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "var(--att-success)", flexShrink: 0 }} />
+                <span style={{ fontWeight: 600, color: "var(--att-text-main)" }}>Mid-Term Verified</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* History / Log Table */}
-        <div className="pt-6 border-t border-[#E5DCD4]">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[#B8A08A]" />
-              <h3 className="text-sm font-black text-[#241A1C]">
+        <div style={{ paddingTop: "1.5rem", borderTop: "1px solid var(--att-border)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Clock style={{ width: "1rem", height: "1rem", color: "var(--att-accent)" }} />
+              <h3 style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0 }}>
                 Recent Class Sessions for {subject.name}
               </h3>
             </div>
-            <span className="text-xs text-[#75666A]">Latest 5 records</span>
+            <span style={{ fontSize: "0.75rem", color: "var(--att-text-muted)" }}>Latest 5 records</span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", textAlign: "left", fontSize: "0.75rem", borderCollapse: "collapse" }}>
               <thead>
-                <tr className="border-b border-[#E5DCD4] text-[#75666A] uppercase tracking-wider font-bold text-[10px]">
-                  <th className="py-2.5 px-3">Date</th>
-                  <th className="py-2.5 px-3">Status</th>
-                  <th className="py-2.5 px-3">Session Notes</th>
-                  <th className="py-2.5 px-3 text-right">Faculty Verification</th>
+                <tr style={{ borderBottom: "1px solid var(--att-border)", color: "var(--att-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700, fontSize: "10px" }}>
+                  <th style={{ padding: "0.65rem 0.75rem" }}>Date</th>
+                  <th style={{ padding: "0.65rem 0.75rem" }}>Status</th>
+                  <th style={{ padding: "0.65rem 0.75rem" }}>Session Notes</th>
+                  <th style={{ padding: "0.65rem 0.75rem", textAlign: "right" }}>Faculty Verification</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E5DCD4]/60 font-medium">
+              <tbody>
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-[#F8F3EA]/50 transition-colors">
-                    <td className="py-3 px-3 font-semibold text-[#241A1C]">{log.date}</td>
-                    <td className="py-3 px-3">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-black ${
-                        log.status === "present"
-                          ? "bg-[#4F7A5A]/15 text-[#4F7A5A]"
-                          : "bg-[#A63D40]/15 text-[#A63D40]"
-                      }`}>
+                  <tr key={log.id} style={{ borderBottom: "1px solid var(--att-border-subtle)" }}>
+                    <td style={{ padding: "0.75rem", fontWeight: 600, color: "var(--att-text-main)" }}>{log.date}</td>
+                    <td style={{ padding: "0.75rem" }}>
+                      <span style={{
+                        display: "inline-block",
+                        padding: "0.15rem 0.5rem",
+                        borderRadius: "9999px",
+                        fontSize: "10px",
+                        fontWeight: 900,
+                        background: log.status === "present" ? "var(--att-success-light)" : "var(--att-danger-light)",
+                        color: log.status === "present" ? "var(--att-success-text)" : "var(--att-danger-text)"
+                      }}>
                         {log.status === "present" ? "Present" : "Absent"}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-[#75666A]">{log.note}</td>
-                    <td className="py-3 px-3 text-right text-[#4F7A5A] font-bold">
+                    <td style={{ padding: "0.75rem", color: "var(--att-text-muted)" }}>{log.note}</td>
+                    <td style={{ padding: "0.75rem", textAlign: "right", color: "var(--att-success)", fontWeight: 700 }}>
                       Verified ✓
                     </td>
                   </tr>

@@ -3,16 +3,12 @@ import {
   CheckCircle2,
   XCircle,
   Clock,
-  Calendar,
   Layers,
-  ArrowUpRight,
-  ArrowDownRight,
   CheckCheck,
-  RotateCcw,
-  Sparkles,
   MinusCircle
 } from "lucide-react";
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
+import "./Attendance.css";
 
 function RecordAttendance({ subjects, setSubjects }) {
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -109,69 +105,114 @@ function RecordAttendance({ subjects, setSubjects }) {
   }
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Daily Class Register Form */}
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#E5DCD4]">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-[#FAF2F3] text-[#6B1E2D] flex items-center justify-center">
-              <Layers className="w-6 h-6" />
+      <div className="att-register-card">
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem", paddingBottom: "1.25rem", borderBottom: "1px solid var(--att-border)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "3rem", height: "3rem", borderRadius: "var(--att-radius-md)", background: "var(--att-primary-light)", color: "var(--att-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Layers style={{ width: "1.5rem", height: "1.5rem" }} />
             </div>
             <div>
-              <h2 className="text-xl md:text-2xl font-black text-[#241A1C] tracking-tight">
+              <h2 style={{ fontSize: "1.35rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0, letterSpacing: "-0.02em" }}>
                 Daily Attendance Register
               </h2>
-              <p className="text-xs md:text-sm text-[#75666A] mt-0.5">
+              <p style={{ fontSize: "0.8125rem", color: "var(--att-text-muted)", margin: "0.25rem 0 0 0" }}>
                 Batch log all your lectures for today in one quick form.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3.5 py-2 bg-[#F8F3EA] border border-[#E5DCD4] rounded-xl text-xs font-bold text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A]"
+              style={{
+                padding: "0.55rem 0.85rem",
+                background: "var(--att-bg)",
+                border: "1px solid var(--att-border)",
+                borderRadius: "var(--att-radius-sm)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                color: "var(--att-text-main)",
+                outline: "none"
+              }}
             />
           </div>
         </div>
 
         {/* Quick Batch Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-[#F8F3EA] border border-[#E5DCD4]">
-          <span className="text-xs font-bold text-[#75666A]">
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", padding: "0.85rem 1rem", borderRadius: "var(--att-radius-md)", background: "var(--att-bg)", border: "1px solid var(--att-border)", margin: "1.25rem 0" }}>
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-muted)" }}>
             Quick Batch Actions:
           </span>
-          <div className="flex items-center gap-2">
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
             <button
               type="button"
               onClick={() => markAll("present")}
-              className="px-3 py-1.5 rounded-xl bg-[#4F7A5A]/10 text-[#4F7A5A] border border-[#4F7A5A]/30 text-xs font-bold hover:bg-[#4F7A5A]/20 transition-all flex items-center gap-1.5 cursor-pointer"
+              style={{
+                padding: "0.4rem 0.75rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-success-light)",
+                color: "var(--att-success-text)",
+                border: "1px solid var(--att-success-border)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem"
+              }}
             >
-              <CheckCircle2 className="w-3.5 h-3.5" />
+              <CheckCircle2 style={{ width: "0.875rem", height: "0.875rem" }} />
               Mark All Present
             </button>
             <button
               type="button"
               onClick={() => markAll("absent")}
-              className="px-3 py-1.5 rounded-xl bg-[#A63D40]/10 text-[#A63D40] border border-[#A63D40]/30 text-xs font-bold hover:bg-[#A63D40]/20 transition-all flex items-center gap-1.5 cursor-pointer"
+              style={{
+                padding: "0.4rem 0.75rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-danger-light)",
+                color: "var(--att-danger-text)",
+                border: "1px solid var(--att-danger-border)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem"
+              }}
             >
-              <XCircle className="w-3.5 h-3.5" />
+              <XCircle style={{ width: "0.875rem", height: "0.875rem" }} />
               Mark All Absent
             </button>
             <button
               type="button"
               onClick={() => markAll("no_class")}
-              className="px-3 py-1.5 rounded-xl bg-[#EFE8DC] text-[#75666A] text-xs font-bold hover:bg-[#E5DCD4] transition-all flex items-center gap-1.5 cursor-pointer"
+              style={{
+                padding: "0.4rem 0.75rem",
+                borderRadius: "var(--att-radius-sm)",
+                background: "var(--att-surface-alt)",
+                color: "var(--att-text-muted)",
+                border: "1px solid var(--att-border)",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.35rem"
+              }}
             >
-              <MinusCircle className="w-3.5 h-3.5" />
+              <MinusCircle style={{ width: "0.875rem", height: "0.875rem" }} />
               No Class Held
             </button>
           </div>
         </div>
 
         {/* Subjects List Rows */}
-        <form onSubmit={handleSaveDailyRegister} className="space-y-3">
+        <form onSubmit={handleSaveDailyRegister} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
           {subjects.map((sub) => {
             const status = markedStatus[sub.id] || "present";
             const currentPct = sub.total > 0 ? Math.round((sub.attended / sub.total) * 100) : 0;
@@ -179,58 +220,46 @@ function RecordAttendance({ subjects, setSubjects }) {
             return (
               <div
                 key={sub.id}
-                className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-2xl bg-[#FFFDF8] border border-[#E5DCD4] gap-3 hover:border-[#B8A08A]/60 transition-all"
+                className="att-register-subject-item"
               >
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-[#EFE8DC] text-[#75666A]">
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span className="att-code-tag blue" style={{ padding: "0.15rem 0.45rem", fontSize: "10px" }}>
                       {sub.code || "SUB"}
                     </span>
-                    <h4 className="text-sm font-bold text-[#241A1C]">
+                    <h4 style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
                       {sub.name}
                     </h4>
                   </div>
-                  <div className="text-xs text-[#75666A] mt-0.5">
+                  <div style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem" }}>
                     Faculty: {sub.faculty || "Faculty"} • Current: {sub.attended}/{sub.total} ({currentPct}%)
                   </div>
                 </div>
 
                 {/* 3 Status Option Buttons */}
-                <div className="inline-flex p-1 rounded-xl bg-[#EFE8DC] self-start sm:self-auto">
+                <div className="att-toggle-group">
                   <button
                     type="button"
                     onClick={() => setStatusFor(sub.id, "present")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                      status === "present"
-                        ? "bg-[#4F7A5A] text-white shadow-xs"
-                        : "text-[#75666A] hover:text-[#241A1C]"
-                    }`}
+                    className={`att-toggle-btn ${status === "present" ? "present active" : ""}`}
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <CheckCircle2 style={{ width: "0.875rem", height: "0.875rem" }} />
                     Present
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatusFor(sub.id, "absent")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                      status === "absent"
-                        ? "bg-[#A63D40] text-white shadow-xs"
-                        : "text-[#75666A] hover:text-[#241A1C]"
-                    }`}
+                    className={`att-toggle-btn ${status === "absent" ? "absent active" : ""}`}
                   >
-                    <XCircle className="w-3.5 h-3.5" />
+                    <XCircle style={{ width: "0.875rem", height: "0.875rem" }} />
                     Absent
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatusFor(sub.id, "no_class")}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
-                      status === "no_class"
-                        ? "bg-[#75666A] text-white shadow-xs"
-                        : "text-[#75666A] hover:text-[#241A1C]"
-                    }`}
+                    className={`att-toggle-btn ${status === "no_class" ? "no-class active" : ""}`}
                   >
-                    <MinusCircle className="w-3.5 h-3.5" />
+                    <MinusCircle style={{ width: "0.875rem", height: "0.875rem" }} />
                     Off / Cancelled
                   </button>
                 </div>
@@ -239,18 +268,32 @@ function RecordAttendance({ subjects, setSubjects }) {
           })}
 
           {message && (
-            <div className="p-4 rounded-xl bg-[#4F7A5A]/10 border border-[#4F7A5A]/30 text-[#4F7A5A] text-xs font-bold flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#4F7A5A] shrink-0" />
+            <div style={{ padding: "0.85rem 1rem", borderRadius: "var(--att-radius-sm)", background: "var(--att-success-light)", border: "1px solid var(--att-success-border)", color: "var(--att-success-text)", fontSize: "0.75rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <CheckCircle2 style={{ width: "1rem", height: "1rem", color: "var(--att-success)", flexShrink: 0 }} />
               <span>{message.text}</span>
             </div>
           )}
 
-          <div className="pt-3 flex justify-end">
+          <div style={{ paddingTop: "0.75rem", display: "flex", justifyContent: "flex-end" }}>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold shadow-md shadow-[#6B1E2D]/20 transition-all active:scale-95 flex items-center gap-2 cursor-pointer"
+              className="att-btn-primary"
+              style={{
+                padding: "0.65rem 1.5rem",
+                borderRadius: "var(--att-radius-md)",
+                background: "var(--att-primary)",
+                color: "#ffffff",
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                border: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                cursor: "pointer",
+                boxShadow: "var(--att-shadow-sm)"
+              }}
             >
-              <CheckCheck className="w-4 h-4" />
+              <CheckCheck style={{ width: "1rem", height: "1rem" }} />
               <span>Save Today's Register</span>
             </button>
           </div>
@@ -258,39 +301,43 @@ function RecordAttendance({ subjects, setSubjects }) {
       </div>
 
       {/* Recent History Table */}
-      <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-3xl p-6 md:p-8 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#B8A08A]" />
-            <h3 className="text-sm font-black text-[#241A1C]">
+      <div className="att-gauge-card" style={{ padding: "1.75rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <Clock style={{ width: "1rem", height: "1rem", color: "var(--att-accent)" }} />
+            <h3 style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-text-main)", margin: 0 }}>
               Recent Roll Call History
             </h3>
           </div>
-          <span className="text-xs text-[#75666A]">Past recordings</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--att-text-muted)" }}>Past recordings</span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", textAlign: "left", fontSize: "0.75rem", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-[#E5DCD4] text-[#75666A] uppercase tracking-wider font-bold text-[10px]">
-                <th className="py-2.5 px-3">Date</th>
-                <th className="py-2.5 px-3">Subject</th>
-                <th className="py-2.5 px-3">Time</th>
-                <th className="py-2.5 px-3 text-right">Status</th>
+              <tr style={{ borderBottom: "1px solid var(--att-border)", color: "var(--att-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700, fontSize: "10px" }}>
+                <th style={{ padding: "0.65rem 0.75rem" }}>Date</th>
+                <th style={{ padding: "0.65rem 0.75rem" }}>Subject</th>
+                <th style={{ padding: "0.65rem 0.75rem" }}>Time</th>
+                <th style={{ padding: "0.65rem 0.75rem", textAlign: "right" }}>Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5DCD4]/60 font-medium">
+            <tbody>
               {logs.map((item) => (
-                <tr key={item.id} className="hover:bg-[#F8F3EA]/50 transition-colors">
-                  <td className="py-3 px-3 font-semibold text-[#241A1C]">{item.date}</td>
-                  <td className="py-3 px-3 font-bold text-[#241A1C]">{item.subjectName}</td>
-                  <td className="py-3 px-3 text-[#75666A]">{item.time}</td>
-                  <td className="py-3 px-3 text-right">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-black ${
-                      item.status === "present"
-                        ? "bg-[#4F7A5A]/15 text-[#4F7A5A]"
-                        : "bg-[#A63D40]/15 text-[#A63D40]"
-                    }`}>
+                <tr key={item.id} style={{ borderBottom: "1px solid var(--att-border-subtle)" }}>
+                  <td style={{ padding: "0.75rem", fontWeight: 600, color: "var(--att-text-main)" }}>{item.date}</td>
+                  <td style={{ padding: "0.75rem", fontWeight: 700, color: "var(--att-text-main)" }}>{item.subjectName}</td>
+                  <td style={{ padding: "0.75rem", color: "var(--att-text-muted)" }}>{item.time}</td>
+                  <td style={{ padding: "0.75rem", textAlign: "right" }}>
+                    <span style={{
+                      display: "inline-block",
+                      padding: "0.15rem 0.5rem",
+                      borderRadius: "9999px",
+                      fontSize: "10px",
+                      fontWeight: 900,
+                      background: item.status === "present" ? "var(--att-success-light)" : "var(--att-danger-light)",
+                      color: item.status === "present" ? "var(--att-success-text)" : "var(--att-danger-text)"
+                    }}>
                       {item.status === "present" ? "Present" : "Absent"}
                     </span>
                   </td>

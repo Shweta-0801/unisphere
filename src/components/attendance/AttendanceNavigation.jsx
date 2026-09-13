@@ -6,6 +6,7 @@ import {
   TrendingUp,
   BookOpenCheck
 } from "lucide-react";
+import "./Attendance.css";
 
 function AttendanceNavigation({ activeSection, setActiveSection, atRiskCount = 0 }) {
   const navItems = [
@@ -18,8 +19,8 @@ function AttendanceNavigation({ activeSection, setActiveSection, atRiskCount = 0
   ];
 
   return (
-    <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-1.5 shadow-xs overflow-x-auto no-scrollbar">
-      <nav className="flex items-center gap-1.5 min-w-max" aria-label="Attendance navigation tabs">
+    <div className="att-nav-bar">
+      <nav className="att-nav-track" aria-label="Attendance navigation tabs">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeSection === item.id;
@@ -28,23 +29,15 @@ function AttendanceNavigation({ activeSection, setActiveSection, atRiskCount = 0
             <button
               key={item.id}
               onClick={() => setActiveSection(item.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                isActive
-                  ? "bg-[#6B1E2D] text-white shadow-xs"
-                  : "text-[#75666A] hover:text-[#241A1C] hover:bg-[#FAF6F0]"
-              }`}
+              className={`att-nav-btn ${isActive ? "active" : ""}`}
             >
-              <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-[#D8CBBE]" : "text-[#75666A]"}`} />
+              <Icon style={{ width: "1rem", height: "1rem", flexShrink: 0, color: isActive ? "var(--att-accent-light)" : "var(--att-text-muted)" }} />
               <span>{item.label}</span>
               {item.highlight && !isActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B8A08A] animate-pulse" />
+                <span className="att-nav-pulse" />
               )}
               {item.badge && (
-                <span className={`px-2 py-0.5 text-[10px] font-black rounded-full ${
-                  isActive
-                    ? "bg-white/20 text-white"
-                    : "bg-[#FAF0F0] text-[#A63D40] border border-[#ECCBCB]"
-                }`}>
+                <span className={`att-nav-badge ${isActive ? "" : "danger"}`}>
                   {item.badge}
                 </span>
               )}

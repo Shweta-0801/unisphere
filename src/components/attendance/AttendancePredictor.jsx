@@ -11,9 +11,9 @@ import {
   Calculator,
   Calendar,
   Zap,
-  Info,
-  ChevronRight
+  Info
 } from "lucide-react";
+import "./Attendance.css";
 
 function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
   const [selectedSubjectId, setSelectedSubjectId] = useState("all");
@@ -46,10 +46,6 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
   const isProjectedSafe = projectedPct >= targetPercentage;
 
   // Calculate Safe Bunks remaining in upcoming
-  // Max total classes = floor(attended_final / target_ratio)
-  // Or: how many of `upcoming` can be missed while attending (upcoming - missed) keeps >= target
-  // target * projectedTotal <= 100 * (attended + upcoming - missed)
-  // missed <= attended + upcoming - (target * projectedTotal / 100)
   const minRequiredToPass = Math.ceil((targetPercentage * projectedTotal - 100 * attended) / 100);
   const minRequiredClamped = Math.max(0, minRequiredToPass);
   const canAchieveTarget = minRequiredClamped <= upcoming;
@@ -58,9 +54,6 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
   // Catch-up calculation for current standing: how many consecutive classes to attend to reach target
   let consecutiveNeeded = 0;
   if (currentPct < targetPercentage && targetPercentage < 100) {
-    // (attended + x) / (total + x) >= target/100
-    // 100 * attended + 100 * x >= target * total + target * x
-    // x * (100 - target) >= target * total - 100 * attended
     consecutiveNeeded = Math.ceil((targetPercentage * total - 100 * attended) / (100 - targetPercentage));
     consecutiveNeeded = Math.max(1, consecutiveNeeded);
   }
@@ -98,62 +91,66 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Top Banner */}
-      <div className="bg-gradient-to-r from-[#48121E] via-[#6B1E2D] to-[#351019] rounded-3xl p-6 sm:p-8 text-[#FFFDF8] shadow-lg shadow-[#6B1E2D]/15">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center border border-white/15">
-              <Sparkles size={24} className="text-[#B8A08A]" />
+      <div className="att-header-hero" style={{ padding: "1.75rem 2rem" }}>
+        <div className="att-header-glow-1" />
+        <div className="att-header-glow-2" />
+
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "3rem", height: "3rem", borderRadius: "var(--att-radius-md)", background: "rgba(255, 255, 255, 0.12)", backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255, 255, 255, 0.15)" }}>
+              <Sparkles style={{ width: "1.5rem", height: "1.5rem", color: "var(--att-accent)" }} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-                  Smart Attendance Predictor & Simulator
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <h2 style={{ fontSize: "1.35rem", fontWeight: 900, letterSpacing: "-0.02em", margin: 0, color: "#ffffff" }}>
+                  Smart Attendance Predictor &amp; Simulator
                 </h2>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/15 border border-white/20 text-[#D8CBBE]">
+                <span style={{ fontSize: "10px", fontWeight: 700, padding: "0.15rem 0.5rem", borderRadius: "9999px", background: "rgba(255, 255, 255, 0.15)", border: "1px solid rgba(255, 255, 255, 0.2)", color: "var(--att-accent-light)" }}>
                   Predictive v2
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-[#D8CBBE] mt-1">
+              <p style={{ fontSize: "0.8125rem", color: "var(--att-accent-light)", marginTop: "0.25rem", margin: "0.25rem 0 0 0" }}>
                 Simulate your attendance trajectory, test what-if bunk scenarios, and ensure semester exam clearance.
               </p>
             </div>
           </div>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 backdrop-blur border border-white/20 text-xs font-bold self-start sm:self-auto text-[#FFFDF8]">
-            <Award size={16} className="text-[#B8A08A]" />
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1rem", borderRadius: "var(--att-radius-md)", background: "rgba(255, 255, 255, 0.12)", border: "1px solid rgba(255, 255, 255, 0.2)", fontSize: "0.75rem", fontWeight: 700, color: "#ffffff" }}>
+            <Award style={{ width: "1rem", height: "1rem", color: "var(--att-accent)" }} />
             <span>Target Threshold: {targetPercentage}%</span>
           </div>
         </div>
       </div>
 
       {/* Interactive Controls & Predictor Grid */}
-      <div className="grid lg:grid-cols-12 gap-6">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem" }}>
         
-        {/* LEFT COLUMN: Controls & What-If Simulator (7 cols) */}
-        <div className="lg:col-span-7 bg-[#FFFDF8] rounded-3xl p-6 sm:p-8 border border-[#E5DCD4] shadow-xs space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
-            <div className="flex items-center gap-2">
-              <Sliders size={18} className="text-[#6B1E2D]" />
-              <h3 className="text-base font-bold text-[#241A1C]">
+        {/* LEFT COLUMN: Controls & What-If Simulator */}
+        <div className="att-gauge-card" style={{ padding: "1.75rem" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1rem", borderBottom: "1px solid var(--att-border)", marginBottom: "1.25rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Sliders style={{ width: "1.125rem", height: "1.125rem", color: "var(--att-primary)" }} />
+              <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
                 Simulation Parameters
               </h3>
             </div>
-            <span className="text-xs text-[#75666A] font-medium">
+            <span style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", fontWeight: 500 }}>
               Adjust values to preview live outcome
             </span>
           </div>
 
           {/* Subject Scope */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-[#75666A] mb-2">
+          <div style={{ marginBottom: "1.25rem" }}>
+            <label className="att-input-label">
               Course / Subject Scope
             </label>
             <select
               value={selectedSubjectId}
               onChange={(e) => setSelectedSubjectId(e.target.value)}
-              className="w-full px-4 py-3 bg-[#F8F3EA] border border-[#E5DCD4] rounded-xl text-sm font-semibold text-[#241A1C] focus:outline-none focus:ring-2 focus:ring-[#B8A08A] focus:bg-[#FFFDF8] transition cursor-pointer"
+              className="att-form-control"
+              style={{ cursor: "pointer" }}
             >
               <option value="all">Overall (All Combined Semester Subjects)</option>
               {subjects.map((sub) => (
@@ -165,12 +162,12 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
           </div>
 
           {/* Upcoming Classes Slider */}
-          <div className="bg-[#F8F3EA] p-5 rounded-2xl border border-[#E5DCD4] space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#241A1C]">
+          <div style={{ background: "var(--att-surface-subtle)", padding: "1.25rem", borderRadius: "var(--att-radius-md)", border: "1px solid var(--att-border)", marginBottom: "1.25rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-main)" }}>
                 Classes Remaining This Semester
               </span>
-              <span className="text-sm font-black text-[#6B1E2D] bg-[#FAF2F3] px-3 py-1 rounded-lg border border-[#E5DCD4]">
+              <span style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-primary)", background: "var(--att-primary-light)", padding: "0.25rem 0.75rem", borderRadius: "var(--att-radius-xs)", border: "1px solid var(--att-primary-border)" }}>
                 {upcomingClasses} Lectures
               </span>
             </div>
@@ -180,9 +177,9 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
               max="40"
               value={upcomingClasses}
               onChange={(e) => setUpcomingClasses(Number(e.target.value))}
-              className="w-full accent-[#6B1E2D] cursor-pointer h-2 bg-[#E5DCD4] rounded-lg"
+              style={{ width: "100%", accentColor: "var(--att-primary)", cursor: "pointer", height: "0.5rem" }}
             />
-            <div className="flex justify-between text-[11px] text-[#75666A] font-medium">
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "var(--att-text-muted)", fontWeight: 500, marginTop: "0.35rem" }}>
               <span>1 Class</span>
               <span>20 Classes</span>
               <span>40 Classes (Full Term)</span>
@@ -190,12 +187,12 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
           </div>
 
           {/* Attendance Behavior Simulation */}
-          <div className="bg-[#F8F3EA] p-5 rounded-2xl border border-[#E5DCD4] space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#241A1C]">
+          <div style={{ background: "var(--att-surface-subtle)", padding: "1.25rem", borderRadius: "var(--att-radius-md)", border: "1px solid var(--att-border)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--att-text-main)" }}>
                 Your Planned Attendance Rate for Remaining Classes
               </span>
-              <span className="text-sm font-black text-[#6B1E2D] bg-[#FAF2F3] px-3 py-1 rounded-lg border border-[#E5DCD4]">
+              <span style={{ fontSize: "0.875rem", fontWeight: 900, color: "var(--att-primary)", background: "var(--att-primary-light)", padding: "0.25rem 0.75rem", borderRadius: "var(--att-radius-xs)", border: "1px solid var(--att-primary-border)" }}>
                 {attendRate}% ({simulatedAttendedUpcoming} of {upcoming})
               </span>
             </div>
@@ -206,53 +203,73 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
               step="5"
               value={attendRate}
               onChange={(e) => setAttendRate(Number(e.target.value))}
-              className="w-full accent-[#6B1E2D] cursor-pointer h-2 bg-[#E5DCD4] rounded-lg"
+              style={{ width: "100%", accentColor: "var(--att-primary)", cursor: "pointer", height: "0.5rem" }}
             />
             
             {/* Quick preset buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-2">
-              <span className="text-[11px] font-semibold text-[#75666A] mr-1">Quick Presets:</span>
+            <div style={{ paddingTop: "0.75rem", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--att-text-muted)", marginRight: "0.25rem" }}>Quick Presets:</span>
               <button
                 type="button"
                 onClick={() => setAttendRate(100)}
-                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
-                  attendRate === 100
-                    ? "bg-[#6B1E2D] text-white"
-                    : "bg-[#FFFDF8] border border-[#E5DCD4] text-[#75666A] hover:bg-[#F8F3EA]"
-                }`}
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "var(--att-radius-xs)",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  border: "1px solid var(--att-border)",
+                  background: attendRate === 100 ? "var(--att-primary)" : "var(--att-surface)",
+                  color: attendRate === 100 ? "#ffffff" : "var(--att-text-muted)"
+                }}
               >
                 100% (No Bunks)
               </button>
               <button
                 type="button"
                 onClick={() => setAttendRate(80)}
-                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
-                  attendRate === 80
-                    ? "bg-[#6B1E2D] text-white"
-                    : "bg-[#FFFDF8] border border-[#E5DCD4] text-[#75666A] hover:bg-[#F8F3EA]"
-                }`}
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "var(--att-radius-xs)",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  border: "1px solid var(--att-border)",
+                  background: attendRate === 80 ? "var(--att-primary)" : "var(--att-surface)",
+                  color: attendRate === 80 ? "#ffffff" : "var(--att-text-muted)"
+                }}
               >
                 80% (Moderate)
               </button>
               <button
                 type="button"
                 onClick={() => setAttendRate(50)}
-                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
-                  attendRate === 50
-                    ? "bg-[#6B1E2D] text-white"
-                    : "bg-[#FFFDF8] border border-[#E5DCD4] text-[#75666A] hover:bg-[#F8F3EA]"
-                }`}
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "var(--att-radius-xs)",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  border: "1px solid var(--att-border)",
+                  background: attendRate === 50 ? "var(--att-primary)" : "var(--att-surface)",
+                  color: attendRate === 50 ? "#ffffff" : "var(--att-text-muted)"
+                }}
               >
                 50% (High Bunk)
               </button>
               <button
                 type="button"
                 onClick={() => setAttendRate(0)}
-                className={`text-xs px-2.5 py-1 rounded-lg font-bold transition cursor-pointer ${
-                  attendRate === 0
-                    ? "bg-[#A63D40] text-white"
-                    : "bg-[#FFFDF8] border border-[#E5DCD4] text-[#75666A] hover:bg-[#F8F3EA]"
-                }`}
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "var(--att-radius-xs)",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  border: "1px solid var(--att-border)",
+                  background: attendRate === 0 ? "var(--att-danger)" : "var(--att-surface)",
+                  color: attendRate === 0 ? "#ffffff" : "var(--att-text-muted)"
+                }}
               >
                 0% (Skip All)
               </button>
@@ -260,149 +277,172 @@ function AttendancePredictor({ subjects = [], targetPercentage = 75 }) {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Live Projected Outcome & Health Gauge (5 cols) */}
-        <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
-          
-          {/* Main Outcome Card */}
-          <div className="bg-[#FFFDF8] rounded-3xl p-6 sm:p-8 border border-[#E5DCD4] shadow-xs flex-1 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#E5DCD4]">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#75666A]">
-                  Forecast Result
-                </span>
-                <span
-                  className={`text-xs font-bold px-3 py-1 rounded-full border ${
-                    isProjectedSafe
-                      ? "bg-[#4F7A5A]/10 text-[#4F7A5A] border-[#4F7A5A]/30"
-                      : "bg-[#A63D40]/10 text-[#A63D40] border-[#A63D40]/30"
-                  }`}
-                >
-                  {isProjectedSafe ? "Eligible for Exams ✓" : "Shortage Warning ⚠"}
-                </span>
+        {/* RIGHT COLUMN: Live Projected Outcome & Health Gauge */}
+        <div className="att-gauge-card" style={{ padding: "1.75rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.75rem", borderBottom: "1px solid var(--att-border)" }}>
+              <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
+                Forecast Result
+              </span>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  padding: "0.25rem 0.75rem",
+                  borderRadius: "9999px",
+                  border: "1px solid",
+                  background: isProjectedSafe ? "var(--att-success-light)" : "var(--att-danger-light)",
+                  color: isProjectedSafe ? "var(--att-success-text)" : "var(--att-danger-text)",
+                  borderColor: isProjectedSafe ? "var(--att-success-border)" : "var(--att-danger-border)"
+                }}
+              >
+                {isProjectedSafe ? "Eligible for Exams ✓" : "Shortage Warning ⚠"}
+              </span>
+            </div>
+
+            {/* Big Percentage Readout */}
+            <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+              <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--att-text-muted)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                Projected Final Attendance
+              </div>
+              <div
+                style={{
+                  fontSize: "3.5rem",
+                  fontWeight: 900,
+                  marginTop: "0.5rem",
+                  letterSpacing: "-0.03em",
+                  color: isProjectedSafe ? "var(--att-success)" : "var(--att-danger)"
+                }}
+              >
+                {projectedPct.toFixed(1)}%
               </div>
 
-              {/* Big Percentage Readout */}
-              <div className="mt-6 text-center">
-                <div className="text-[11px] font-bold text-[#75666A] uppercase tracking-widest">
-                  Projected Final Attendance
-                </div>
+              <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", fontSize: "0.75rem", fontWeight: 600, color: "var(--att-text-muted)" }}>
+                <span>Current: {currentPct.toFixed(1)}%</span>
+                <span>→</span>
+                <span style={{ color: projectedPct >= currentPct ? "var(--att-success)" : "var(--att-danger)", fontWeight: 700 }}>
+                  {projectedPct >= currentPct ? `+${(projectedPct - currentPct).toFixed(1)}%` : `${(projectedPct - currentPct).toFixed(1)}%`}
+                </span>
+              </div>
+            </div>
+
+            {/* Trajectory Bar */}
+            <div style={{ marginTop: "1.5rem" }}>
+              <div style={{ height: "0.75rem", width: "100%", background: "var(--att-surface-alt)", borderRadius: "9999px", overflow: "hidden", position: "relative" }}>
+                {/* Target Marker */}
                 <div
-                  className={`text-5xl sm:text-6xl font-black mt-2 tracking-tight ${
-                    isProjectedSafe ? "text-[#4F7A5A]" : "text-[#A63D40]"
-                  }`}
-                >
-                  {projectedPct.toFixed(1)}%
-                </div>
-
-                <div className="mt-3 flex items-center justify-center gap-2 text-xs font-semibold text-[#75666A]">
-                  <span>Current: {currentPct.toFixed(1)}%</span>
-                  <span>→</span>
-                  <span className={projectedPct >= currentPct ? "text-[#4F7A5A] font-bold" : "text-[#A63D40] font-bold"}>
-                    {projectedPct >= currentPct ? `+${(projectedPct - currentPct).toFixed(1)}%` : `${(projectedPct - currentPct).toFixed(1)}%`}
-                  </span>
-                </div>
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    width: "2px",
+                    background: "var(--att-text-main)",
+                    zIndex: 10,
+                    left: `${targetPercentage}%`
+                  }}
+                  title={`Target: ${targetPercentage}%`}
+                />
+                <div
+                  style={{
+                    height: "100%",
+                    borderRadius: "9999px",
+                    transition: "all 0.3s ease",
+                    background: isProjectedSafe ? "var(--att-success)" : "var(--att-danger)",
+                    width: `${Math.min(100, projectedPct)}%`
+                  }}
+                />
               </div>
-
-              {/* Trajectory Bar */}
-              <div className="mt-6">
-                <div className="h-3 w-full bg-[#EFE8DC] rounded-full overflow-hidden relative">
-                  {/* Target Marker */}
-                  <div
-                    className="absolute top-0 bottom-0 w-1 bg-[#241A1C] z-10"
-                    style={{ left: `${targetPercentage}%` }}
-                    title={`Target: ${targetPercentage}%`}
-                  />
-                  <div
-                    className={`h-full rounded-full transition-all duration-300 ${
-                      isProjectedSafe ? "bg-[#4F7A5A]" : "bg-[#A63D40]"
-                    }`}
-                    style={{ width: `${Math.min(100, projectedPct)}%` }}
-                  />
-                </div>
-                <div className="flex justify-between text-[10px] text-[#75666A] mt-1.5 font-medium">
-                  <span>0%</span>
-                  <span className="font-bold text-[#241A1C]">Target: {targetPercentage}%</span>
-                  <span>100%</span>
-                </div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "10px", color: "var(--att-text-muted)", marginTop: "0.35rem", fontWeight: 500 }}>
+                <span>0%</span>
+                <span style={{ fontWeight: 700, color: "var(--att-text-main)" }}>Target: {targetPercentage}%</span>
+                <span>100%</span>
               </div>
             </div>
+          </div>
 
-            {/* Prediction Breakdown */}
-            <div className="mt-6 pt-4 border-t border-[#E5DCD4] space-y-2.5 text-xs">
-              <div className="flex items-center justify-between text-[#75666A]">
-                <span>Final Projected Classes:</span>
-                <span className="font-bold text-[#241A1C]">{projectedAttended} of {projectedTotal} attended</span>
-              </div>
-              <div className="flex items-center justify-between text-[#75666A]">
-                <span>Allowed Bunks in Next {upcoming}:</span>
-                <span className="font-bold text-[#6B1E2D]">{safeBunksInUpcoming} safe bunks</span>
-              </div>
-              {currentPct < targetPercentage && consecutiveNeeded > 0 && (
-                <div className="p-2.5 rounded-xl bg-[#A63D40]/10 border border-[#A63D40]/30 text-[#A63D40] text-[11px] font-semibold flex items-center gap-2">
-                  <AlertTriangle size={14} className="shrink-0 text-[#A63D40]" />
-                  <span>Must attend next {consecutiveNeeded} consecutive classes to recover to {targetPercentage}%.</span>
-                </div>
-              )}
+          {/* Prediction Breakdown */}
+          <div style={{ marginTop: "1.5rem", paddingTop: "1rem", borderTop: "1px solid var(--att-border)", display: "flex", flexDirection: "column", gap: "0.65rem", fontSize: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "var(--att-text-muted)" }}>
+              <span>Final Projected Classes:</span>
+              <span style={{ fontWeight: 700, color: "var(--att-text-main)" }}>{projectedAttended} of {projectedTotal} attended</span>
             </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", color: "var(--att-text-muted)" }}>
+              <span>Allowed Bunks in Next {upcoming}:</span>
+              <span style={{ fontWeight: 700, color: "var(--att-primary)" }}>{safeBunksInUpcoming} safe bunks</span>
+            </div>
+            {currentPct < targetPercentage && consecutiveNeeded > 0 && (
+              <div style={{ padding: "0.65rem", borderRadius: "var(--att-radius-sm)", background: "var(--att-danger-light)", border: "1px solid var(--att-danger-border)", color: "var(--att-danger-text)", fontSize: "11px", fontWeight: 600, display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <AlertTriangle style={{ width: "0.875rem", height: "0.875rem", flexShrink: 0, color: "var(--att-danger)" }} />
+                <span>Must attend next {consecutiveNeeded} consecutive classes to recover to {targetPercentage}%.</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Scenario Matrix Cards */}
       <div>
-        <div className="mb-4">
-          <h3 className="text-base font-bold text-[#241A1C]">
+        <div style={{ marginBottom: "1rem" }}>
+          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "var(--att-text-main)", margin: 0 }}>
             End-of-Term Scenarios Comparison
           </h3>
-          <p className="text-xs text-[#75666A]">
+          <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem" }}>
             Pre-computed projections comparing different student attendance commitments.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
           {scenarios.map((sc, i) => {
             const meets = sc.pct >= targetPercentage;
             return (
               <div
                 key={i}
-                className="bg-[#FFFDF8] rounded-2xl p-5 border border-[#E5DCD4] shadow-2xs hover:border-[#B8A08A]/60 transition flex flex-col justify-between"
+                className="att-gauge-card"
+                style={{ padding: "1.25rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#75666A]">
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.75rem" }}>
+                    <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--att-text-muted)" }}>
                       Scenario {i + 1}
                     </span>
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
-                        meets
-                          ? "bg-[#4F7A5A]/10 text-[#4F7A5A]"
-                          : "bg-[#A63D40]/10 text-[#A63D40]"
-                      }`}
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        padding: "0.15rem 0.5rem",
+                        borderRadius: "var(--att-radius-xs)",
+                        background: meets ? "var(--att-success-light)" : "var(--att-danger-light)",
+                        color: meets ? "var(--att-success-text)" : "var(--att-danger-text)"
+                      }}
                     >
                       {meets ? "Clear" : "Shortage"}
                     </span>
                   </div>
 
-                  <div className="text-sm font-bold text-[#241A1C]">
+                  <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "var(--att-text-main)" }}>
                     {sc.label}
                   </div>
 
                   <div
-                    className={`text-3xl font-black mt-2 tracking-tight ${
-                      meets ? "text-[#4F7A5A]" : "text-[#A63D40]"
-                    }`}
+                    style={{
+                      fontSize: "1.875rem",
+                      fontWeight: 900,
+                      marginTop: "0.5rem",
+                      letterSpacing: "-0.02em",
+                      color: meets ? "var(--att-success)" : "var(--att-danger)"
+                    }}
                   >
                     {sc.pct.toFixed(1)}%
                   </div>
 
-                  <p className="text-xs text-[#75666A] mt-1">
+                  <p style={{ fontSize: "0.75rem", color: "var(--att-text-muted)", marginTop: "0.25rem" }}>
                     {sc.note}
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[#E5DCD4] text-[11px] font-semibold text-[#75666A] flex items-center justify-between">
+                <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid var(--att-border)", fontSize: "11px", fontWeight: 600, color: "var(--att-text-muted)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <span>Final: {sc.attended}/{projectedTotal}</span>
-                  <span className={meets ? "text-[#4F7A5A] font-bold" : "text-[#A63D40] font-bold"}>
+                  <span style={{ color: meets ? "var(--att-success)" : "var(--att-danger)", fontWeight: 700 }}>
                     {meets ? "Permitted" : "Barred"}
                   </span>
                 </div>
