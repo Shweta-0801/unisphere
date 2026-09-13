@@ -3,24 +3,39 @@ import ItemCard from "./ItemCard";
 
 function MyReportsPoints({
   activeSection,
+
   reports,
+
   reportsFilter,
   setReportsFilter,
+
   resolvedCount,
+
   isReportExpired,
+
   formatTimeAgo,
   formatDate,
+
   handleMarkAsFound,
+
   points,
+
   reward,
+
   isRewardExpired,
 }) {
   return (
     <>
+
+
       {activeSection === "my-reports" && (
+
         <div className="lostfound-section lostfound-reports-section">
+
           <div className="reports-filter-bar">
+
             <div className="filter-title-group">
+
               <h3 className="section-title">
                 Alex Sharma&apos;s Submitted Reports
               </h3>
@@ -30,9 +45,12 @@ function MyReportsPoints({
                 Items older than 3 hours
                 remain saved in history.
               </span>
+
             </div>
 
+
             <div className="filter-chips-list">
+
               <button
                 className={`filter-chip ${
                   reportsFilter === "all"
@@ -45,6 +63,7 @@ function MyReportsPoints({
               >
                 All ({reports.length})
               </button>
+
 
               <button
                 className={`filter-chip ${
@@ -67,6 +86,7 @@ function MyReportsPoints({
                 )
               </button>
 
+
               <button
                 className={`filter-chip ${
                   reportsFilter === "resolved"
@@ -81,6 +101,7 @@ function MyReportsPoints({
               >
                 Resolved ({resolvedCount})
               </button>
+
 
               <button
                 className={`filter-chip ${
@@ -104,12 +125,19 @@ function MyReportsPoints({
                 }
                 )
               </button>
+
             </div>
+
           </div>
 
+
+          
+
           <div className="reports-cards-grid">
+
             {reports
               .filter((item) => {
+
                 if (
                   reportsFilter === "active"
                 ) {
@@ -119,6 +147,7 @@ function MyReportsPoints({
                   );
                 }
 
+
                 if (
                   reportsFilter === "resolved"
                 ) {
@@ -126,6 +155,7 @@ function MyReportsPoints({
                     item.status === "resolved"
                   );
                 }
+
 
                 if (
                   reportsFilter === "expired"
@@ -136,9 +166,12 @@ function MyReportsPoints({
                   );
                 }
 
+
                 return true;
+
               })
               .map((item) => (
+
                 <ItemCard
                   key={item.id}
                   item={item}
@@ -155,16 +188,30 @@ function MyReportsPoints({
                     handleMarkAsFound
                   }
                 />
+
               ))}
+
           </div>
+
         </div>
+
       )}
 
+
+    
+
       {activeSection === "my-points" && (
+
         <div className="lostfound-section lostfound-points-section">
+
+
+
           <div className="lostfound-card points-overview-card">
+
             <div className="points-header-row">
+
               <div>
+
                 <h3 className="points-heading">
                   Alex Sharma&apos;s Points
                 </h3>
@@ -174,9 +221,12 @@ function MyReportsPoints({
                   reported/contributed item is
                   successfully resolved.
                 </p>
+
               </div>
 
+
               <div className="points-counter-badge">
+
                 <span className="points-huge-number">
                   {points}
                 </span>
@@ -184,11 +234,16 @@ function MyReportsPoints({
                 <span className="points-unit">
                   Points
                 </span>
+
               </div>
+
             </div>
 
+
             <div className="points-progress-block">
+
               <div className="progress-labels-row">
+
                 <span className="progress-title">
                   Progress to next reward
                 </span>
@@ -196,9 +251,12 @@ function MyReportsPoints({
                 <span className="progress-fraction">
                   {points} / 1000
                 </span>
+
               </div>
 
+
               <div className="progress-track">
+
                 <div
                   className="progress-fill"
                   style={{
@@ -208,28 +266,42 @@ function MyReportsPoints({
                     )}%`,
                   }}
                 ></div>
+
               </div>
 
+
               <div className="progress-helper-text">
+
                 {points >= 1000 ? (
+
                   <span className="text-green font-medium">
                     1000-point threshold
                     reached! Reward unlocked
                     below.
                   </span>
+
                 ) : (
+
                   <span>
                     {1000 - points} more
                     points needed to unlock
                     your food reward voucher.
                   </span>
+
                 )}
+
               </div>
+
             </div>
+
           </div>
 
+
+
           <div className="lostfound-card reward-voucher-card">
+
             <div className="reward-card-header">
+
               <h4 className="reward-title">
                 Campus Cafe Voucher
               </h4>
@@ -238,11 +310,16 @@ function MyReportsPoints({
                 Automatic reward unlocked
                 upon reaching 1000 points
               </span>
+
             </div>
 
+
             {reward ? (
+
               <div className="unlocked-voucher-content">
+
                 <div className="voucher-highlight-banner">
+
                   <span className="voucher-outlet">
                     {reward.outlet}
                   </span>
@@ -250,10 +327,14 @@ function MyReportsPoints({
                   <span className="voucher-amount">
                     {reward.discount}
                   </span>
+
                 </div>
 
+
                 <div className="voucher-details-grid">
+
                   <div className="voucher-detail-col">
+
                     <span className="detail-name">
                       Voucher Code
                     </span>
@@ -261,9 +342,12 @@ function MyReportsPoints({
                     <span className="detail-value voucher-code-text">
                       {reward.voucherCode}
                     </span>
+
                   </div>
 
+
                   <div className="voucher-detail-col">
+
                     <span className="detail-name">
                       Date Issued
                     </span>
@@ -273,9 +357,12 @@ function MyReportsPoints({
                         reward.issuedAt
                       )}
                     </span>
+
                   </div>
 
+
                   <div className="voucher-detail-col">
+
                     <span className="detail-name">
                       Expiry Date
                     </span>
@@ -285,43 +372,62 @@ function MyReportsPoints({
                         reward.expiresAt
                       )}
                     </span>
+
                   </div>
 
+
                   <div className="voucher-detail-col">
+
                     <span className="detail-name">
                       Status
                     </span>
 
+
                     {isRewardExpired ? (
+
                       <span className="voucher-status-badge status-expired">
                         Reward Expired
                       </span>
+
                     ) : (
+
                       <span className="voucher-status-badge status-valid">
                         Active • Valid for 24h
                       </span>
+
                     )}
+
                   </div>
+
                 </div>
 
+
                 <div className="voucher-rules-footer">
+
                   <p>
                     Present this voucher code
                     at the Campus Cafe counter
                     within 24 hours of generation
                     to redeem your ₹100 discount.
                   </p>
+
                 </div>
+
               </div>
+
             ) : (
+
               <div className="locked-voucher-state">
+
                 <div className="locked-shield-icon">
                   <span className="shield-symbol"></span>
                 </div>
 
+
                 <h5 className="locked-title">
                   Reward Locked
                 </h5>
+
 
                 <p className="locked-desc">
                   Resolve items to reach 1000
@@ -331,11 +437,17 @@ function MyReportsPoints({
                   24 hours will automatically
                   generate here.
                 </p>
+
               </div>
+
             )}
+
           </div>
+
         </div>
+
       )}
+
     </>
   );
 }
