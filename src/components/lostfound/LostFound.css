@@ -2,28 +2,29 @@
   --color-accent-taupe: #B8A08A;
   --color-accent-light: #D8CBBE;
 
-
+  /* Light Mode Palette */
   --bg-page: #F8F3EA;
   --bg-card: #FFFDF8;
   --bg-card-subtle: #FAF6F0;
   --bg-input: #FFFDF8;
 
-  --color-primary: #6B1E2D;          
+  --color-primary: #6B1E2D;          /* Muted deep blue */
   --color-primary-hover: #48121E;
   --color-primary-light: #F8F3EA;
 
-  --color-success: #4F7A5A;          
+  --color-success: #4F7A5A;          /* Soft academic green */
   --color-success-hover: #3A5E44;
   --color-success-light: #F0F6F2;
 
-  --color-danger: #A63D40;          
+  --color-danger: #A63D40;           /* Controlled red (Lost items & errors only) */
+  --color-danger-light: #FDF2F2;
   --color-danger-border: #EBC8C9;
 
-  --text-main: #241A1C;              
-  --text-muted: #75666A;            
+  --text-main: #241A1C;              /* Dark charcoal */
+  --text-muted: #75666A;             /* Soft grey */
   --text-inverse: #FFFDF8;
 
-  --border-color: #E5DCD4;           
+  --border-color: #E5DCD4;          
   --border-subtle: #EFE8DC;
 
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
@@ -42,16 +43,16 @@
 
 
 .dark-theme {
-  --bg-page: #241A1C;              
-  --bg-card: #241A1C;             
+  --bg-page: #241A1C;               /* Deep slate dark background */
+  --bg-card: #241A1C;               /* Slightly lighter dark card */
   --bg-card-subtle: #2B141A;
   --bg-input: #2B141A;
 
-  --color-primary: #6B1E2D;         
+  --color-primary: #6B1E2D;          /* Recognizable muted blue in dark mode */
   --color-primary-hover: #B8A08A;
   --color-primary-light: #351019;
 
-  --color-success: #4F7A5A;         
+  --color-success: #4F7A5A;          /* Soft recognizable green in dark mode */
   --color-success-hover: #4F7A5A;
   --color-success-light: #27422E;
 
@@ -59,8 +60,8 @@
   --color-danger-light: #351019;
   --color-danger-border: #48121E;
 
-  --text-main: #FAF6F0;             
-  --text-muted: #9C8E92;             
+  --text-main: #FAF6F0;              /* Light crisp readable text */
+  --text-muted: #9C8E92;             /* Muted dark mode grey */
   --text-inverse: #241A1C;
 
   --border-color: #48121E;
@@ -70,7 +71,6 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.45);
 }
-
 
 * {
   box-sizing: border-box;
@@ -107,6 +107,105 @@ input, select, textarea {
 }
 
 
+.w-full {
+  width: 100%;
+}
+
+
+.lostfound-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: rgba(255, 253, 248, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #E5DCD4;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  flex-shrink: 0;
+}
+
+.lostfound-top-left, .lostfound-top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lostfound-top-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background-color: #6B1E2D;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.lostfound-top-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #241A1C;
+  line-height: 1;
+}
+
+.lostfound-top-subtitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #75666A;
+  margin-top: 2px;
+}
+
+.lostfound-top-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #F0F5F2;
+  color: #4F7A5A;
+  border: 1px solid #C8DACD;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.lostfound-top-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #4F7A5A;
+}
+
+.lostfound-top-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background-color: #FAF6F0;
+  border: 1px solid #E5DCD4;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #241A1C;
+}
+
+.lostfound-top-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background-color: #6B1E2D;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
 .unisphere-navbar {
   position: sticky;
   top: 0;
@@ -128,7 +227,7 @@ input, select, textarea {
   gap: 16px;
 }
 
-
+/* Brand Logo */
 .unisphere-brand {
   display: flex;
   align-items: center;
@@ -175,7 +274,7 @@ input, select, textarea {
   color: var(--text-muted);
 }
 
-
+/* Top Navigation Links */
 .unisphere-nav-links {
   display: flex;
   align-items: center;
@@ -258,7 +357,7 @@ input, select, textarea {
   width: 100%;
 }
 
-
+/* Primary Button (Blue) */
 .unisphere-btn-primary {
   background-color: var(--color-primary);
   color: #FFFDF8;
@@ -269,7 +368,7 @@ input, select, textarea {
   background-color: var(--color-primary-hover);
 }
 
-
+/* Success Button (Green) */
 .unisphere-btn-success {
   background-color: var(--color-success);
   color: #FFFDF8;
@@ -280,6 +379,7 @@ input, select, textarea {
   background-color: var(--color-success-hover);
 }
 
+/* Outline / Neutral Button */
 .unisphere-btn-outline {
   background-color: var(--bg-card);
   color: var(--text-main);
@@ -291,6 +391,7 @@ input, select, textarea {
   border-color: var(--text-muted);
 }
 
+/* Secondary Button */
 .unisphere-btn-secondary {
   background-color: var(--bg-card-subtle);
   color: var(--text-main);
@@ -302,7 +403,7 @@ input, select, textarea {
   color: var(--color-primary);
 }
 
-
+/* Filter Chips */
 .filter-chip {
   padding: 6px 14px;
   font-size: 12.5px;
@@ -326,6 +427,7 @@ input, select, textarea {
   font-weight: 600;
 }
 
+/* Status Pills */
 .status-pill {
   display: inline-block;
   padding: 3px 8px;
@@ -411,6 +513,7 @@ input, select, textarea {
 .toast-close-btn:hover {
   color: var(--text-main);
 }
+
 
 .unisphere-home-layout {
   max-width: 1100px;
@@ -761,7 +864,7 @@ input, select, textarea {
   gap: 6px;
 }
 
-
+/* Map Canvas Container */
 .campus-map-wrapper {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -774,14 +877,14 @@ input, select, textarea {
   position: relative;
   width: 100%;
   height: 480px;
-  background-color: #f1f6f2; 
+  background-color: #f1f6f2; /* Soft campus lawn green */
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-color);
 }
 
 .dark-theme .campus-map-canvas {
-  background-color: #152220; 
+  background-color: #152220; /* Dark muted green lawn */
 }
 
 /* Pathways & Plaza */
@@ -834,6 +937,7 @@ input, select, textarea {
   color: #7da59a;
 }
 
+/* Campus Buildings */
 .map-building {
   position: absolute;
   background-color: var(--bg-card);
@@ -868,6 +972,7 @@ input, select, textarea {
   margin-top: 2px;
 }
 
+/* CSS Circular Markers (No Emojis!) */
 .lostfound-map-marker {
   position: absolute;
   width: 22px;
@@ -925,6 +1030,7 @@ input, select, textarea {
   background-color: var(--color-success);
 }
 
+/* Tooltip on Marker Hover */
 .marker-tooltip {
   position: absolute;
   bottom: 26px;
@@ -961,6 +1067,7 @@ input, select, textarea {
   opacity: 0.85;
 }
 
+/* Quick Strip Below Map */
 .map-recent-strip {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -1186,7 +1293,7 @@ input, select, textarea {
   background-color: var(--color-success);
 }
 
-
+/* Form Inputs */
 .form-input, .form-select, .form-textarea {
   width: 100%;
   padding: 10px 12px;
@@ -1253,6 +1360,7 @@ input, select, textarea {
   gap: 12px;
   margin-top: 8px;
 }
+
 
 .lostfound-reports-section {
   display: flex;
@@ -1423,9 +1531,7 @@ input, select, textarea {
   font-weight: 600;
 }
 
-/* --------------------------------------------------------------------------
-   11. SECTION D: MY POINTS & AUTOMATIC REWARD SYSTEM
-   -------------------------------------------------------------------------- */
+
 .lostfound-points-section {
   display: flex;
   flex-direction: column;
@@ -1679,6 +1785,7 @@ input, select, textarea {
   max-width: 420px;
   margin: 0 auto;
 }
+
 
 .unisphere-modal-overlay {
   position: fixed;
