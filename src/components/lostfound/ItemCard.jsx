@@ -10,7 +10,7 @@ function ItemCard({
   return (
     <div className="lostfound-card report-item-card">
 
-      
+      {/* IMAGE */}
 
       <div className="report-card-media">
 
