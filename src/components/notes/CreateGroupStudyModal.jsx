@@ -145,7 +145,7 @@ export default function CreateGroupStudyModal({
 
           <div className="modal-buttons-row">
             <button type="button" onClick={onClose} className="btn-cancel">Cancel</button>
-            <button type="submit" className="btn-confirm-submit">🚀 Launch Room Now</button>
+            <button type="submit" className="btn-confirm-submit"> Launch Room Now</button>
           </div>
         </form>
       </div>
