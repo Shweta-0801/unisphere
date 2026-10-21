@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  CalendarCheck,
   MessageSquare,
   Search,
   BookOpen,
+  Users,
+  Library,
   Bell,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
   Clock,
-  ChevronRight,
-  Sparkles
+  Compass
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
 import { useAuth } from "../context/AuthContext";
+import InteractiveAttendanceCard from "../components/dashboard/InteractiveAttendanceCard";
+import "./Dashboard.css";
 
-function DashboardPage() {
+export default function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -22,42 +28,57 @@ function DashboardPage() {
   const deptText = user?.department || "Computer Science & Engineering";
   const semText = user?.semester || "4th Semester";
 
+  // Core Campus Student Modules (Attendance integrated directly on the Dashboard)
   const modules = [
-    {
-      id: "attendance",
-      title: "Attendance & Exam Hub",
-      description: "Track lecture percentages, calculate safe bunks, and verify end-semester exam eligibility.",
-      icon: CalendarCheck,
-      stat: "88.4% Aggregate",
-      route: "/attendance",
-      btnText: "Open Attendance Hub →"
-    },
     {
       id: "complaints",
       title: "Grievances & Redressal",
-      description: "Report hostel, lab, cafeteria, or academic issues with transparent real-time tracking.",
+      description: "Report hostel, lab, cafeteria, or academic infrastructure issues with 9-stage transparent tracking.",
       icon: MessageSquare,
       stat: "0 Pending Tickets",
+      tag: "Direct Escalation",
       route: "/complaints",
-      btnText: "Open Complaints Portal →"
+      btnText: "Open Grievances"
     },
     {
       id: "lostfound",
       title: "Lost & Found Network",
-      description: "Post missing belongings or inspect found student items plotted on the interactive campus map.",
+      description: "Locate misplaced belongings plotted on the interactive campus map and earn voucher points.",
       icon: Search,
       stat: "120+ Recovered",
+      tag: "Campus Grid",
       route: "/lost-found",
-      btnText: "Open Lost & Found →"
+      btnText: "Open Lost & Found"
     },
     {
       id: "notes",
-      title: "Study Notes & Circle",
-      description: "Access semester study resources, unit summaries, and collaborate with peer study groups.",
+      title: "Notes Marketplace",
+      description: "Access verified semester lecture notes, handwritten cheatsheets, and sample 6-page previews.",
       icon: BookOpen,
       stat: "450+ Verified",
+      tag: "Peer Knowledge",
       route: "/notes",
-      btnText: "Open Study Notes →"
+      btnText: "Open Notes Market"
+    },
+    {
+      id: "group-study",
+      title: "Virtual Study Lounge",
+      description: "Collaborate in synchronous study rooms with live peer presence, shared notes, and Pomodoro focus timer.",
+      icon: Users,
+      stat: "24 Active Peers",
+      tag: "Live Sync",
+      route: "/group-study",
+      btnText: "Enter Study Lounge"
+    },
+    {
+      id: "library",
+      title: "Smart Library System",
+      description: "Check 36-seat live floor layout availability, reserve study desks, and search catalog return dates.",
+      icon: Library,
+      stat: "17 Seats Available",
+      tag: "Seat Map",
+      route: "/library",
+      btnText: "Open Smart Library"
     }
   ];
 
@@ -100,7 +121,7 @@ function DashboardPage() {
       date: "Sep 09, 2026"
     },
     {
-      tag: "Academic",
+      tag: "Infrastructure",
       title: "Hostel Wi-Fi Upgrade Completed in Block B",
       date: "Sep 08, 2026"
     }
@@ -108,266 +129,273 @@ function DashboardPage() {
 
   return (
     <AppLayout activePath="/dashboard">
-      {/* Top Header Bar */}
-      <header className="sticky top-0 z-20 bg-[#FFFDF8]/90 backdrop-blur-md border-b border-[#E5DCD4] h-16 flex items-center justify-between px-6 shrink-0">
-        <div>
-          <h1 className="text-base font-black text-[#241A1C] leading-none">
-            Academic Dashboard
-          </h1>
-          <p className="text-[11px] font-bold text-[#75666A] mt-1">
-            {semText} • {deptText}
-          </p>
-        </div>
+      <div className="dashboard-root">
+        {/* Top Header Bar */}
+        <header className="dash-top-header">
+          <div>
+            <h1 className="dash-header-title">Academic Dashboard</h1>
+            <p className="dash-header-subtitle">
+              {semText} • {deptText}
+            </p>
+          </div>
 
-        {/* Top Actions */}
-        <div className="flex items-center gap-3">
-          <div className="relative">
+          <div className="dash-header-actions">
+            <div className="dash-notif-wrap">
+              <button
+                type="button"
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                className="dash-icon-btn"
+                aria-label="View Campus Notifications"
+              >
+                <Bell size={18} />
+                <span className="dash-notif-dot" />
+              </button>
+
+              {notificationsOpen && (
+                <>
+                  <div
+                    className="dash-notif-backdrop"
+                    onClick={() => setNotificationsOpen(false)}
+                  />
+                  <div className="dash-notif-dropdown">
+                    <div className="dash-notif-head">
+                      <span className="dash-notif-title">Campus Alerts</span>
+                      <span className="dash-notif-badge">3 Unread</span>
+                    </div>
+                    <div className="dash-notif-list">
+                      {notices.map((n, i) => (
+                        <div key={i} className="dash-notif-item">
+                          <span className="dash-notif-tag">{n.tag}</span>
+                          <span className="dash-notif-item-title">{n.title}</span>
+                          <span className="dash-notif-date">{n.date}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
             <button
-              onClick={() => setNotificationsOpen(!notificationsOpen)}
-              className="p-2 rounded-xl text-[#75666A] hover:text-[#241A1C] hover:bg-[#FAF6F0] transition relative cursor-pointer"
+              type="button"
+              onClick={() => navigate("/notes")}
+              className="unisphere-btn unisphere-btn-primary"
             >
-              <Bell size={18} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#6B1E2D]" />
+              <BookOpen size={14} />
+              <span>Notes Marketplace</span>
             </button>
-
-            {notificationsOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-20"
-                  onClick={() => setNotificationsOpen(false)}
-                />
-                <div className="absolute right-0 mt-2 w-80 bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl shadow-xl p-4 z-30 animate-in fade-in zoom-in-95 duration-100">
-                  <div className="flex items-center justify-between pb-3 border-b border-[#E5DCD4]">
-                    <span className="text-xs font-black text-[#241A1C]">Campus Alerts</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F8F1F2] text-[#6B1E2D]">
-                      3 Unread
-                    </span>
-                  </div>
-                  <div className="mt-3 space-y-2.5">
-                    {notices.map((n, i) => (
-                      <div key={i} className="p-2.5 rounded-xl hover:bg-[#FAF6F0] transition text-xs border border-[#E5DCD4]/60">
-                        <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider block">
-                          {n.tag}
-                        </span>
-                        <span className="font-bold text-[#241A1C] block mt-0.5">{n.title}</span>
-                        <span className="text-[10px] text-[#75666A] mt-1 block">{n.date}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
           </div>
+        </header>
 
-          <button
-            onClick={() => navigate("/attendance")}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold transition shadow-xs active:scale-95 cursor-pointer"
-          >
-            <CalendarCheck size={14} />
-            <span>Attendance Hub</span>
-          </button>
-        </div>
-      </header>
-
-      {/* Dashboard Body */}
-      <main className="p-6 md:p-8 space-y-8 max-w-7xl">
         {/* Welcome Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#48121E] via-[#6B1E2D] to-[#351019] text-white p-6 md:p-8 shadow-md shadow-[#6B1E2D]/15">
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 -mb-16 w-64 h-64 rounded-full bg-[#B8A08A]/10 blur-2xl pointer-events-none" />
+        <section className="dash-welcome-card">
+          <div className="dash-welcome-blur-1" />
+          <div className="dash-welcome-blur-2" />
 
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#D8CBBE] text-xs font-bold border border-white/10">
-                <Sparkles size={13} className="text-[#B8A08A]" />
-                <span>Academic Overview • Spring 2026</span>
+          <div className="dash-welcome-content">
+            <div className="dash-welcome-left">
+              <div className="dash-welcome-badge">
+                <Sparkles size={13} />
+                <span>Academic Overview • Term 2026</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                Welcome back, {firstName}!
+
+              <h2 className="dash-welcome-headline">
+                Welcome back, {firstName}
               </h2>
-              <p className="text-xs md:text-sm text-[#D8CBBE] leading-relaxed">
-                Your academic attendance stands safely at <strong>88.4%</strong> across all enrolled subjects. No shortage warnings active.
+
+              <p className="dash-welcome-desc">
+                Your cumulative attendance stands well above the 75% university condonation cutoff. Review today's schedule, reserve study seats, or inspect recovery pins on campus.
               </p>
+
+              <div className="dash-welcome-quicklinks">
+                <button
+                  type="button"
+                  onClick={() => navigate("/lost-found")}
+                  className="dash-welcome-pill-btn"
+                >
+                  <Search size={14} />
+                  <span>Lost &amp; Found Grid</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/group-study")}
+                  className="dash-welcome-ghost-btn"
+                >
+                  <Users size={14} />
+                  <span>Join Study Room</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/library")}
+                  className="dash-welcome-ghost-btn"
+                >
+                  <Library size={14} />
+                  <span>View Seat Map</span>
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center">
-                <span className="text-2xl font-black text-white block leading-none">88.4%</span>
-                <span className="text-[10px] font-bold text-[#D8CBBE] uppercase tracking-wider mt-1 block">Overall</span>
-              </div>
-              <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center">
-                <span className="text-2xl font-black text-[#D8CBBE] block leading-none">4/4</span>
-                <span className="text-[10px] font-bold text-[#D8CBBE] uppercase tracking-wider mt-1 block">Courses Safe</span>
+            <div className="dash-standing-box">
+              <span className="dash-standing-val">88.4%</span>
+              <div className="dash-standing-meta">
+                <span className="dash-standing-label">Cohort Standing</span>
+                <span className="dash-standing-status">Exam Admittance Safe</span>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* 4 Pillars Modules Grid */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
+        {/* Interactive Attendance Calculator (Requirement 3) */}
+        <InteractiveAttendanceCard />
+
+        {/* Quick Metrics Row */}
+        <section className="dash-metrics-grid">
+          <div className="dash-metric-card">
+            <div className="dash-metric-head">
+              <span className="dash-metric-label">Safe Bunks</span>
+              <ShieldCheck size={18} className="dash-metric-icon" />
+            </div>
+            <span className="dash-metric-number">4 Classes</span>
+            <span className="dash-metric-sub">Without violating 75%</span>
+          </div>
+
+          <div className="dash-metric-card">
+            <div className="dash-metric-head">
+              <span className="dash-metric-label">Library Seats</span>
+              <Library size={18} className="dash-metric-icon" />
+            </div>
+            <span className="dash-metric-number">17 / 36</span>
+            <span className="dash-metric-sub">Seats currently available</span>
+          </div>
+
+          <div className="dash-metric-card">
+            <div className="dash-metric-head">
+              <span className="dash-metric-label">Voucher Rewards</span>
+              <Compass size={18} className="dash-metric-icon" />
+            </div>
+            <span className="dash-metric-number">200 Pts</span>
+            <span className="dash-metric-sub">1,000 pts = Cafe voucher</span>
+          </div>
+
+          <div className="dash-metric-card">
+            <div className="dash-metric-head">
+              <span className="dash-metric-label">Study Rooms</span>
+              <Users size={18} className="dash-metric-icon" />
+            </div>
+            <span className="dash-metric-number">3 Active</span>
+            <span className="dash-metric-sub">Synced live peer rooms</span>
+          </div>
+        </section>
+
+        {/* Core 6 Modules Grid */}
+        <section>
+          <div className="dash-section-head">
             <div>
-              <h3 className="text-lg font-black text-[#241A1C] tracking-tight">
-                Campus Service Modules
-              </h3>
-              <p className="text-xs text-[#75666A]">
-                Centralized access to all campus services and student tools.
+              <h2 className="dash-section-title">Campus Operating Pillars</h2>
+              <p className="dash-section-desc">
+                Integrated modules providing full control over your academic journey.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="dash-modules-grid">
             {modules.map((mod) => {
               const Icon = mod.icon;
               return (
                 <div
                   key={mod.id}
-                  className="bg-[#FFFDF8] rounded-3xl p-6 border border-[#E5DCD4] shadow-xs hover:border-[#B8A08A] hover:shadow-sm transition-all flex flex-col justify-between"
+                  className="dash-module-card"
+                  onClick={() => navigate(mod.route)}
+                  role="button"
+                  tabIndex={0}
                 >
                   <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-10 h-10 rounded-2xl bg-[#FAF6F0] text-[#6B1E2D] border border-[#E5DCD4] flex items-center justify-center">
+                    <div className="dash-mod-head">
+                      <div className="dash-mod-icon-halo">
                         <Icon size={20} />
                       </div>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#FAF6F0] text-[#75666A] border border-[#E5DCD4]">
-                        {mod.stat}
-                      </span>
+                      <span className="dash-mod-tag">{mod.tag}</span>
                     </div>
 
-                    <h4 className="text-base font-bold text-[#241A1C] mb-2">{mod.title}</h4>
-                    <p className="text-xs text-[#75666A] leading-relaxed mb-6">
-                      {mod.description}
-                    </p>
+                    <div className="dash-mod-body">
+                      <h3 className="dash-mod-title">{mod.title}</h3>
+                      <p className="dash-mod-desc">{mod.description}</p>
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => navigate(mod.route)}
-                    className="w-full py-2.5 rounded-xl bg-[#FAF6F0] hover:bg-[#6B1E2D] text-[#6B1E2D] hover:text-white border border-[#E5DCD4] hover:border-[#6B1E2D] text-xs font-bold transition-all flex items-center justify-center gap-1.5 group cursor-pointer"
-                  >
-                    <span>{mod.btnText}</span>
-                  </button>
+                  <div className="dash-mod-footer">
+                    <span className="dash-mod-stat">{mod.stat}</span>
+                    <span className="dash-mod-link">
+                      <span>{mod.btnText}</span>
+                      <ArrowRight size={13} />
+                    </span>
+                  </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
 
-        {/* Two Column Grid: Today's Classes & University Notices */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Today's Schedule Card */}
-          <div className="lg:col-span-7 bg-[#FFFDF8] rounded-3xl p-6 md:p-7 border border-[#E5DCD4] shadow-xs space-y-5">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF6F0] text-[#6B1E2D] flex items-center justify-center border border-[#E5DCD4]">
-                  <Clock size={16} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-black text-[#241A1C]">Today's Schedule</h3>
-                  <p className="text-[11px] font-semibold text-[#75666A]">
-                    Thursday • 3 Lectures Scheduled
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => navigate("/attendance")}
-                className="text-xs font-bold text-[#6B1E2D] hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                <span>View Attendance</span>
-                <ChevronRight size={14} />
-              </button>
+        {/* Timetable Schedule & Campus Announcements */}
+        <section className="dash-bottom-grid">
+          {/* Today's Timetable */}
+          <div className="dash-panel-card">
+            <div className="dash-panel-head">
+              <h3 className="dash-panel-title">Today's Class Schedule</h3>
+              <span className="dash-panel-pill">Tuesday • Term 2026</span>
             </div>
 
-            <div className="space-y-3">
+            <div className="dash-schedule-list">
               {todayClasses.map((cls, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#E5DCD4] hover:bg-white transition"
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 text-center shrink-0">
-                      <span className="text-[11px] font-black text-[#241A1C] block leading-tight">
-                        {cls.time.split(" ")[0]}
-                      </span>
-                      <span className="text-[10px] font-bold text-[#75666A] block">
-                        {cls.time.split(" ")[1]}
-                      </span>
+                <div key={idx} className="dash-schedule-row">
+                  <div className="dash-schedule-left">
+                    <div className="dash-schedule-time">
+                      <Clock size={13} />
+                      <span>{cls.time}</span>
                     </div>
-
-                    <div className="w-px h-8 bg-[#E5DCD4]" />
-
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#FFFDF8] text-[#6B1E2D] border border-[#E5DCD4]">
-                          {cls.code}
-                        </span>
-                        <span className="text-xs font-bold text-[#241A1C] truncate">{cls.subject}</span>
-                      </div>
-                      <div className="text-[11px] text-[#75666A] mt-0.5">
+                    <div className="dash-schedule-info">
+                      <span className="dash-schedule-subject">
+                        {cls.subject} ({cls.code})
+                      </span>
+                      <span className="dash-schedule-details">
                         {cls.faculty} • {cls.room}
-                      </div>
+                      </span>
                     </div>
                   </div>
 
-                  <div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                  <span
+                    className={`dash-schedule-status ${
                       cls.status === "Attended"
-                        ? "bg-[#F0F5F2] text-[#4F7A5A] border border-[#C8DACD]"
-                        : "bg-[#FAF6F0] text-[#75666A] border border-[#E5DCD4]"
-                    }`}>
-                      {cls.status}
-                    </span>
-                  </div>
+                        ? "status-attended"
+                        : "status-upcoming"
+                    }`}
+                  >
+                    {cls.status}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Notice Board & Important Updates */}
-          <div className="lg:col-span-5 bg-[#FFFDF8] rounded-3xl p-6 md:p-7 border border-[#E5DCD4] shadow-xs space-y-5">
-            <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#FAF6F0] text-[#6B1E2D] flex items-center justify-center border border-[#E5DCD4]">
-                  <Bell size={16} />
-                </div>
-                <div>
-                  <h3 className="text-sm font-black text-[#241A1C]">
-                    University Notices
-                  </h3>
-                  <p className="text-[11px] font-semibold text-[#75666A]">
-                    Dean & Department Bulletins
-                  </p>
-                </div>
-              </div>
-
-              <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">
-                Verified
-              </span>
+          {/* Institutional Bulletins */}
+          <div className="dash-panel-card">
+            <div className="dash-panel-head">
+              <h3 className="dash-panel-title">Campus Bulletins</h3>
+              <span className="dash-panel-pill">Verified</span>
             </div>
 
-            <div className="space-y-3">
-              {notices.map((nt, idx) => (
-                <div
-                  key={idx}
-                  className="p-3.5 rounded-2xl bg-[#FAF6F0] border border-[#E5DCD4] hover:bg-white transition"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#F8F1F2] px-2 py-0.5 rounded border border-[#E5DCD4]">
-                      {nt.tag}
-                    </span>
-                    <span className="text-[10px] text-[#75666A] font-semibold">{nt.date}</span>
-                  </div>
-                  <h5 className="text-xs font-bold text-[#241A1C] mt-2 leading-snug">
-                    {nt.title}
-                  </h5>
+            <div className="dash-schedule-list">
+              {notices.map((n, idx) => (
+                <div key={idx} className="dash-notif-item">
+                  <span className="dash-notif-tag">{n.tag}</span>
+                  <span className="dash-notif-item-title">{n.title}</span>
+                  <span className="dash-notif-date">{n.date}</span>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </main>
+        </section>
+      </div>
     </AppLayout>
   );
 }
-
-export default DashboardPage;
