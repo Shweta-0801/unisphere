@@ -5,54 +5,54 @@
    ========================================================================== */
 
 :root {
-  --att-primary: #6B1E2D;
-  --att-primary-hover: #48121E;
-  --att-primary-light: #FAF2F3;
-  --att-primary-border: #E5DCD4;
-  --att-primary-gradient: linear-gradient(135deg, #48121E 0%, #6B1E2D 50%, #351019 100%);
-  --att-primary-glow: rgba(107, 30, 45, 0.16);
+  --att-primary: #3B302A;
+  --att-primary-hover: #211D1A;
+  --att-primary-light: #EFEAE4;
+  --att-primary-border: #D6D0C8;
+  --att-primary-gradient: linear-gradient(135deg, #211D1A 0%, #3B302A 50%, #4A3E36 100%);
+  --att-primary-glow: rgba(59, 48, 42, 0.16);
 
-  --att-accent: #B8A08A;
-  --att-accent-light: #D8CBBE;
-  --att-accent-subtle: #EFEAE4;
+  --att-accent: #B7A594;
+  --att-accent-light: #D8C9B9;
+  --att-accent-subtle: #EAE8E4;
 
-  --att-indigo-gradient: linear-gradient(135deg, #48121E 0%, #6B1E2D 100%);
+  --att-indigo-gradient: linear-gradient(135deg, #211D1A 0%, #3B302A 100%);
   --att-emerald-gradient: linear-gradient(135deg, #3A5F44 0%, #4F7A5A 100%);
-  --att-rose-gradient: linear-gradient(135deg, #872E31 0%, #A63D40 100%);
+  --att-rose-gradient: linear-gradient(135deg, #6B1E2D 0%, #8C2A3E 100%);
 
   --att-success: #4F7A5A;
   --att-success-hover: #3A5F44;
-  --att-success-light: #F0F5F2;
+  --att-success-light: #EBF3ED;
   --att-success-border: #C8DACD;
   --att-success-text: #2D4C35;
 
-  --att-danger: #A63D40;
-  --att-danger-hover: #872E31;
+  --att-danger: #8C2A3E;
+  --att-danger-hover: #6B1E2D;
   --att-danger-light: #FAF0F0;
   --att-danger-border: #ECCBCB;
-  --att-danger-text: #682224;
+  --att-danger-text: #5A1623;
 
-  --att-warning: #B8A08A;
+  --att-warning: #B7A594;
   --att-warning-light: #FAF6F0;
-  --att-warning-border: #D8CBBE;
-  --att-warning-text: #75666A;
+  --att-warning-border: #D8C9B9;
+  --att-warning-text: #73685F;
 
-  --att-bg: #F8F3EA;
-  --att-surface: #FFFDF8;
-  --att-surface-subtle: #FAF6F0;
-  --att-surface-alt: #EFE8DC;
-  --att-border: #E5DCD4;
-  --att-border-subtle: #EFEAE4;
+  --att-bg: #EAE8E4;
+  --att-surface: #FAF9F6;
+  --att-surface-subtle: #F2EFEA;
+  --att-surface-alt: #D8C9B9;
+  --att-border: #D6D0C8;
+  --att-border-subtle: #E5E0D8;
 
-  --att-text-main: #241A1C;
-  --att-text-muted: #75666A;
-  --att-text-subtle: #B8A08A;
+  --att-text-main: #211D1A;
+  --att-text-muted: #8D857D;
+  --att-text-subtle: #B7A594;
 
-  --att-shadow-xs: 0 1px 2px rgba(36, 26, 28, 0.04);
-  --att-shadow-sm: 0 2px 4px rgba(36, 26, 28, 0.06);
-  --att-shadow-md: 0 6px 14px -2px rgba(36, 26, 28, 0.08), 0 2px 4px -1px rgba(36, 26, 28, 0.04);
-  --att-shadow-lg: 0 14px 28px -4px rgba(36, 26, 28, 0.1), 0 4px 8px -2px rgba(36, 26, 28, 0.05);
-  --att-shadow-xl: 0 24px 38px -6px rgba(36, 26, 28, 0.12), 0 8px 16px -4px rgba(36, 26, 28, 0.06);
+  --att-shadow-xs: 0 1px 2px rgba(33, 29, 26, 0.04);
+  --att-shadow-sm: 0 2px 4px rgba(33, 29, 26, 0.06);
+  --att-shadow-md: 0 6px 14px -2px rgba(33, 29, 26, 0.08), 0 2px 4px -1px rgba(33, 29, 26, 0.04);
+  --att-shadow-lg: 0 14px 28px -4px rgba(33, 29, 26, 0.1), 0 4px 8px -2px rgba(33, 29, 26, 0.05);
+  --att-shadow-xl: 0 24px 38px -6px rgba(33, 29, 26, 0.12), 0 8px 16px -4px rgba(33, 29, 26, 0.06);
 
   --att-radius-xs: 6px;
   --att-radius-sm: 10px;
@@ -70,7 +70,16 @@
   background-color: var(--att-bg);
   color: var(--att-text-main);
   padding-bottom: 5rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.att-page h1,
+.att-page h2,
+.att-page h3,
+.att-page h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  color: var(--att-text-main);
 }
 
 /* Sticky top bar */
@@ -1575,4 +1584,143 @@
 @keyframes attSlideUp {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* AttendancePage Layout & Helper Classes */
+.att-top-bar-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--att-radius-sm);
+  background-color: var(--att-primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--att-shadow-xs);
+}
+
+.att-top-bar-title {
+  font-size: 0.875rem;
+  font-weight: 900;
+  color: var(--att-text-main);
+  line-height: 1;
+  margin: 0;
+}
+
+.att-top-bar-sub {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--att-text-muted);
+  margin: 0.15rem 0 0 0;
+}
+
+.att-top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.att-btn-new-course {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--att-radius-sm);
+  background-color: var(--att-primary);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--att-shadow-xs);
+}
+
+.att-btn-new-course-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  stroke-width: 2.5;
+}
+
+.att-overview-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.att-courses-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.att-courses-head-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.att-courses-heading {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--att-text-main);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.att-courses-subtext {
+  font-size: 0.75rem;
+  color: var(--att-text-muted);
+  margin: 0.15rem 0 0 0;
+}
+
+.att-empty-courses-card {
+  padding: 3rem;
+  text-align: center;
+}
+
+.att-empty-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--att-accent);
+  margin: 0 auto 0.75rem auto;
+}
+
+.att-empty-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--att-text-main);
+  margin: 0;
+}
+
+.att-empty-desc {
+  font-size: 0.75rem;
+  color: var(--att-text-muted);
+  max-width: 24rem;
+  margin: 0.25rem auto 0 auto;
+}
+
+.att-empty-reset-btn {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--att-primary-light);
+  color: var(--att-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--att-radius-sm);
+  border: none;
+  cursor: pointer;
+}
+
+.att-toast-icon-success {
+  width: 1rem;
+  height: 1rem;
+  color: var(--att-success);
+  flex-shrink: 0;
+}
+
+.att-toast-icon-warning {
+  width: 1rem;
+  height: 1rem;
+  color: var(--att-accent);
+  flex-shrink: 0;
 }
