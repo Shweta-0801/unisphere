@@ -25,6 +25,7 @@ import AddSubjectModal from "../components/attendance/AddSubjectModal";
 import { loadFromStorage, saveToStorage } from "../utils/storage";
 import AppLayout from "../components/layout/AppLayout";
 import { useAuth } from "../context/AuthContext";
+import { getStoredAttendanceHistory } from "../data/teacherData";
 import "../components/attendance/Attendance.css";
 
 const DEFAULT_SUBJECTS = [
@@ -110,6 +111,19 @@ function AttendancePage() {
   useEffect(() => {
     saveToStorage("attendanceTargetPercentage", targetPercentage);
   }, [targetPercentage]);
+
+  // Sync when storage is updated externally (e.g. by Teacher Attendance Management)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = loadFromStorage("attendanceSubjects", null);
+      if (saved && Array.isArray(saved) && saved.length > 0) {
+        setSubjects(saved);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   // Aggregate metrics
   const totalClasses = subjects.reduce((sum, s) => sum + (s.total || 0), 0);
@@ -265,7 +279,47 @@ function AttendancePage() {
 
       {/* Main Container */}
       <main className="att-main">
-        
+        {/* Real-time Teacher Attendance Sync Banner */}
+        <div style={{
+          background: "#FAF9F6",
+          border: "1px solid #D6D0C8",
+          borderLeft: "4px solid #4F7A5A",
+          borderRadius: "12px",
+          padding: "10px 16px",
+          marginBottom: "16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "8px"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#4F7A5A", display: "inline-block" }} />
+            <span style={{ fontSize: "12px", fontWeight: "700", color: "#3B302A" }}>
+              Teacher Attendance Sync Active:
+            </span>
+            <span style={{ fontSize: "12px", color: "#8D857D" }}>
+              Student records are directly synchronized with Faculty Attendance Management.
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={() => navigate("/attendance-management")}
+            style={{
+              background: "#EFEAE4",
+              border: "1px solid #D6D0C8",
+              borderRadius: "9999px",
+              padding: "4px 12px",
+              fontSize: "11px",
+              fontWeight: "700",
+              color: "#3B302A",
+              cursor: "pointer"
+            }}
+          >
+            Faculty Roll Call Register ↗
+          </button>
+        </div>
+
         {/* Header Hero Banner */}
         <AttendanceHeader
           targetPercentage={targetPercentage}
