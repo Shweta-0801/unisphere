@@ -79,7 +79,7 @@ export const initialAttendanceData = {
     },
     {
       id: "t2",
-      time: "10:15 AM - 11:15 AM",
+      time: "10:15 AM – 11:15 AM",
       subject: "Database Management Systems",
       code: "CS-302",
       faculty: "Prof. Sunita Rao",
@@ -89,7 +89,7 @@ export const initialAttendanceData = {
     },
     {
       id: "t3",
-      time: "11:30 AM - 01:00 PM",
+      time: "11:30 AM – 01:00 PM",
       subject: "Full-Stack Web Development Lab",
       code: "CS-305L",
       faculty: "Prof. Vikram Mehta",
@@ -99,7 +99,7 @@ export const initialAttendanceData = {
     },
     {
       id: "t4",
-      time: "02:00 PM - 03:00 PM",
+      time: "02:00 PM – 03:00 PM",
       subject: "Computer Networks & Security",
       code: "CS-304",
       faculty: "Prof. Priya Nair",

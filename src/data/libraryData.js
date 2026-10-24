@@ -310,3 +310,4 @@ export const initialIssuedBooks = [
     returnDate: getRelativeDateString(6) // Due in the future (Issued)
   }
 ];
+

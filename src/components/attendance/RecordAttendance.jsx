@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -34,6 +34,19 @@ function RecordAttendance({ subjects, setSubjects }) {
       { id: 3, date: "2026-03-07", subjectName: "Java Programming & OOP", status: "absent", time: "02:00 PM" }
     ]);
   });
+
+  // Sync when storage is updated externally (e.g. by Teacher Attendance Management)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedLogs = loadFromStorage("attendanceLogsHistory", null);
+      if (savedLogs && Array.isArray(savedLogs)) {
+        setLogs(savedLogs);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   function setStatusFor(subjectId, status) {
     setMarkedStatus((prev) => ({
