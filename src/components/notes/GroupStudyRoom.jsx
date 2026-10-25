@@ -167,7 +167,7 @@ export default function GroupStudyRoom({
             <div className="presence-chips">
               {activeRoom.activeStudents?.map((student) => (
                 <div key={student.id} className="student-presence-chip">
-                  <span className="chip-avatar" style={{ backgroundColor: student.color }}>
+                  <span className="chip-avatar">
                     {student.avatar}
                   </span>
                   <div className="chip-details">
@@ -262,13 +262,13 @@ export default function GroupStudyRoom({
               )}
 
               {/* Collaborative Pointers */}
-              <div className="live-cursor cursor-peer-1" style={{ top: "34%", left: "65%" }}>
-                <span className="cursor-arrow" style={{ color: "#8B5CF6" }}>▲</span>
-                <span className="cursor-label" style={{ backgroundColor: "#8B5CF6" }}>Aanya (Reading)</span>
+              <div className="live-cursor cursor-peer-1">
+                <span className="cursor-arrow cursor-color-purple">▲</span>
+                <span className="cursor-label cursor-bg-purple">Aanya (Reading)</span>
               </div>
-              <div className="live-cursor cursor-peer-2" style={{ top: "66%", left: "30%" }}>
-                <span className="cursor-arrow" style={{ color: "#10B981" }}>▲</span>
-                <span className="cursor-label" style={{ backgroundColor: "#10B981" }}>Rahul (Highlighting)</span>
+              <div className="live-cursor cursor-peer-2">
+                <span className="cursor-arrow cursor-color-emerald">▲</span>
+                <span className="cursor-label cursor-bg-emerald">Rahul (Highlighting)</span>
               </div>
             </div>
 
@@ -299,7 +299,7 @@ export default function GroupStudyRoom({
             {activeRoom.chat?.map((m) => (
               <div key={m.id} className={`chat-bubble ${m.avatar === "YOU" || m.avatar === "ME" ? "mine" : "peer"}`}>
                 <div className="bubble-head">
-                  <span className="bubble-sender" style={{ color: m.color }}>{m.sender}</span>
+                  <span className="bubble-sender">{m.sender}</span>
                   <span className="bubble-time">{m.time}</span>
                 </div>
                 <div className="bubble-text">{m.text}</div>
