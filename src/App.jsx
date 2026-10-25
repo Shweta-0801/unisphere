@@ -1,61 +1,188 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 import ScrollToTop from "./components/common/ScrollToTop";
 
 import HomePage from "./pages/HomePage";
+import RoleSelectionPage from "./pages/RoleSelection/RoleSelectionPage";
+import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
-import AttendancePage from "./pages/AttendancePage";
+import LostFoundPage from "./pages/LostFoundPage";
+import ComplaintsPage from "./pages/ComplaintsPage";
+import NotesPage from "./pages/NotesPage";
+import GroupStudyPage from "./pages/GroupStudy/GroupStudyPage";
 import LibraryPage from "./pages/Library/LibraryPage";
+import AttendancePage from "./pages/AttendancePage";
+import AcademicPerformancePage from "./pages/AcademicPerformancePage";
+import AttendanceManagementPage from "./pages/AttendanceManagementPage";
 import MyClassesPage from "./pages/Teacher/MyClassesPage";
-
-// Clean placeholder for other team members' modules in progress
-const TeammateModulePlaceholder = ({ name }) => (
-  <div style={{ padding: "4rem 2rem", textAlign: "center", color: "var(--unisphere-text-dark, #211D1A)" }}>
-    <h2 style={{ fontFamily: "var(--font-serif, serif)", fontSize: "1.75rem", marginBottom: "0.75rem" }}>{name}</h2>
-    <p style={{ color: "var(--unisphere-text-muted, #8D857D)", maxWidth: "450px", margin: "0 auto" }}>
-      This module is assigned to a teammate and will be fully integrated when their respective branch is merged.
-    </p>
-  </div>
-);
+import AssignmentsPage from "./pages/Teacher/AssignmentsPage";
+import TeacherDashboardPage from "./pages/Teacher/TeacherDashboardPage";
+import NotFoundPage from "./pages/NotFound/NotFoundPage";
 
 function App() {
   return (
-    <AuthProvider>
-      <ScrollToTop />
-      <Routes>
-        {/* ================= PUBLIC & MAIN DASHBOARD ================= */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <ScrollToTop />
+          <Routes>
+            {/* ================= PUBLIC ROUTES ================= */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/role-selection" element={<RoleSelectionPage />} />
+            <Route path="/login" element={<LoginPage initialMode="login" />} />
+            <Route path="/register" element={<LoginPage initialMode="register" />} />
 
-        {/* ================= SHWETA'S ASSIGNED MODULES ================= */}
-        {/* 1. Student Attendance */}
-        <Route path="/attendance" element={<AttendancePage />} />
+            {/* ================= CORE DASHBOARD (ROLE-ADAPTIVE) ================= */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* 2. Smart Library */}
-        <Route path="/library" element={<LibraryPage />} />
+            {/* ================= STUDENT MODULES (FULLY PRESERVED) ================= */}
+            <Route
+              path="/attendance"
+              element={
+                <ProtectedRoute>
+                  <AttendancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/lost-found"
+              element={
+                <ProtectedRoute>
+                  <LostFoundPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/complaints"
+              element={
+                <ProtectedRoute>
+                  <ComplaintsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/notes"
+              element={
+                <ProtectedRoute>
+                  <NotesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/group-study"
+              element={
+                <ProtectedRoute>
+                  <GroupStudyPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/library"
+              element={
+                <ProtectedRoute>
+                  <LibraryPage />
+                </ProtectedRoute>
+              }
+            />
 
-        {/* 3. My Classes & Students (Teacher) */}
-        <Route path="/teacher/classes" element={<MyClassesPage />} />
-        <Route path="/my-classes" element={<Navigate to="/teacher/classes" replace />} />
-        <Route path="/teacher/students" element={<Navigate to="/teacher/classes" replace />} />
+            {/* ================= THE FIVE TEACHER MODULES ================= */}
+            {/* Module A: My Classes & Students */}
+            <Route
+              path="/teacher/classes"
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <MyClassesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-classes"
+              element={<Navigate to="/teacher/classes" replace />}
+            />
+            <Route
+              path="/teacher/students"
+              element={<Navigate to="/teacher/classes" replace />}
+            />
 
-        {/* ================= TEAMMATE ROUTE PLACEHOLDERS ================= */}
-        <Route path="/lost-found" element={<TeammateModulePlaceholder name="Lost & Found" />} />
-        <Route path="/complaints" element={<TeammateModulePlaceholder name="Complaints Portal" />} />
-        <Route path="/notes" element={<TeammateModulePlaceholder name="Notes Marketplace" />} />
-        <Route path="/group-study" element={<TeammateModulePlaceholder name="Group Study Hub" />} />
-        <Route path="/teacher/assignments" element={<TeammateModulePlaceholder name="Assignments Portal" />} />
-        <Route path="/assignments" element={<Navigate to="/teacher/assignments" replace />} />
-        <Route path="/academic-performance" element={<TeammateModulePlaceholder name="Academic Performance" />} />
-        <Route path="/attendance-management" element={<TeammateModulePlaceholder name="Attendance Management" />} />
-        <Route path="/teacher/dashboard" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/teacher" element={<Navigate to="/teacher/classes" replace />} />
+            {/* Module B: Teacher Dashboard */}
+            <Route
+              path="/teacher/dashboard"
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <TeacherDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher"
+              element={<Navigate to="/teacher/dashboard" replace />}
+            />
 
-        {/* ================= 404 FALLBACK ================= */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </AuthProvider>
+            {/* Module C: Assignments Portal */}
+            <Route
+              path="/teacher/assignments"
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <AssignmentsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/assignments"
+              element={<Navigate to="/teacher/assignments" replace />}
+            />
+
+            {/* Module D: Academic Performance */}
+            <Route
+              path="/academic-performance"
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <AcademicPerformancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/academic-performance"
+              element={<Navigate to="/academic-performance" replace />}
+            />
+            <Route
+              path="/teacher/performance"
+              element={<Navigate to="/academic-performance" replace />}
+            />
+
+            {/* Module E: Attendance Management */}
+            <Route
+              path="/attendance-management"
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <AttendanceManagementPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/teacher/attendance"
+              element={<Navigate to="/attendance-management" replace />}
+            />
+            <Route
+              path="/teacher/attendance-management"
+              element={<Navigate to="/attendance-management" replace />}
+            />
+
+            {/* ================= 404 CATCH-ALL ================= */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+     </AuthProvider>
+    </LanguageProvider>
+  </ThemeProvider>
   );
 }
 
