@@ -787,3 +787,219 @@ button {
   justify-content: center;
 }
 
+/* ==========================================================================
+   DARK THEME PALETTE OVERRIDES ([data-theme="dark"])
+   Luxury Obsidian & Dark Espresso Velvet Institutional Aesthetic
+   ========================================================================== */
+
+[data-theme="dark"] {
+  /* Surfaces & Canvas */
+  --unisphere-bg-main: #141110;
+  --unisphere-card-dark: #1E1917;
+  --unisphere-warm-brown: #B7A594;
+  --unisphere-light-beige: #2A231F;
+  --unisphere-surface-white: #1C1715;
+  --unisphere-text-dark: #FAF8F5;
+  --unisphere-text-light: #141110;
+  --unisphere-text-muted: #A89F96;
+  --unisphere-border: #2E2724;
+
+  /* Global Brand Core in Dark Mode */
+  --primary-burgundy: #D8C9B9;
+  --dark-burgundy: #141110;
+  --deep-wine: #0D0B0A;
+  --burgundy-light: #2A221E;
+  --burgundy-glow: rgba(216, 201, 185, 0.16);
+
+  /* Warm Taupe & Sand Accents */
+  --champagne-accent: #C4B3A2;
+  --champagne-light: #332B26;
+  --champagne-subtle: #1C1715;
+
+  --cream: #141110;
+  --cream-light: #1C1715;
+  --cream-dark: #26201C;
+  --warm-white: #1C1715;
+
+  /* Typography */
+  --dark-text: #FAF8F5;
+  --muted-text: #A89F96;
+  --light-text: #FAF8F5;
+
+  /* Borders & Dividers */
+  --light-border: #2E2724;
+  --border-subtle: #241E1B;
+  --border-main: #2E2724;
+
+  /* Standard Element Defaults */
+  --bg-main: #141110;
+  --bg-surface: #1C1715;
+  --text-main: #FAF8F5;
+  --text-muted: #A89F96;
+
+  /* Refined Dark Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 14px -2px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 14px 28px -4px rgba(0, 0, 0, 0.7);
+}
+
+/* Smooth background transition when toggling */
+body, .app-shell, .app-sidebar, .app-mobile-header, .app-main-viewport {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ==========================================================================
+   THEME TOGGLE & LANGUAGE SELECTOR CONTROLS
+   ========================================================================== */
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--burgundy-light);
+  border: 1px solid var(--light-border);
+  border-radius: var(--radius-sm);
+  color: var(--dark-text);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--champagne-light);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-icon-wrap.dark-active {
+  transform: rotate(360deg);
+}
+
+.sun-icon {
+  color: #E5A93B;
+}
+
+.moon-icon {
+  color: var(--primary-burgundy);
+}
+
+/* Language Selector Dropdown */
+.lang-selector-root {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-selector-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  background: var(--burgundy-light);
+  border: 1px solid var(--light-border);
+  border-radius: var(--radius-sm);
+  color: var(--dark-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-selector-trigger:hover {
+  background: var(--champagne-light);
+}
+
+.lang-chevron {
+  transition: transform 0.2s ease;
+}
+
+.lang-chevron.open {
+  transform: rotate(180deg);
+}
+
+.lang-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 140px;
+  background: var(--bg-surface);
+  border: 1px solid var(--light-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 0.35rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.lang-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xs);
+  color: var(--dark-text);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.lang-dropdown-item:hover {
+  background: var(--burgundy-light);
+}
+
+.lang-dropdown-item.active {
+  font-weight: 700;
+  background: var(--burgundy-light);
+}
+
+.lang-check {
+  margin-left: auto;
+  color: var(--primary-burgundy);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive mobile header controls styling */
+.mobile-header-actions-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+@media (max-width: 480px) {
+  /* Hide the text label 'Dark/Light' on small mobile and only show the Sun/Moon icon */
+  .mobile-header-actions-wrap .theme-toggle-label {
+    display: none;
+  }
+
+  .mobile-header-actions-wrap .theme-toggle-btn {
+    padding: 0.35rem 0.45rem;
+  }
+
+  .mobile-header-actions-wrap .lang-selector-trigger {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .mobile-header-actions-wrap .mobile-signin-btn {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+}
