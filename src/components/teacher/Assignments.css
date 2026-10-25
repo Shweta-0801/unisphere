@@ -594,3 +594,140 @@
   color: #8D857D;
   padding: 4px 0;
 }
+
+
+/* =============================================================================
+   DARK THEME PALETTE OVERRIDES FOR ASSIGNMENTS PORTAL
+   ============================================================================= */
+
+[data-theme="dark"] .asg-header-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-badge {
+  background-color: #261E1A;
+  color: #D8C9B9;
+  border: 1px solid #382E28;
+}
+
+[data-theme="dark"] .asg-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-subtitle {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .asg-nav-tabs {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-tab-btn {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .asg-tab-btn:hover {
+  background-color: #241C1A;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-tab-btn.active {
+  background-color: #2E231E;
+  color: #FAF8F5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .asg-filter-bar {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-search-input,
+[data-theme="dark"] .asg-select {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-item-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .asg-item-card:hover {
+  border-color: #4A3C34;
+}
+
+[data-theme="dark"] .asg-card-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-card-desc {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .asg-chip {
+  background-color: #241C1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .asg-deadline-row {
+  border-top-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-submissions-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-sub-row {
+  border-bottom-color: #261F1C;
+}
+
+[data-theme="dark"] .asg-student-name {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-student-roll {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .asg-score-group label,
+[data-theme="dark"] .asg-feedback-group label {
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .asg-score-input,
+[data-theme="dark"] .asg-feedback-input {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-modal-content {
+  background-color: #1C1715;
+  border-color: #382E28;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .asg-modal-header {
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .asg-modal-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .asg-form-group label {
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .asg-form-control {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}

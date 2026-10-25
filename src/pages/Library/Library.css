@@ -1964,3 +1964,252 @@
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+
+/* =============================================================================
+   DARK THEME PALETTE OVERRIDES FOR SMART LIBRARY
+   ============================================================================= */
+
+[data-theme="dark"] .library-header-bar {
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .library-badge {
+  background-color: #261E1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .library-hours {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .library-main-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .library-sub-text {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .library-btn-reset {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .library-btn-reset:hover {
+  background-color: #2C231F;
+  border-color: #4D3C33;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .library-tab-nav {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .library-tab-btn {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .library-tab-btn:hover {
+  background-color: #241C1A;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .library-tab-btn.active {
+  background-color: #2E231E;
+  color: #FAF8F5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .library-stat-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .lib-stat-label {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .lib-stat-val {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .lib-stat-sub {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .library-zone-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .lib-zone-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .lib-zone-desc {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .lib-zone-badge {
+  background-color: #241C1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .library-floor-card,
+[data-theme="dark"] .library-catalog-section,
+[data-theme="dark"] .library-issued-section {
+  background-color: #1A1513;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .library-floor-title,
+[data-theme="dark"] .catalog-main-title,
+[data-theme="dark"] .issued-main-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .library-floor-sub,
+[data-theme="dark"] .catalog-sub-text,
+[data-theme="dark"] .issued-sub-text {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .seat-card {
+  background-color: #221B18;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .seat-card:hover {
+  border-color: #4D3C33;
+}
+
+[data-theme="dark"] .seat-card.occupied {
+  background-color: #1E1715;
+  border-color: #2C211C;
+}
+
+[data-theme="dark"] .seat-card.available {
+  background-color: #221B18;
+}
+
+[data-theme="dark"] .seat-num {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .seat-user-tag {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .seat-power-badge {
+  background-color: #2C231F;
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .library-search-input,
+[data-theme="dark"] .library-cat-select {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .catalog-book-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .catalog-book-card:hover {
+  border-color: #4A3C34;
+}
+
+[data-theme="dark"] .book-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .book-author {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .book-call-badge {
+  background-color: #241C1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .book-shelf-text {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .issued-book-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .issued-book-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .issued-book-author {
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .issued-book-desc {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .issued-date-item {
+  background-color: #221B18;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .issued-date-label {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .issued-date-val {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .issued-remind-banner {
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .btn-return-desk {
+  background-color: #241C1A;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .btn-return-desk:hover {
+  background-color: #2E231E;
+  border-color: #4D3C33;
+}
+
+[data-theme="dark"] .preview-book-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .preview-book-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .preview-book-author {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .preview-call-no {
+  background-color: #221B18;
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .btn-preview-find {
+  color: #D8C9B9;
+}

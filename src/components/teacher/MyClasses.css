@@ -709,3 +709,79 @@
   color: #211D1A;
   flex: 1;
 }
+
+
+/* =============================================================================
+   DARK THEME PALETTE OVERRIDES FOR MY CLASSES & STUDENTS
+   ============================================================================= */
+
+[data-theme="dark"] .mc-header-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .mc-badge {
+  background-color: #261E1A;
+  color: #D8C9B9;
+  border: 1px solid #382E28;
+}
+
+[data-theme="dark"] .mc-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .mc-subtitle {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .mc-stat-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .mc-stat-label {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .mc-stat-val {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .mc-filter-bar {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .mc-search-input,
+[data-theme="dark"] .mc-select {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .mc-table-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .mc-table-header th {
+  background-color: #1E1815;
+  color: #D8C9B9;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .mc-table-row td {
+  border-color: #261F1C;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .mc-table-row:hover td {
+  background-color: #241D1A;
+}
+
+[data-theme="dark"] .mc-modal-content {
+  background-color: #1C1715;
+  border-color: #382E28;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+}
