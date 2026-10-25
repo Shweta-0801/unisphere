@@ -17,6 +17,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import AppLayout from "../../components/layout/AppLayout";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   initialLibrarySeats,
   libraryBooksCatalog,
@@ -28,6 +29,7 @@ import IssuedBookCard from "../../components/library/IssuedBookCard";
 import "./Library.css";
 
 export default function LibraryPage() {
+  const { t } = useLanguage();
   // Navigation: Sub-navbar Tab State ("overview" | "issued" | "catalog" | "seats")
   const [activeLibraryTab, setActiveLibraryTab] = useState("overview");
 
@@ -211,9 +213,9 @@ export default function LibraryPage() {
               <span className="library-badge">Central Academic Library</span>
               <span className="library-hours">Open Daily: 08:00 AM – 11:00 PM</span>
             </div>
-            <h1 className="library-main-title">Smart Library &amp; Seating Architecture</h1>
+            <h1 className="library-main-title">{t("library.title", "Smart Library System")}</h1>
             <p className="library-sub-text">
-              Unified campus library system: real-time visual desk availability, active textbook loans with return-date alerts, and physical book stacks.
+              {t("library.subtitle", "Unified campus library system: real-time visual desk availability, active textbook loans with return-date alerts, and physical book stacks.")}
             </p>
           </div>
 
@@ -224,7 +226,7 @@ export default function LibraryPage() {
               title="Reset sample seat states"
             >
               <RotateCcw size={14} />
-              <span>Reset Seat Data</span>
+              <span>{t("common.cancel", "Reset")}</span>
             </button>
           </div>
         </header>
@@ -241,7 +243,7 @@ export default function LibraryPage() {
               className={`library-tab-btn ${activeLibraryTab === "overview" ? "active" : ""}`}
             >
               <LayoutDashboard size={15} />
-              <span>Library Overview</span>
+              <span>{t("library.overviewTab", "Library Overview")}</span>
             </button>
 
             <button
@@ -250,7 +252,7 @@ export default function LibraryPage() {
               className={`library-tab-btn ${activeLibraryTab === "issued" ? "active" : ""}`}
             >
               <BookmarkCheck size={15} />
-              <span>My Issued Books &amp; Reminders</span>
+              <span>{t("library.issuedTab", "My Issued Books & Reminders")}</span>
               <span className={`library-nav-pill ${reminders.length > 0 ? "pill-urgent" : ""}`}>
                 {issuedBooks.length}
               </span>
@@ -265,7 +267,7 @@ export default function LibraryPage() {
               className={`library-tab-btn ${activeLibraryTab === "catalog" ? "active" : ""}`}
             >
               <BookOpen size={15} />
-              <span>Browse Books &amp; Stacks</span>
+              <span>{t("library.catalogTab", "Browse Books & Stacks")}</span>
               <span className="library-nav-pill">
                 {books.length}
               </span>
@@ -277,7 +279,7 @@ export default function LibraryPage() {
               className={`library-tab-btn ${activeLibraryTab === "seats" ? "active" : ""}`}
             >
               <Zap size={15} />
-              <span>Seat Reservation &amp; Floor</span>
+              <span>{t("library.seatsTab", "Seat Reservation & Floor")}</span>
               <span className="library-nav-pill pill-success">
                 {availableSeats} Free
               </span>

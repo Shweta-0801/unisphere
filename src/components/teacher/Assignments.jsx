@@ -21,9 +21,11 @@ import {
   sampleStudentsByClass
 } from "../../data/teacherData";
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
+import { useLanguage } from "../../context/LanguageContext";
 import "./Assignments.css";
 
 export default function Assignments() {
+  const { t } = useLanguage();
   const ASG_KEY = "unisphere_faculty_assignments";
   const MAT_KEY = "unisphere_faculty_study_materials";
 
@@ -270,9 +272,9 @@ export default function Assignments() {
             <FileText size={13} />
             <span>Coursework Management</span>
           </div>
-          <h1 className="asg-title">Assignments &amp; Study Material</h1>
+          <h1 className="asg-title">{t("assignments.title", "Assignments & Study Material")}</h1>
           <p className="asg-subtitle">
-            Create coursework assignments with deadlines and rubric marks, evaluate student submissions, and upload verified study material.
+            {t("assignments.subtitle", "Create coursework assignments with deadlines and rubric marks, evaluate student submissions, and upload verified study material.")}
           </p>
         </div>
 
@@ -284,7 +286,7 @@ export default function Assignments() {
               className="asg-btn asg-btn-primary"
             >
               <Plus size={16} />
-              <span>Create Assignment</span>
+              <span>{t("assignments.createAsgBtn", "Create Assignment")}</span>
             </button>
           ) : (
             <button
@@ -293,7 +295,7 @@ export default function Assignments() {
               className="asg-btn asg-btn-primary"
             >
               <Upload size={16} />
-              <span>Upload Study Material</span>
+              <span>{t("assignments.uploadMatBtn", "Upload Study Material")}</span>
             </button>
           )}
         </div>
@@ -310,7 +312,7 @@ export default function Assignments() {
           className={`asg-tab-btn ${activeTab === "assignments" ? "active" : ""}`}
         >
           <FileText size={15} />
-          <span>Assignments ({assignments.length})</span>
+          <span>{t("assignments.assignmentsTab", "Assignments")} ({assignments.length})</span>
         </button>
 
         <button
@@ -322,7 +324,7 @@ export default function Assignments() {
           className={`asg-tab-btn ${activeTab === "materials" ? "active" : ""}`}
         >
           <BookOpen size={15} />
-          <span>Study Material ({studyMaterials.length})</span>
+          <span>{t("assignments.materialsTab", "Study Material")} ({studyMaterials.length})</span>
         </button>
       </div>
 
