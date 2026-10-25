@@ -7,20 +7,31 @@ import {
   BookOpen,
   Check,
   X,
-  Sparkles
+  Sparkles,
+  UserPlus,
+  Trash2
 } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 import { assignedClassesData, sampleStudentsByClass } from "../../data/teacherData";
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
 import "./MyClasses.css";
+import EnrollStudentModal from "./EnrollStudentModal";
+import { FACULTY_CLASSES_KEY, FACULTY_STUDENTS_KEY, removeStudent } from "../../utils/enrollmentService";
 
 export default function MyClasses() {
+  const { t } = useLanguage();
   // Storage keys for persisting teacher data
-  const CLASSES_KEY = "unisphere_faculty_classes";
-  const STUDENTS_KEY = "unisphere_faculty_students";
+  const CLASSES_KEY = FACULTY_CLASSES_KEY || "unisphere_faculty_classes";
+  const STUDENTS_KEY = FACULTY_STUDENTS_KEY || "unisphere_faculty_students";
 
   // 1. State: Assigned classes and Student rosters
-  const [classesList] = useState(() => loadFromStorage(CLASSES_KEY, assignedClassesData));
+  const [classesList, setClassesList] = useState(() =>
+    loadFromStorage(CLASSES_KEY, assignedClassesData)
+  );
   const [selectedClassId, setSelectedClassId] = useState(classesList[0]?.id || "cls-1");
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [studentToRemove, setStudentToRemove] = useState(null);
+
   const [studentsByClass, setStudentsByClass] = useState(() =>
     loadFromStorage(STUDENTS_KEY, sampleStudentsByClass)
   );
@@ -58,7 +69,23 @@ export default function MyClasses() {
   // Save changes to localStorage
   useEffect(() => {
     saveToStorage(STUDENTS_KEY, studentsByClass);
-  }, [studentsByClass]);
+  }, [studentsByClass, STUDENTS_KEY]);
+
+  // Real-time synchronization across teacher modules & browser tabs
+  useEffect(() => {
+    const handleSync = () => {
+      setStudentsByClass(loadFromStorage(STUDENTS_KEY, sampleStudentsByClass));
+      setClassesList(loadFromStorage(CLASSES_KEY, assignedClassesData));
+    };
+    window.addEventListener("unisphere:student-enrolled", handleSync);
+    window.addEventListener("unisphere:student-removed", handleSync);
+    window.addEventListener("storage", handleSync);
+    return () => {
+      window.removeEventListener("unisphere:student-enrolled", handleSync);
+      window.removeEventListener("unisphere:student-removed", handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
+  }, [STUDENTS_KEY, CLASSES_KEY]);
 
   // Live Summary Statistics for Selected Class
   const stats = useMemo(() => {
@@ -91,7 +118,6 @@ export default function MyClasses() {
   const handleOpenAttendanceModal = () => {
     const initialMap = {};
     currentStudents.forEach((student) => {
-      // Default all to Present
       initialMap[student.id] = true;
     });
     setAttendanceToggles(initialMap);
@@ -124,7 +150,6 @@ export default function MyClasses() {
       day: "numeric"
     });
 
-    // Update each student's attendance records
     const updatedRoster = currentStudents.map((student) => {
       const isPresent = !!attendanceToggles[student.id];
       const newAttended = isPresent ? student.classesAttended + 1 : student.classesAttended;
@@ -172,6 +197,27 @@ export default function MyClasses() {
     showToast("Mentorship note saved successfully.");
   };
 
+  // Execute student removal
+  const handleExecuteRemove = () => {
+    if (!studentToRemove) return;
+    try {
+      removeStudent({
+        studentId: studentToRemove.id,
+        rollNo: studentToRemove.rollNo,
+        classId: selectedClassId
+      });
+      showToast(`Removed ${studentToRemove.name} from ${currentClass.code}.`);
+      setStudentsByClass(loadFromStorage(STUDENTS_KEY, sampleStudentsByClass));
+      setClassesList(loadFromStorage(CLASSES_KEY, assignedClassesData));
+      if (selectedStudent && selectedStudent.id === studentToRemove.id) {
+        setSelectedStudent(null);
+      }
+      setStudentToRemove(null);
+    } catch (err) {
+      showToast(err.message || "Failed to remove student.");
+    }
+  };
+
   return (
     <div className="mc-root">
       {/* Toast Notification */}
@@ -189,25 +235,41 @@ export default function MyClasses() {
             <BookOpen size={13} />
             <span>Faculty Class Management</span>
           </div>
-          <h1 className="mc-title">My Classes &amp; Students</h1>
+          <h1 className="mc-title">{t("myClasses.title", "My Classes & Students")}</h1>
           <p className="mc-subtitle">
-            Select an assigned course to view the student directory, monitor attendance against the mandatory 75% cutoff, and record lecture roll calls.
+            {t(
+              "myClasses.subtitle",
+              "Select an assigned course to view the student directory, monitor attendance against the mandatory 75% cutoff, and record lecture roll calls."
+            )}
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleOpenAttendanceModal}
-          className="mc-btn mc-btn-primary"
-        >
-          <CheckCircle2 size={16} />
-          <span>Mark Today's Attendance</span>
-        </button>
+        <div className="mc-header-actions" style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={() => setIsEnrollModalOpen(true)}
+            className="mc-btn mc-btn-secondary"
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
+            <UserPlus size={16} />
+            <span>{t("myClasses.enrollStudentBtn", "Enroll New Student")}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleOpenAttendanceModal}
+            className="mc-btn mc-btn-primary"
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
+            <CheckCircle2 size={16} />
+            <span>{t("myClasses.markAttendanceBtn", "Mark Today's Attendance")}</span>
+          </button>
+        </div>
       </div>
 
       {/* 2. Class Selector Buttons */}
       <div className="mc-class-selector">
-        <span className="mc-selector-label">Assigned Classes:</span>
+        <span className="mc-selector-label">{t("myClasses.selectBatch", "Assigned Classes:")}</span>
         <div className="mc-class-buttons">
           {classesList.map((cls) => {
             const isSelected = cls.id === selectedClassId;
@@ -237,13 +299,13 @@ export default function MyClasses() {
       {/* 3. Class Summary Stats */}
       <div className="mc-stats-grid">
         <div className="mc-stat-box">
-          <span className="mc-stat-label">Enrolled Students</span>
+          <span className="mc-stat-label">{t("myClasses.totalEnrolled", "Enrolled Students")}</span>
           <span className="mc-stat-val">{stats.total}</span>
           <span className="mc-stat-sub">Active in this section</span>
         </div>
 
         <div className="mc-stat-box">
-          <span className="mc-stat-label">Average Attendance</span>
+          <span className="mc-stat-label">{t("myClasses.classAverage", "Average Attendance")}</span>
           <span className={`mc-stat-val ${Number(stats.average) >= 75 ? "stat-safe" : "stat-risk"}`}>
             {stats.average}%
           </span>
@@ -251,7 +313,7 @@ export default function MyClasses() {
         </div>
 
         <div className="mc-stat-box">
-          <span className="mc-stat-label">Students Below 75% Cutoff</span>
+          <span className="mc-stat-label">{t("myClasses.studentsAtRisk", "Students Below 75% Cutoff")}</span>
           <span className={`mc-stat-val ${stats.atRisk > 0 ? "stat-risk" : "stat-safe"}`}>
             {stats.atRisk} At Risk
           </span>
@@ -267,7 +329,7 @@ export default function MyClasses() {
             <Search size={16} className="mc-search-icon" />
             <input
               type="text"
-              placeholder="Search students by name or roll number..."
+              placeholder={t("myClasses.searchPlaceholder", "Search students by name or roll number...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="mc-search-input"
@@ -289,7 +351,7 @@ export default function MyClasses() {
               onClick={() => setStatusFilter("all")}
               className={`mc-filter-btn ${statusFilter === "all" ? "active" : ""}`}
             >
-              All Students ({currentStudents.length})
+              {t("myClasses.allStudents", "All Students")} ({currentStudents.length})
             </button>
             <button
               type="button"
@@ -297,7 +359,7 @@ export default function MyClasses() {
               className={`mc-filter-btn filter-risk ${statusFilter === "atRisk" ? "active" : ""}`}
             >
               <AlertTriangle size={12} />
-              <span>Below 75% ({stats.atRisk})</span>
+              <span>{t("myClasses.atRiskStudents", "Below 75%")} ({stats.atRisk})</span>
             </button>
             <button
               type="button"
@@ -305,7 +367,7 @@ export default function MyClasses() {
               className={`mc-filter-btn filter-safe ${statusFilter === "safe" ? "active" : ""}`}
             >
               <CheckCircle2 size={12} />
-              <span>Safe &ge; 75% ({stats.total - stats.atRisk})</span>
+              <span>{t("myClasses.safeStudents", "Safe ≥ 75%")} ({stats.total - stats.atRisk})</span>
             </button>
           </div>
         </div>
@@ -364,13 +426,23 @@ export default function MyClasses() {
                         </span>
                       </td>
                       <td style={{ textAlign: "right" }}>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedStudent(student)}
-                          className="mc-btn mc-btn-secondary mc-btn-sm"
-                        >
-                          View Details
-                        </button>
+                        <div style={{ display: "inline-flex", gap: "6px", alignItems: "center" }}>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedStudent(student)}
+                            className="mc-btn mc-btn-secondary mc-btn-sm"
+                          >
+                            View Details
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setStudentToRemove(student)}
+                            className="mc-btn-danger-sm"
+                            title={`Remove ${student.name} from section`}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -565,13 +637,112 @@ export default function MyClasses() {
               </button>
             </div>
 
-            <div className="mc-modal-actions">
+            <div className="mc-modal-actions" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <button
+                type="button"
+                onClick={() => {
+                  const toRemove = selectedStudent;
+                  setSelectedStudent(null);
+                  setStudentToRemove(toRemove);
+                }}
+                className="mc-btn mc-btn-danger"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+              >
+                <Trash2 size={14} />
+                <span>Remove from Section</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setSelectedStudent(null)}
                 className="mc-btn mc-btn-secondary"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 7. Enroll New Student Modal */}
+      <EnrollStudentModal
+        isOpen={isEnrollModalOpen}
+        onClose={() => setIsEnrollModalOpen(false)}
+        defaultClassId={selectedClassId}
+        onEnrolled={(newStudent, classId) => {
+          showToast(`Successfully enrolled ${newStudent.name} (${newStudent.rollNo})!`);
+          const updatedStudents = loadFromStorage(STUDENTS_KEY, sampleStudentsByClass);
+          setStudentsByClass(updatedStudents);
+          const updatedClasses = loadFromStorage(CLASSES_KEY, assignedClassesData);
+          setClassesList(updatedClasses);
+          if (classId && classId !== selectedClassId) {
+            setSelectedClassId(classId);
+          }
+        }}
+      />
+
+      {/* 8. Remove Student Confirmation Modal */}
+      {studentToRemove && (
+        <div className="mc-modal-overlay">
+          <div className="mc-modal-card" style={{ maxWidth: "28rem" }}>
+            <div className="mc-modal-header" style={{ borderBottom: "none", paddingBottom: "0.5rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "50%",
+                  background: "#FBEBED",
+                  color: "#8C2A3E",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0
+                }}>
+                  <AlertTriangle size={18} />
+                </div>
+                <div>
+                  <h3 className="mc-modal-title" style={{ fontSize: "1.15rem" }}>
+                    Remove Student?
+                  </h3>
+                  <span className="mc-modal-subtitle">
+                    {currentClass.code} • {currentClass.section}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStudentToRemove(null)}
+                className="mc-close-btn"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mc-modal-body" style={{ padding: "0.5rem 1.25rem 1.25rem" }}>
+              <p style={{ fontSize: "13.5px", lineHeight: "1.5", margin: 0, color: "var(--color-text-main, #3B302A)" }}>
+                Are you sure you want to remove <strong>{studentToRemove.name}</strong> (<code>{studentToRemove.rollNo}</code>) from this course section?
+              </p>
+              <p style={{ fontSize: "12px", opacity: 0.8, marginTop: "8px", marginBottom: 0 }}>
+                This action will update class enrollment totals, attendance registers, and academic ledgers across the faculty dashboard.
+              </p>
+            </div>
+
+            <div className="mc-modal-actions" style={{ borderTop: "1px solid var(--light-border, #E5E0D8)", paddingTop: "12px" }}>
+              <button
+                type="button"
+                onClick={() => setStudentToRemove(null)}
+                className="mc-btn mc-btn-secondary"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleExecuteRemove}
+                className="mc-btn mc-btn-danger"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+              >
+                <Trash2 size={14} />
+                <span>Confirm Removal</span>
               </button>
             </div>
           </div>

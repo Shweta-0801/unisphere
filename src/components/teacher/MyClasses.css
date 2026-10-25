@@ -785,3 +785,57 @@
   border-color: #382E28;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
 }
+
+/* Danger Actions & Remove Student Confirmation */
+.mc-btn-danger {
+  background-color: #FBEBED;
+  color: #8C2A3E;
+  border: 1px solid #ECCBCB;
+}
+
+.mc-btn-danger:hover {
+  background-color: #8C2A3E;
+  color: #FFFFFF;
+  border-color: #8C2A3E;
+}
+
+.mc-btn-danger-sm {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #8C2A3E;
+  border: 1px solid #ECCBCB;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.mc-btn-danger-sm:hover {
+  background-color: #8C2A3E;
+  color: #FFFFFF;
+  border-color: #8C2A3E;
+}
+
+[data-theme="dark"] .mc-btn-danger {
+  background-color: rgba(140, 42, 62, 0.22);
+  color: #F8B4B4;
+  border-color: rgba(140, 42, 62, 0.45);
+}
+
+[data-theme="dark"] .mc-btn-danger:hover {
+  background-color: #8C2A3E;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .mc-btn-danger-sm {
+  color: #F8B4B4;
+  border-color: rgba(140, 42, 62, 0.4);
+}
+
+[data-theme="dark"] .mc-btn-danger-sm:hover {
+  background-color: #8C2A3E;
+  color: #FFFFFF;
+  border-color: #8C2A3E;
+}
