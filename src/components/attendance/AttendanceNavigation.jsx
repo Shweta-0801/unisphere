@@ -6,16 +6,19 @@ import {
   TrendingUp,
   BookOpenCheck
 } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 import "./Attendance.css";
 
 function AttendanceNavigation({ activeSection, setActiveSection, atRiskCount = 0 }) {
+  const { t } = useLanguage();
+
   const navItems = [
-    { id: "Overview", label: "Overview", icon: LayoutDashboard },
-    { id: "Predictor", label: "Predictor & What-If", icon: TrendingUp, highlight: true },
-    { id: "Calculator", label: "Bunk Calculator", icon: Calculator },
-    { id: "Record Attendance", label: "Quick Register", icon: CheckCircle2 },
-    { id: "Calendar", label: "Schedule Calendar", icon: CalendarDays },
-    { id: "Subject Details", label: "Course Breakdown", icon: BookOpenCheck, badge: atRiskCount > 0 ? `${atRiskCount} at risk` : null }
+    { id: "Overview", label: t("attendance.overviewTab", "Overview"), icon: LayoutDashboard },
+    { id: "Predictor", label: t("attendance.predictorTab", "Predictor & What-If"), icon: TrendingUp, highlight: true },
+    { id: "Calculator", label: t("attendance.calculatorTab", "Bunk Calculator"), icon: Calculator },
+    { id: "Record Attendance", label: t("attendance.registerTab", "Quick Register"), icon: CheckCircle2 },
+    { id: "Calendar", label: t("attendance.calendarTab", "Schedule Calendar"), icon: CalendarDays },
+    { id: "Subject Details", label: t("attendance.breakdownTab", "Course Breakdown"), icon: BookOpenCheck, badge: atRiskCount > 0 ? t("attendance.atRiskBadge", "{count} at risk", { count: atRiskCount }) : null }
   ];
 
   return (

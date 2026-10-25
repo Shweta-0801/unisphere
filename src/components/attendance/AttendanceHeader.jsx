@@ -1,4 +1,5 @@
 import { Plus, Target, Sparkles, Calendar, ShieldCheck, AlertCircle } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 import "./Attendance.css";
 
 function AttendanceHeader({
@@ -8,6 +9,7 @@ function AttendanceHeader({
   totalSubjects,
   safeSubjectsCount
 }) {
+  const { t } = useLanguage();
   const atRiskCount = Math.max(0, totalSubjects - safeSubjectsCount);
 
   return (
@@ -22,27 +24,29 @@ function AttendanceHeader({
           <div className="att-header-badge-row">
             <span className="att-header-pill">
               <Sparkles style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
-              Smart Campus Academic Tracker
+              {t("attendance.trackerPill", "Smart Campus Academic Tracker")}
             </span>
             <span className="att-header-pill">
               <Calendar style={{ width: "0.875rem", height: "0.875rem", color: "var(--att-accent)" }} />
-              Semester 4 • 2026
+              {t("attendance.semesterPill", "Semester 4 • 2026")}
             </span>
           </div>
 
           <h1 className="att-header-title">
-            Attendance &amp; Eligibility Hub
+            {t("attendance.title", "Attendance & Eligibility Hub")}
           </h1>
 
           <p className="att-header-subtitle">
-            Monitor daily subject attendance, compute safe bunks, predict final exam eligibility, and keep your record safely above university thresholds.
+            {t("attendance.subtitle", "Monitor daily subject attendance, compute safe bunks, predict final exam eligibility, and keep your record safely above university thresholds.")}
           </p>
 
           <div className="att-header-status-line">
             <div className="att-header-status-pill">
               <ShieldCheck style={{ width: "1rem", height: "1rem", color: "var(--att-success)" }} />
               <span>
-                <strong>{safeSubjectsCount} of {totalSubjects}</strong> Courses Safe
+                <strong>
+                  {t("attendance.coursesSafe", "{safe} of {total} Courses Safe", { safe: safeSubjectsCount, total: totalSubjects })}
+                </strong>
               </span>
             </div>
 
@@ -50,7 +54,9 @@ function AttendanceHeader({
               <div className="att-header-status-pill risk">
                 <AlertCircle style={{ width: "1rem", height: "1rem", color: "var(--att-danger)" }} />
                 <span>
-                  <strong>{atRiskCount}</strong> Course at Shortage Risk
+                  <strong>
+                    {t("attendance.shortageRisk", "{count} Course at Shortage Risk", { count: atRiskCount })}
+                  </strong>
                 </span>
               </div>
             )}
@@ -62,7 +68,7 @@ function AttendanceHeader({
           {/* Target Threshold Selector */}
           <div className="att-target-selector-box">
             <Target style={{ width: "1rem", height: "1rem", color: "var(--att-accent)", flexShrink: 0 }} />
-            <label htmlFor="target-cutoff-select">Target:</label>
+            <label htmlFor="target-cutoff-select">{t("attendance.targetCutoff", "Target:")}</label>
             <select
               id="target-cutoff-select"
               value={targetPercentage}
@@ -82,7 +88,7 @@ function AttendanceHeader({
             className="att-btn-primary-white"
           >
             <Plus style={{ width: "1rem", height: "1rem", strokeWidth: 2.5 }} />
-            <span>Add Course</span>
+            <span>{t("attendance.addCourse", "Add Course")}</span>
           </button>
         </div>
       </div>
