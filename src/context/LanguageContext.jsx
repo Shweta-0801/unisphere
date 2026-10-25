@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { translations, SUPPORTED_LANGUAGES } from "../utils/translations";
 
 const LanguageContext = createContext(null);
@@ -22,24 +22,54 @@ export function LanguageProvider({ children }) {
     }
   }, [lang]);
 
-  // Nested dot-notation helper: t("nav.attendance", "Attendance Hub")
-  const t = (path, fallback = "") => {
-    const keys = path.split(".");
+  // Nested dot-notation helper with parameter interpolation
+  // Usage: t("attendance.coursesSafe", "{safe} of {total} Courses Safe", { safe: 4, total: 5 })
+  const t = (path, fallback = "", params = {}) => {
+    let actualFallback = fallback;
+    let actualParams = params;
+
+    if (typeof fallback === "object" && fallback !== null) {
+      actualParams = fallback;
+      actualFallback = "";
+    }
+
+    const keys = (path || "").split(".");
     let current = translations[lang];
 
     for (const key of keys) {
       if (!current || typeof current !== "object") {
-        // Fallback to English if translation is missing
-        let fallbackVal = translations["en"];
-        for (const fbKey of keys) {
-          if (!fallbackVal) break;
-          fallbackVal = fallbackVal[fbKey];
-        }
-        return fallbackVal || fallback || path;
+        current = undefined;
+        break;
       }
       current = current[key];
     }
-    return current || fallback || path;
+
+    // Fallback cascade: Current language -> English dictionary -> fallback string -> key
+    if (current === undefined || current === null) {
+      let fallbackVal = translations["en"];
+      for (const fbKey of keys) {
+        if (!fallbackVal || typeof fallbackVal !== "object") {
+          fallbackVal = undefined;
+          break;
+        }
+        fallbackVal = fallbackVal[fbKey];
+      }
+      current = fallbackVal;
+    }
+
+    let result = (typeof current === "string" ? current : actualFallback) || path;
+
+    // Parameter interpolation: replace {key} with params[key]
+    if (actualParams && typeof actualParams === "object") {
+      Object.keys(actualParams).forEach((paramKey) => {
+        result = String(result).replace(
+          new RegExp(`\\{${paramKey}\\}`, "g"),
+          actualParams[paramKey] !== undefined ? actualParams[paramKey] : ""
+        );
+      });
+    }
+
+    return result;
   };
 
   return (

@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    // Navigation
+    // Navigation & App Shell
     nav: {
       dashboard: "Dashboard",
       attendance: "Attendance Hub",
@@ -17,43 +17,182 @@ export const translations = {
       facultyServices: "Faculty Services",
       home: "Home",
       signIn: "Sign In",
-      logOut: "Log out"
+      logOut: "Log out",
+      guestStudent: "Guest Student",
+      homePill: "Home ↗",
+      academicSuite: "Academic Campus Suite"
     },
-    // Attendance Hub
-    attendance: {
-      title: "Attendance Hub",
-      target: "Target",
-      overall: "Overall Attendance",
-      safe: "Safe Zone",
-      atRisk: "At Risk",
-      totalClasses: "Total Classes",
-      attended: "Attended",
-      calculate: "Predictor",
-      record: "Record Today",
-      addSubject: "Add Subject"
-    },
-    // Library
-    library: {
-      title: "Smart Library System",
-      seatMap: "36-Seat Live Layout",
-      issuedBooks: "My Issued Books",
-      catalog: "Book Catalog",
-      availableSeats: "Seats Available",
-      dueTomorrow: "Due Tomorrow",
-      returnBook: "Return Book"
-    },
-    // Common Actions
-    actions: {
+
+    // Common Global UI
+    common: {
       search: "Search...",
       filter: "Filter",
+      all: "All",
+      safe: "Safe Zone",
+      atRisk: "At Risk",
       save: "Save Changes",
       cancel: "Cancel",
+      close: "Close",
       viewDetails: "View Details",
-      download: "Download"
+      download: "Download",
+      status: "Status",
+      action: "Action",
+      today: "Today",
+      present: "Present",
+      absent: "Absent",
+      leave: "Leave",
+      changeLanguage: "Change Language",
+      toggleTheme: "Toggle Theme",
+      light: "Light",
+      dark: "Dark"
+    },
+
+    // Dashboard
+    dashboard: {
+      welcomeBack: "Welcome back, {name}",
+      subtitleStudent: "Monitor academic metrics, track attendance, and engage with live campus modules.",
+      subtitleFaculty: "Manage course rosters, mark session attendance, and review student performance.",
+      semesterBadge: "4th Semester • Computer Science",
+      facultyBadge: "Faculty Member • Department of CSE",
+      quickActions: "Quick Services",
+      modulesTitle: "Academic Campus Modules",
+      systemStanding: "Institutional Standing",
+      activePeers: "24 Active Peers in Study Hub",
+      attendanceNotice: "Keep attendance above 75% for seamless final exam eligibility.",
+      grievanceTitle: "Grievances & Redressal",
+      grievanceDesc: "Report campus infrastructure issues with transparent 9-stage tracking.",
+      lostFoundTitle: "Lost & Found Network",
+      lostFoundDesc: "Locate misplaced belongings plotted on the interactive campus map.",
+      notesTitle: "Notes Marketplace",
+      notesDesc: "Access verified semester lecture notes and peer study materials.",
+      studyTitle: "Virtual Study Lounge",
+      studyDesc: "Collaborate in synchronous study rooms with live peer presence and Pomodoro timer.",
+      libraryTitle: "Smart Library System",
+      libraryDesc: "Check 36-seat live floor layout availability and reserve study desks."
+    },
+
+    // Attendance Hub
+    attendance: {
+      title: "Attendance & Eligibility Hub",
+      subtitle: "Monitor daily subject attendance, compute safe bunks, predict final exam eligibility, and keep your record safely above university thresholds.",
+      trackerPill: "Smart Campus Academic Tracker",
+      semesterPill: "Semester 4 • 2026",
+      coursesSafe: "{safe} of {total} Courses Safe",
+      shortageRisk: "{count} Course at Shortage Risk",
+      targetCutoff: "Target:",
+      addCourse: "Add Course",
+      overviewTab: "Overview",
+      predictorTab: "Predictor & What-If",
+      calculatorTab: "Bunk Calculator",
+      registerTab: "Quick Register",
+      calendarTab: "Schedule Calendar",
+      breakdownTab: "Course Breakdown",
+      atRiskBadge: "{count} at risk",
+      aggregateStanding: "Aggregate Standing",
+      semesterPerformance: "Semester Performance",
+      examEligible: "Exam Eligible",
+      shortageRiskBadge: "Shortage Risk",
+      presentRatio: "Present Ratio:",
+      absenceRatio: "Absence Ratio:",
+      targetClearance: "Target Clearance:",
+      passingCutoff: "{target}% Passing Cutoff",
+      classesAttended: "Classes Attended",
+      classesMissed: "Classes Missed",
+      totalClasses: "Total Classes",
+      safeBunkAllowance: "Safe Bunk Allowance",
+      catchUpClasses: "Catch-Up Classes",
+      attendedSub: "Completed lecture & practical sessions",
+      missedSub: "Absences, leaves, and missed roll calls",
+      totalSub: "Total delivered sessions this term",
+      safeBunkSub: "Classes can be skipped",
+      catchUpSub: "Consecutive needed",
+      withoutDropping: "Without dropping below {target}%",
+      restoreEligibility: "To restore standard eligibility",
+      guidelinesTitle: "Institutional Attendance Guidelines & Insights",
+      safeZone: "Safe Zone",
+      caution: "Caution",
+      actionRequired: "Action Required",
+      advisorComfortable: "You are comfortably above target! You can safely miss up to {count} total classes across subjects and still stay above {target}%.",
+      advisorEdge: "You are right on the edge of your {target}% target. Missing your next class will put you at risk!",
+      advisorDanger: "Attendance Warning: You must attend the next {count} consecutive classes without missing any to restore your standing to {target}%.",
+      advisorEmpty: "No classes recorded yet. Start logging your subject sessions!"
+    },
+
+    // Smart Library
+    library: {
+      title: "Smart Library System",
+      subtitle: "Real-time 36-desk floor occupancy, circulation catalog, and automated return deadline tracking.",
+      overviewTab: "Library Overview",
+      seatsTab: "36-Seat Floor Map",
+      catalogTab: "Book Catalog",
+      issuedTab: "My Issued Books",
+      totalCapacity: "Total Capacity",
+      availableSeats: "Seats Available",
+      occupiedSeats: "Occupied Desks",
+      issuedBooksCount: "Books in Hand",
+      searchBooks: "Search book title, author, or ISBN...",
+      allCategories: "All Categories",
+      reserveSeat: "Reserve Selected Seat",
+      vacateSeat: "Vacate Desk",
+      seatAvailable: "Available",
+      seatOccupied: "Occupied",
+      seatReserved: "Reserved",
+      dueTomorrow: "Due Tomorrow",
+      dueToday: "Due Today",
+      overdue: "Overdue",
+      returnBook: "Return to Circulation Desk",
+      remindersTitle: "Circulation Alerts & Deadlines",
+      noReminders: "No overdue or upcoming deadlines. All books in good standing!"
+    },
+
+    // Faculty: My Classes
+    myClasses: {
+      title: "My Classes & Students",
+      subtitle: "Manage active course batches, track individual student attendance, and record class rosters.",
+      selectBatch: "Select Course Batch:",
+      searchPlaceholder: "Search student name or roll number...",
+      allStudents: "All Students",
+      safeStudents: "Safe (≥ 75%)",
+      atRiskStudents: "Shortage Risk (< 75%)",
+      totalEnrolled: "Total Enrolled",
+      classAverage: "Class Average",
+      studentsAtRisk: "Students At Risk",
+      markAttendanceBtn: "Take Class Attendance",
+      rosterTitle: "Enrolled Student Directory",
+      rollNo: "Roll Number",
+      studentName: "Student Name",
+      attendanceRate: "Attendance Rate",
+      standing: "Standing",
+      actions: "Actions",
+      modalTitle: "Record Class Attendance",
+      lectureDate: "Lecture Date",
+      lectureTopic: "Lecture Topic / Module Covered",
+      markAllPresent: "Mark All Present",
+      markAllAbsent: "Mark All Absent",
+      submitSession: "Save Attendance Session"
+    },
+
+    // Authentication
+    auth: {
+      welcome: "Welcome to UniSphere",
+      portalSubtitle: "Smart Campus Academic & Administrative Suite",
+      signIn: "Sign In",
+      register: "Create Account",
+      forgotPassword: "Forgot Password?",
+      studentTab: "Student Portal",
+      facultyTab: "Faculty Portal",
+      emailLabel: "Campus Email",
+      passwordLabel: "Password",
+      rememberMe: "Remember my credentials",
+      submitSignIn: "Sign In to UniSphere",
+      demoStudent: "Quick Demo: Student Access",
+      demoFaculty: "Quick Demo: Faculty Access",
+      backHome: "← Back to Campus Home"
     }
   },
+
   hi: {
-    // Hindi
+    // Navigation & App Shell
     nav: {
       dashboard: "डैशबोर्ड",
       attendance: "उपस्थिति केंद्र",
@@ -70,40 +209,182 @@ export const translations = {
       facultyServices: "संकाय सेवाएं",
       home: "मुख्य पृष्ठ",
       signIn: "साइन इन",
-      logOut: "लॉग आउट"
+      logOut: "लॉग आउट",
+      guestStudent: "अतिथि छात्र",
+      homePill: "मुख्य ↗",
+      academicSuite: "शैक्षणिक परिसर मंच"
     },
-    attendance: {
-      title: "उपस्थिति केंद्र",
-      target: "लक्ष्य",
-      overall: "कुल उपस्थिति",
-      safe: "सुरक्षित क्षेत्र",
-      atRisk: "जोखिम में",
-      totalClasses: "कुल कक्षाएं",
-      attended: "उपस्थित",
-      calculate: "पूर्वानुमान",
-      record: "उपस्थिति दर्ज करें",
-      addSubject: "विषय जोड़ें"
-    },
-    library: {
-      title: "स्मार्ट पुस्तकालय प्रणाली",
-      seatMap: "लाइव सीट लेआउट",
-      issuedBooks: "मेरी जारी पुस्तकें",
-      catalog: "पुस्तक सूची",
-      availableSeats: "उपलब्ध सीटें",
-      dueTomorrow: "कल तक जमा करें",
-      returnBook: "पुस्तक वापस करें"
-    },
-    actions: {
+
+    // Common Global UI
+    common: {
       search: "खोजें...",
       filter: "फ़िल्टर",
+      all: "सभी",
+      safe: "सुरक्षित क्षेत्र",
+      atRisk: "जोखिम में",
       save: "परिवर्तन सहेजें",
       cancel: "रद्द करें",
+      close: "बंद करें",
       viewDetails: "विवरण देखें",
-      download: "डाउनलोड"
+      download: "डाउनलोड",
+      status: "स्थिति",
+      action: "कार्रवाई",
+      today: "आज",
+      present: "उपस्थित",
+      absent: "अनुपस्थित",
+      leave: "अवकाश",
+      changeLanguage: "भाषा बदलें",
+      toggleTheme: "थीम बदलें",
+      light: "लाइट",
+      dark: "डार्क"
+    },
+
+    // Dashboard
+    dashboard: {
+      welcomeBack: "वापसी पर स्वागत है, {name}",
+      subtitleStudent: "अपनी शैक्षणिक प्रगति की निगरानी करें, उपस्थिति ट्रैक करें और परिसर सुविधाओं का लाभ उठाएं।",
+      subtitleFaculty: "कक्षा सूचियों का प्रबंधन करें, दैनिक उपस्थिति दर्ज करें और छात्रों के प्रदर्शन की समीक्षा करें।",
+      semesterBadge: "चतुर्थ सेमेस्टर • कंप्यूटर साइंस",
+      facultyBadge: "संकाय सदस्य • सीएसई विभाग",
+      quickActions: "त्वरित सेवाएं",
+      modulesTitle: "शैक्षणिक परिसर मॉड्यूल",
+      systemStanding: "संस्थागत स्थिति",
+      activePeers: "अध्ययन केंद्र में 24 सक्रिय सहपाठी",
+      attendanceNotice: "अंतिम परीक्षा की पात्रता बनाए रखने के लिए 75% से अधिक उपस्थिति रखें।",
+      grievanceTitle: "शिकायत एवं समाधान",
+      grievanceDesc: "परिसर अवसंरचना समस्याओं की पारदर्शी 9-चरणीय ट्रैकिंग द्वारा रिपोर्ट करें।",
+      lostFoundTitle: "खोया-पाया नेटवर्क",
+      lostFoundDesc: "इंटरैक्टिव मानचित्र पर खोई हुई वस्तुओं की खोज करें।",
+      notesTitle: "नोट्स बाज़ार",
+      notesDesc: "सत्यापित सेमेस्टर व्याख्यान नोट्स और अध्ययन सामग्री प्राप्त करें।",
+      studyTitle: "वर्चुअल स्टडी लाउंज",
+      studyDesc: "लाइव पोमोडोरो टाइमर और सहपाठियों के साथ मिलकर अध्ययन करें।",
+      libraryTitle: "स्मार्ट पुस्तकालय प्रणाली",
+      libraryDesc: "36-सीट लेआउट उपलब्धता देखें और अध्ययन डेस्क आरक्षित करें।"
+    },
+
+    // Attendance Hub
+    attendance: {
+      title: "उपस्थिति एवं पात्रता केंद्र",
+      subtitle: "दैनिक विषय उपस्थिति देखें, सुरक्षित अवकाश की गणना करें, परीक्षा पात्रता का पूर्वानुमान लगाएं और विश्वविद्यालय मानकों से ऊपर रहें।",
+      trackerPill: "स्मार्ट कैंपस शैक्षणिक ट्रैकर",
+      semesterPill: "सेमेस्टर 4 • 2026",
+      coursesSafe: "{safe} / {total} पाठ्यक्रम सुरक्षित",
+      shortageRisk: "{count} पाठ्यक्रम में उपस्थिति कम होने का जोखिम",
+      targetCutoff: "लक्ष्य:",
+      addCourse: "विषय जोड़ें",
+      overviewTab: "अवलोकन",
+      predictorTab: "पूर्वानुमान एवं विश्लेषण",
+      calculatorTab: "अवकाश गणक",
+      registerTab: "त्वरित पंजीकरण",
+      calendarTab: "समय-सारणी कैलेंडर",
+      breakdownTab: "विषयवार विवरण",
+      atRiskBadge: "{count} जोखिम में",
+      aggregateStanding: "कुल स्थिति",
+      semesterPerformance: "सेमेस्टर प्रदर्शन",
+      examEligible: "परीक्षा हेतु पात्र",
+      shortageRiskBadge: "कमी का जोखिम",
+      presentRatio: "उपस्थिति अनुपात:",
+      absenceRatio: "अनुपस्थिति अनुपात:",
+      targetClearance: "लक्ष्य से अंतर:",
+      passingCutoff: "{target}% न्यूनतम सीमा",
+      classesAttended: "उपस्थित कक्षाएं",
+      classesMissed: "छूटी हुई कक्षाएं",
+      totalClasses: "कुल कक्षाएं",
+      safeBunkAllowance: "सुरक्षित अवकाश सीमा",
+      catchUpClasses: "अनिवार्य उपस्थित कक्षाएं",
+      attendedSub: "पूर्ण किए गए व्याख्यान और प्रयोगशाला सत्र",
+      missedSub: "अनुपस्थितियां व छूटी हुई हाज़िरी",
+      totalSub: "इस सत्र में आयोजित कुल कक्षाएं",
+      safeBunkSub: "कक्षाएं जो छोड़ी जा सकती हैं",
+      catchUpSub: "लगातार उपस्थित होना आवश्यक",
+      withoutDropping: "{target}% से कम हुए बिना",
+      restoreEligibility: "पात्रता बहाल करने हेतु",
+      guidelinesTitle: "संस्थागत उपस्थिति दिशानिर्देश एवं विश्लेषण",
+      safeZone: "सुरक्षित क्षेत्र",
+      caution: "सावधानी",
+      actionRequired: "तत्काल कार्रवाई आवश्यक",
+      advisorComfortable: "आप लक्ष्य से सुरक्षित दूरी पर हैं! आप सभी विषयों में कुल {count} कक्षाएं छोड़ सकते हैं और फिर भी {target}% से ऊपर रहेंगे।",
+      advisorEdge: "आप ठीक अपने {target}% लक्ष्य की सीमा पर हैं। अगली कक्षा छोड़ते ही आप जोखिम क्षेत्र में आ जाएंगे!",
+      advisorDanger: "उपस्थिति चेतावनी: मानक {target}% स्तर वापस पाने के लिए आपको अगली लगातार {count} कक्षाओं में उपस्थित होना होगा।",
+      advisorEmpty: "अभी तक कोई कक्षा दर्ज नहीं की गई है। सत्र दर्ज करना शुरू करें!"
+    },
+
+    // Smart Library
+    library: {
+      title: "स्मार्ट पुस्तकालय प्रणाली",
+      subtitle: "36-डेस्क फ्लोर अधिभोग, पुस्तक सूची और स्वचालित वापसी समय-सीमा ट्रैकिंग।",
+      overviewTab: "पुस्तकालय अवलोकन",
+      seatsTab: "36-सीट फ्लोर मैप",
+      catalogTab: "पुस्तक सूची",
+      issuedTab: "मेरी जारी पुस्तकें",
+      totalCapacity: "कुल क्षमता",
+      availableSeats: "उपलब्ध सीटें",
+      occupiedSeats: "आरक्षित डेस्क",
+      issuedBooksCount: "प्राप्त पुस्तकें",
+      searchBooks: "शीर्षक, लेखक या ISBN द्वारा खोजें...",
+      allCategories: "सभी श्रेणियां",
+      reserveSeat: "चयनित सीट आरक्षित करें",
+      vacateSeat: "सीट खाली करें",
+      seatAvailable: "उपलब्ध",
+      seatOccupied: "व्यस्त",
+      seatReserved: "आरक्षित",
+      dueTomorrow: "कल तक जमा करें",
+      dueToday: "आज जमा करें",
+      overdue: "समय सीमा समाप्त",
+      returnBook: "वितरण काउंटर पर वापस करें",
+      remindersTitle: "वापसी सूचना एवं समय-सीमा",
+      noReminders: "कोई विलंबित या आगामी समय-सीमा नहीं। सभी पुस्तकें समय पर हैं!"
+    },
+
+    // Faculty: My Classes
+    myClasses: {
+      title: "मेरी कक्षाएं व छात्र",
+      subtitle: "सक्रिय पाठ्यक्रम बैचों का प्रबंधन करें, छात्रों की व्यक्तिगत उपस्थिति ट्रैक करें और हाज़िरी दर्ज करें।",
+      selectBatch: "पाठ्यक्रम बैच चुनें:",
+      searchPlaceholder: "छात्र का नाम या रोल नंबर खोजें...",
+      allStudents: "सभी छात्र",
+      safeStudents: "सुरक्षित (≥ 75%)",
+      atRiskStudents: "जोखिम में (< 75%)",
+      totalEnrolled: "कुल नामांकित",
+      classAverage: "कक्षा औसत",
+      studentsAtRisk: "जोखिम वाले छात्र",
+      markAttendanceBtn: "उपस्थिति दर्ज करें",
+      rosterTitle: "नामांकित छात्र सूची",
+      rollNo: "रोल नंबर",
+      studentName: "छात्र का नाम",
+      attendanceRate: "उपस्थिति प्रतिशत",
+      standing: "स्थिति",
+      actions: "कार्रवाई",
+      modalTitle: "कक्षा उपस्थिति दर्ज करें",
+      lectureDate: "व्याख्यान तिथि",
+      lectureTopic: "व्याख्यान का विषय / मॉड्यूल",
+      markAllPresent: "सभी को उपस्थित करें",
+      markAllAbsent: "सभी को अनुपस्थित करें",
+      submitSession: "उपस्थिति सत्र सहेजें"
+    },
+
+    // Authentication
+    auth: {
+      welcome: "UniSphere में आपका स्वागत है",
+      portalSubtitle: "एकीकृत स्मार्ट परिसर शैक्षणिक एवं प्रशासनिक सुइट",
+      signIn: "साइन इन",
+      register: "नया खाता बनाएं",
+      forgotPassword: "पासवर्ड भूल गए?",
+      studentTab: "छात्र पोर्टल",
+      facultyTab: "संकाय पोर्टल",
+      emailLabel: "परिसर ईमेल",
+      passwordLabel: "पासवर्ड",
+      rememberMe: "इस कंप्यूटर पर मुझे याद रखें",
+      submitSignIn: "UniSphere में साइन इन करें",
+      demoStudent: "त्वरित डेमो: छात्र पहुंच",
+      demoFaculty: "त्वरित डेमो: संकाय पहुंच",
+      backHome: "← मुख्य पृष्ठ पर वापस जाएं"
     }
   },
+
   es: {
-    // Spanish
+    // Navigation & App Shell
     nav: {
       dashboard: "Panel Principal",
       attendance: "Centro de Asistencia",
@@ -120,42 +401,183 @@ export const translations = {
       facultyServices: "Servicios Docentes",
       home: "Inicio",
       signIn: "Iniciar Sesión",
-      logOut: "Cerrar sesión"
+      logOut: "Cerrar sesión",
+      guestStudent: "Estudiante Invitado",
+      homePill: "Inicio ↗",
+      academicSuite: "Suite Académica del Campus"
     },
-    attendance: {
-      title: "Centro de Asistencia",
-      target: "Objetivo",
-      overall: "Asistencia General",
-      safe: "Zona Segura",
-      atRisk: "En Riesgo",
-      totalClasses: "Clases Totales",
-      attended: "Asistidas",
-      calculate: "Predictor",
-      record: "Registrar Hoy",
-      addSubject: "Añadir Asignatura"
-    },
-    library: {
-      title: "Sistema de Biblioteca Inteligente",
-      seatMap: "Plano de 36 Asientos",
-      issuedBooks: "Mis Libros Prestados",
-      catalog: "Catálogo de Libros",
-      availableSeats: "Asientos Disponibles",
-      dueTomorrow: "Vence Mañana",
-      returnBook: "Devolver Libro"
-    },
-    actions: {
+
+    // Common Global UI
+    common: {
       search: "Buscar...",
       filter: "Filtrar",
+      all: "Todos",
+      safe: "Zona Segura",
+      atRisk: "En Riesgo",
       save: "Guardar Cambios",
       cancel: "Cancelar",
+      close: "Cerrar",
       viewDetails: "Ver Detalles",
-      download: "Descargar"
+      download: "Descargar",
+      status: "Estado",
+      action: "Acción",
+      today: "Hoy",
+      present: "Presente",
+      absent: "Ausente",
+      leave: "Permiso",
+      changeLanguage: "Cambiar Idioma",
+      toggleTheme: "Alternar Tema",
+      light: "Claro",
+      dark: "Oscuro"
+    },
+
+    // Dashboard
+    dashboard: {
+      welcomeBack: "Bienvenido de nuevo, {name}",
+      subtitleStudent: "Monitorea tus métricas académicas, controla tu asistencia y accede a los servicios del campus.",
+      subtitleFaculty: "Gestiona listas de cursos, registra la asistencia y revisa el rendimiento estudiantil.",
+      semesterBadge: "4º Semestre • Ingeniería Informática",
+      facultyBadge: "Profesor • Departamento de Informática",
+      quickActions: "Servicios Rápidos",
+      modulesTitle: "Módulos del Campus Académico",
+      systemStanding: "Estado Institucional",
+      activePeers: "24 Compañeros activos en el centro de estudio",
+      attendanceNotice: "Mantén una asistencia superior al 75% para garantizar el acceso al examen final.",
+      grievanceTitle: "Quejas y Reclamaciones",
+      grievanceDesc: "Reporta incidencias del campus con seguimiento transparente en 9 fases.",
+      lostFoundTitle: "Red de Objetos Perdidos",
+      lostFoundDesc: "Localiza pertenencias perdidas mediante el mapa interactivo del campus.",
+      notesTitle: "Mercado de Apuntes",
+      notesDesc: "Accede a apuntes verificados del semestre y material de estudio compartido.",
+      studyTitle: "Sala Virtual de Estudio",
+      studyDesc: "Colabora en salas sincronizadas con presencia en vivo y temporizador Pomodoro.",
+      libraryTitle: "Sistema de Biblioteca Inteligente",
+      libraryDesc: "Consulta disponibilidad en vivo del plano de 36 puestos y reserva escritorios."
+    },
+
+    // Attendance Hub
+    attendance: {
+      title: "Centro de Asistencia y Elegibilidad",
+      subtitle: "Monitorea tu asistencia diaria, calcula faltas permitidas, predice tu acceso a exámenes finales y mantente por encima de los límites universitarios.",
+      trackerPill: "Seguimiento Académico Inteligente",
+      semesterPill: "Semestre 4 • 2026",
+      coursesSafe: "{safe} de {total} asignaturas seguras",
+      shortageRisk: "{count} asignatura en riesgo de falta",
+      targetCutoff: "Objetivo:",
+      addCourse: "Añadir Asignatura",
+      overviewTab: "Resumen",
+      predictorTab: "Predictor y Escenarios",
+      calculatorTab: "Calculadora de Faltas",
+      registerTab: "Registro Rápido",
+      calendarTab: "Calendario de Clases",
+      breakdownTab: "Desglose de Cursos",
+      atRiskBadge: "{count} en riesgo",
+      aggregateStanding: "Estado Global",
+      semesterPerformance: "Rendimiento del Semestre",
+      examEligible: "Apto para Exámenes",
+      shortageRiskBadge: "Riesgo de Falta",
+      presentRatio: "Tasa de Asistencia:",
+      absenceRatio: "Tasa de Ausencia:",
+      targetClearance: "Margen sobre Objetivo:",
+      passingCutoff: "{target}% Corte de Aprobado",
+      classesAttended: "Clases Asistidas",
+      classesMissed: "Clases Faltadas",
+      totalClasses: "Clases Totales",
+      safeBunkAllowance: "Margen Seguro de Faltas",
+      catchUpClasses: "Clases Necesarias",
+      attendedSub: "Sesiones teóricas y prácticas completadas",
+      missedSub: "Ausencias, permisos y faltas registradas",
+      totalSub: "Sesiones impartidas este periodo",
+      safeBunkSub: "Clases que puedes faltar",
+      catchUpSub: "Consecutivas requeridas",
+      withoutDropping: "Sin bajar del {target}%",
+      restoreEligibility: "Para restaurar tu derecho a examen",
+      guidelinesTitle: "Directrices y Análisis Institucionales de Asistencia",
+      safeZone: "Zona Segura",
+      caution: "Precaución",
+      actionRequired: "Acción Requerida",
+      advisorComfortable: "¡Estás holgadamente por encima del objetivo! Puedes faltar hasta {count} clases en total y seguir por encima del {target}%.",
+      advisorEdge: "Estás justo en el límite de tu meta del {target}%. ¡Faltar a la próxima clase te pondrá en zona de riesgo!",
+      advisorDanger: "Aviso de Asistencia: Debes asistir a las próximas {count} clases consecutivas sin faltar para recuperar tu elegibilidad al {target}%.",
+      advisorEmpty: "Aún no hay clases registradas. ¡Empieza registrando tus asignaturas!"
+    },
+
+    // Smart Library
+    library: {
+      title: "Sistema de Biblioteca Inteligente",
+      subtitle: "Ocupación en tiempo real de 36 puestos, catálogo general y control automático de plazos de devolución.",
+      overviewTab: "Resumen Biblioteca",
+      seatsTab: "Plano de 36 Puestos",
+      catalogTab: "Catálogo de Libros",
+      issuedTab: "Mis Libros Prestados",
+      totalCapacity: "Capacidad Total",
+      availableSeats: "Puestos Libres",
+      occupiedSeats: "Puestos Ocupados",
+      issuedBooksCount: "Libros en Préstamo",
+      searchBooks: "Buscar por título, autor o ISBN...",
+      allCategories: "Todas las Categorías",
+      reserveSeat: "Reservar Puesto Seleccionado",
+      vacateSeat: "Liberar Puesto",
+      seatAvailable: "Disponible",
+      seatOccupied: "Ocupado",
+      seatReserved: "Reservado",
+      dueTomorrow: "Vence Mañana",
+      dueToday: "Vence Hoy",
+      overdue: "Vencido",
+      returnBook: "Devolver en Mostrador",
+      remindersTitle: "Alertas y Vencimientos de Préstamos",
+      noReminders: "No hay préstamos vencidos ni próximos a vencer. ¡Todo al día!"
+    },
+
+    // Faculty: My Classes
+    myClasses: {
+      title: "Mis Clases y Alumnos",
+      subtitle: "Gestiona grupos de asignaturas, supervisa la asistencia de los alumnos y pasa lista de sesión.",
+      selectBatch: "Seleccionar Grupo de Curso:",
+      searchPlaceholder: "Buscar por nombre o matrícula...",
+      allStudents: "Todos los Alumnos",
+      safeStudents: "Seguros (≥ 75%)",
+      atRiskStudents: "En Riesgo (< 75%)",
+      totalEnrolled: "Total Inscritos",
+      classAverage: "Promedio del Grupo",
+      studentsAtRisk: "Alumnos en Riesgo",
+      markAttendanceBtn: "Pasar Lista del Grupo",
+      rosterTitle: "Directorio de Alumnos Inscritos",
+      rollNo: "Matrícula",
+      studentName: "Nombre del Alumno",
+      attendanceRate: "Tasa de Asistencia",
+      standing: "Estado",
+      actions: "Acciones",
+      modalTitle: "Registrar Asistencia de la Clase",
+      lectureDate: "Fecha de la Clase",
+      lectureTopic: "Tema / Módulo Impartido",
+      markAllPresent: "Marcar Todos Presentes",
+      markAllAbsent: "Marcar Todos Ausentes",
+      submitSession: "Guardar Sesión de Asistencia"
+    },
+
+    // Authentication
+    auth: {
+      welcome: "Bienvenido a UniSphere",
+      portalSubtitle: "Suite Académica y de Gestión Inteligente del Campus",
+      signIn: "Iniciar Sesión",
+      register: "Crear Cuenta",
+      forgotPassword: "¿Olvidaste tu contraseña?",
+      studentTab: "Portal del Estudiante",
+      facultyTab: "Portal del Profesor",
+      emailLabel: "Correo Institucional",
+      passwordLabel: "Contraseña",
+      rememberMe: "Recordar mis credenciales",
+      submitSignIn: "Iniciar Sesión en UniSphere",
+      demoStudent: "Demo Rápida: Acceso Alumno",
+      demoFaculty: "Demo Rápida: Acceso Profesor",
+      backHome: "← Volver al Inicio del Campus"
     }
   }
 };
 
 export const SUPPORTED_LANGUAGES = [
   { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "hi", name: "Hindi", flag: "🇮🇳" },
-  { code: "es", name: "Spanish", flag: "🇪🇸" }
+  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+  { code: "es", name: "Español", flag: "🇪🇸" }
 ];
