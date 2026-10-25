@@ -2,10 +2,9 @@ import React, { useState } from "react";
 
 export default function NotePreviewModal({
   note,
-  isOwned,
+  isDownloaded,
   onClose,
-  onBuyOrDownload,
-  onStartStudyGroup
+  onDownload
 }) {
   const previewPages = note.previewPages || [];
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -14,6 +13,7 @@ export default function NotePreviewModal({
   const selectedPage = previewPages[selectedIndex] || {
     pageNumber: 1,
     docPage: 1,
+    label: "Page 1 (First 3)",
     title: `${note.subject} — Preview`,
     content: "Preview content is not available for this note yet.",
     highlight: "Preview pages will appear here once the seller uploads them."
@@ -47,30 +47,30 @@ export default function NotePreviewModal({
 
         <div className="reader-split-body">
           <aside className="reader-sidebar">
-            <span className="sidebar-title">Preview Pages</span>
+            <span className="sidebar-title">6-Page Sample Preview</span>
             <div className="sidebar-page-list">
               {previewPages.map((page, index) => (
                 <button
-                  key={`${page.docPage}-${index}`}
+                  key={`${page.docPage || page.pageNumber}-${index}`}
                   type="button"
                   onClick={() => setSelectedIndex(index)}
                   className={`sidebar-page-pill ${selectedIndex === index ? "active" : ""}`}
                 >
-                  <span className="pg-num">Page {page.docPage || page.pageNumber}</span>
+                  <span className="pg-num">{page.label || `Page ${page.docPage || page.pageNumber}`}</span>
                   <span className="pg-topic">{page.title}</span>
                 </button>
               ))}
             </div>
-            <p style={{ marginTop: 12, fontSize: "0.7rem", color: "#64748b" }}>
-              Preview includes selected sample pages only.
+            <p className="reader-sidebar-note">
+              Preview includes first 3 &amp; last 3 sample pages. Full 100% document unlocked upon purchase.
             </p>
           </aside>
 
           <main className="reader-main-paper-view">
-            <article className="reader-paper" style={{ transform: `scale(${zoom / 100})`, transformOrigin: "top center", marginBottom: `${zoom - 100}px` }}>
+            <article className={`reader-paper zoom-${zoom}`}>
               <div className="paper-head-watermark">
-                <span>UNISPHERE · ACADEMIC RESOURCE</span>
-                <span>PREVIEW · PAGE {selectedPage.docPage || selectedPage.pageNumber}</span>
+                <span>UNISPHERE · ACADEMIC RESOURCE PREVIEW</span>
+                <span>{selectedPage.label || `PAGE ${selectedPage.docPage || selectedPage.pageNumber}`}</span>
               </div>
               <h2 className="paper-title">{selectedPage.title}</h2>
               <div className="paper-body-text">{selectedPage.content}</div>
@@ -85,23 +85,16 @@ export default function NotePreviewModal({
 
         <div className="reader-footer-row">
           <span className="reader-footer-note">
-            {isOwned ? "✓ You own this note. Full access is unlocked." : `Previewing ${previewPages.length || 1} sample page${(previewPages.length || 1) === 1 ? "" : "s"}.`}
+            {isDownloaded ? "✓ Note unlocked and saved in your student locker." : `Previewing sample pages (${previewPages.length} pages available).`}
           </span>
 
           <div className="reader-footer-btns">
             <button
               type="button"
-              onClick={() => onStartStudyGroup(note)}
-              className="btn-host-from-preview"
-            >
-              👥 Study Together
-            </button>
-            <button
-              type="button"
-              onClick={() => onBuyOrDownload(note)}
+              onClick={() => onDownload(note)}
               className="btn-buy-from-preview"
             >
-              {isOwned ? "⬇️ Download / Open" : note.price === 0 ? "⬇️ Get Free" : `🛒 Buy for ₹${note.price}`}
+              {isDownloaded ? "✓ In Locker" : "Get Full Notes"}
             </button>
           </div>
         </div>
