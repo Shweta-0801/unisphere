@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/common/ThemeToggle";
+import LanguageSelector from "../components/common/LanguageSelector";
 import {
   GraduationCap,
   CalendarCheck,
@@ -114,7 +116,7 @@ function HomePage() {
   const activeModuleData = modules.find((m) => m.id === activeTab) || modules[0];
 
   return (
-    <div className="min-h-screen bg-[#F8F3EA] text-[#241A1C] font-sans selection:bg-[#B8A08A]/30 selection:text-[#351019]">
+    <div className="homepage-root min-h-screen bg-[#F8F3EA] text-[#241A1C] font-sans selection:bg-[#B8A08A]/30 selection:text-[#351019]">
       {/* Subtle ambient lighting */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[500px] bg-gradient-to-tr from-[#EFE8DC]/60 via-[#F8F3EA]/40 to-[#D8CBBE]/30 blur-3xl rounded-full" />
@@ -181,6 +183,8 @@ function HomePage() {
 
           {/* Action CTAs: Login + Register + Dashboard */}
           <div className="flex items-center gap-2.5">
+            <LanguageSelector />
+            <ThemeToggle />
             {/* Login Button */}
             <button
               onClick={() => navigate("/login")}

@@ -1374,3 +1374,59 @@ body, .app-shell, .app-sidebar, .app-mobile-header, .app-main-viewport {
     font-size: 0.75rem;
   }
 }
+
+/* =============================================================================
+   DARK THEME PALETTE OVERRIDES FOR HOMEPAGE
+   ============================================================================= */
+
+[data-theme="dark"] .homepage-root {
+  background-color: #141110 !important;
+  color: #FAF8F5 !important;
+}
+
+[data-theme="dark"] .homepage-root header {
+  background-color: rgba(23, 19, 17, 0.95) !important;
+  border-bottom-color: #2E2724 !important;
+}
+
+[data-theme="dark"] .homepage-root h1,
+[data-theme="dark"] .homepage-root h2,
+[data-theme="dark"] .homepage-root h3,
+[data-theme="dark"] .homepage-root h4 {
+  color: #FAF8F5 !important;
+}
+
+[data-theme="dark"] .homepage-root p {
+  color: #C8BAAC !important;
+}
+
+[data-theme="dark"] .homepage-root .text-\[\#241A1C\],
+[data-theme="dark"] .homepage-root .text-\[\#351019\] {
+  color: #FAF8F5 !important;
+}
+
+[data-theme="dark"] .homepage-root .text-\[\#75666A\],
+[data-theme="dark"] .homepage-root .text-\[\#8D857D\] {
+  color: #A89F96 !important;
+}
+
+[data-theme="dark"] .homepage-root .bg-\[\#FFFDF8\],
+[data-theme="dark"] .homepage-root .bg-\[\#FAF9F6\],
+[data-theme="dark"] .homepage-root .bg-\[\#FAF6F0\],
+[data-theme="dark"] .homepage-root .bg-\[\#F8F3EA\] {
+  background-color: #1C1715 !important;
+  color: #FAF8F5 !important;
+}
+
+[data-theme="dark"] .homepage-root .border-\[\#E5DCD4\],
+[data-theme="dark"] .homepage-root .border-\[\#D6D0C8\] {
+  border-color: #2E2724 !important;
+}
+
+[data-theme="dark"] .homepage-root nav a {
+  color: #C8BAAC !important;
+}
+
+[data-theme="dark"] .homepage-root nav a:hover {
+  color: #FAF8F5 !important;
+}
