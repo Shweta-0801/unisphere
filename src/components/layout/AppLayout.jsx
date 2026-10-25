@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import ThemeToggle from "../common/ThemeToggle";
+import LanguageSelector from "../common/LanguageSelector";
+import { useLanguage } from "../../context/LanguageContext";
+
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -28,24 +32,26 @@ export default function AppLayout({ children, activePath }) {
   const currentPath = activePath || location.pathname;
   const isFaculty = user?.role === "Faculty" || user?.role === "Teacher";
 
-  // Core Student Modules + Dashboard (Retained in full)
+  // Core Student Modules + Dashboard
+  const { t } = useLanguage();
+
   const studentNavItems = [
-    { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { label: "Attendance Hub", icon: CalendarCheck, path: "/attendance" },
-    { label: "Complaints Portal", icon: MessageSquare, path: "/complaints" },
-    { label: "Lost & Found", icon: Search, path: "/lost-found" },
-    { label: "Notes Marketplace", icon: BookOpen, path: "/notes" },
-    { label: "Group Study Hub", icon: Users, path: "/group-study" },
-    { label: "Smart Library", icon: Library, path: "/library" }
+    { label: t("nav.dashboard", "Dashboard"), icon: LayoutDashboard, path: "/dashboard" },
+    { label: t("nav.attendance", "Attendance Hub"), icon: CalendarCheck, path: "/attendance" },
+    { label: t("nav.complaints", "Complaints Portal"), icon: MessageSquare, path: "/complaints" },
+    { label: t("nav.lostFound", "Lost & Found"), icon: Search, path: "/lost-found" },
+    { label: t("nav.notes", "Notes Marketplace"), icon: BookOpen, path: "/notes" },
+    { label: t("nav.groupStudy", "Group Study Hub"), icon: Users, path: "/group-study" },
+    { label: t("nav.library", "Smart Library"), icon: Library, path: "/library" }
   ];
 
-  // Dedicated Faculty / Teacher Modules (Strictly the 5 required modules)
+  // Dedicated Faculty / Teacher Modules
   const facultyNavItems = [
-    { label: "My Classes & Students", icon: GraduationCap, path: "/teacher/classes" },
-    { label: "Teacher Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-    { label: "Assignments Portal", icon: FileText, path: "/teacher/assignments" },
-    { label: "Academic Performance", icon: Award, path: "/academic-performance" },
-    { label: "Attendance Management", icon: CalendarCheck, path: "/attendance-management" }
+    { label: t("nav.myClasses", "My Classes & Students"), icon: GraduationCap, path: "/teacher/classes" },
+    { label: t("nav.dashboard", "Teacher Dashboard"), icon: LayoutDashboard, path: "/dashboard" },
+    { label: t("nav.assignments", "Assignments Portal"), icon: FileText, path: "/teacher/assignments" },
+    { label: t("nav.performance", "Academic Performance"), icon: Award, path: "/academic-performance" },
+    { label: t("nav.attendanceMgmt", "Attendance Management"), icon: CalendarCheck, path: "/attendance-management" }
   ];
 
   const navItems = isFaculty ? facultyNavItems : studentNavItems;
@@ -73,7 +79,7 @@ export default function AppLayout({ children, activePath }) {
 
   return (
     <div className="app-shell">
-      {/* ================= MOBILE HEADER BAR ================= */}
+      {/* ================= 1. MOBILE HEADER BAR ================= */}
       <header className="app-mobile-header">
         <div
           className="mobile-header-brand-wrap"
@@ -91,19 +97,28 @@ export default function AppLayout({ children, activePath }) {
         </div>
 
         <div className="mobile-header-actions-wrap">
+          {/* Controls in top mobile header */}
+          <LanguageSelector className="mobile-header-control" />
+          <ThemeToggle className="mobile-header-control" />
+
+          {/* User Profile Avatar or Sign In button */}
           {user ? (
-            <div className="app-sidebar-user-avatar">
+            <div 
+              className="app-sidebar-user-avatar"
+              title={`${user.name} (${user.role || (isFaculty ? "Faculty" : "Student")})`}
+            >
               {user.initials || (isFaculty ? "FC" : "ST")}
             </div>
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="unisphere-btn unisphere-btn-secondary"
+              className="unisphere-btn unisphere-btn-secondary mobile-signin-btn"
             >
               Sign In
             </button>
           )}
 
+          {/* Hamburger Menu Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="mobile-header-toggle-btn"
@@ -114,10 +129,10 @@ export default function AppLayout({ children, activePath }) {
         </div>
       </header>
 
-      {/* ================= DESKTOP PERSISTENT SIDEBAR ================= */}
+      {/* ================= 2. DESKTOP PERSISTENT SIDEBAR ================= */}
       <aside className="app-sidebar">
         <div>
-          {/* Brand Header: Logo & UniSphere title prominently displayed; clicking navigates to public homepage ("/") */}
+          {/* Brand Header */}
           <div
             onClick={handleLogoClick}
             className="app-sidebar-header"
@@ -149,7 +164,7 @@ export default function AppLayout({ children, activePath }) {
           {/* Navigation Items List */}
           <div className="app-sidebar-nav">
             <div className="app-sidebar-nav-title">
-              {isFaculty ? "Faculty Services" : "Campus Services"}
+              {isFaculty ? t("nav.facultyServices", "Faculty Services") : t("nav.campusServices", "Campus Services")}
             </div>
 
             {navItems.map((item) => {
@@ -172,6 +187,21 @@ export default function AppLayout({ children, activePath }) {
               );
             })}
           </div>
+        </div>
+
+        {/* Desktop Sidebar Control Bar: Theme & Language */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "0.75rem 1rem",
+          borderTop: "1px solid var(--light-border)",
+          borderBottom: "1px solid var(--light-border)",
+          background: "var(--cream-light)",
+          marginBottom: "0.75rem"
+        }}>
+          <LanguageSelector />
+          <ThemeToggle />
         </div>
 
         {/* User Profile Box at Bottom */}
@@ -218,7 +248,7 @@ export default function AppLayout({ children, activePath }) {
         </div>
       </aside>
 
-      {/* ================= MOBILE SLIDE-OUT DRAWER ================= */}
+      {/* ================= 3. MOBILE SLIDE-OUT DRAWER ================= */}
       {mobileMenuOpen && (
         <div className="app-mobile-drawer-root">
           <div
@@ -245,12 +275,19 @@ export default function AppLayout({ children, activePath }) {
                   </div>
                   <span className="app-sidebar-logo-title">UNISPHERE</span>
                 </div>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="mobile-header-toggle-btn"
-                >
-                  <X size={20} />
-                </button>
+
+                {/* Controls in drawer header */}
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                  <LanguageSelector />
+                  <ThemeToggle />
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="mobile-header-toggle-btn"
+                    aria-label="Close menu"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
               </div>
 
               <div className="mobile-drawer-nav-list">
@@ -277,7 +314,7 @@ export default function AppLayout({ children, activePath }) {
               </div>
             </div>
 
-            {/* Mobile User Profile */}
+            {/* Mobile User Profile Footer */}
             <div className="mobile-drawer-footer">
               {user ? (
                 <div className="app-sidebar-user-card">
@@ -295,6 +332,7 @@ export default function AppLayout({ children, activePath }) {
                   <button
                     onClick={handleLogout}
                     className="app-sidebar-logout-btn"
+                    aria-label="Log out"
                   >
                     <LogOut size={16} />
                   </button>
@@ -315,7 +353,7 @@ export default function AppLayout({ children, activePath }) {
         </div>
       )}
 
-      {/* ================= MAIN CONTENT VIEWPORT ================= */}
+      {/* ================= 4. MAIN CONTENT VIEWPORT ================= */}
       <div className="app-main-viewport">
         {children}
       </div>
