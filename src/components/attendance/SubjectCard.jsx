@@ -246,7 +246,7 @@ function SubjectCard({
         {/* Smart Bunk / Catch-Up Advice Tag */}
         <div className={`att-bunk-chip ${adviceType}`}>
           <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{adviceText}</span>
-          <span style={{ fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.05em", opacity: 0.9, padding: "0.1rem 0.35rem", borderRadius: "4px", background: "rgba(255,255,255,0.7)", border: "1px solid currentColor", flexShrink: 0, marginLeft: "0.25rem" }}>
+          <span className="att-advice-status-tag">
             {adviceType === "safe" ? "Relax" : adviceType === "warning" ? "Caution" : "At Risk"}
           </span>
         </div>
