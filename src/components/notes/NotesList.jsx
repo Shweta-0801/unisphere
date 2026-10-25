@@ -1,22 +1,43 @@
 import React from "react";
+import { FolderSearch, RotateCcw } from "lucide-react";
 import NoteCard from "./NoteCard";
 
 export default function NotesList({
   notes,
-  purchasedNoteIds,
+  downloadedNoteIds,
   onPreview,
-  onBuyOrDownload,
-  onStartStudyGroup,
+  onDownload,
+  onShare,
   onResetFilters
 }) {
   if (notes.length === 0) {
     return (
       <div className="empty-results-box">
-        <span className="empty-icon">📂</span>
-        <h3>No notes found for current search</h3>
-        <p>Try resetting filters or search by a different keyword.</p>
-        <button onClick={onResetFilters} className="btn-reset-filters">
-          Reset Filters
+        <div
+          style={{
+            display: "inline-flex",
+            padding: "16px",
+            borderRadius: "50%",
+            background: "#FAF6F0",
+            border: "1px solid #D6D0C8",
+            marginBottom: "12px",
+            color: "#8D857D"
+          }}
+        >
+          <FolderSearch size={36} />
+        </div>
+        <h3>No Semester Notes Found</h3>
+        <p style={{ maxWidth: "440px", margin: "0 auto 16px", color: "#8D857D", fontSize: "13.5px" }}>
+          No course notes matched your selected subject or search keyword. Try switching to a different subject chip or reset your query.
+        </p>
+        <button
+          type="button"
+          onClick={onResetFilters}
+          className="btn-reset-filters"
+          style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+        >
+          <RotateCcw size={14} />
+          <span>Reset All Filters</span>
         </button>
       </div>
     );
@@ -28,10 +49,10 @@ export default function NotesList({
         <NoteCard
           key={note.id}
           note={note}
-          isOwned={purchasedNoteIds.has(note.id)}
+          isDownloaded={downloadedNoteIds.has(note.id)}
           onPreview={onPreview}
-          onBuyOrDownload={onBuyOrDownload}
-          onStartStudyGroup={onStartStudyGroup}
+          onDownload={onDownload}
+          onShare={onShare}
         />
       ))}
     </div>
