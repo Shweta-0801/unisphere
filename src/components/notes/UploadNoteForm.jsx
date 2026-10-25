@@ -6,18 +6,18 @@ export default function UploadNoteForm({ subjects, onClose, onSubmit }) {
     subject: "DBMS",
     topic: "",
     description: "",
-    price: 39,
-    isFree: false,
     semester: "4th Sem",
     pages: 15,
     sellerName: "Alex Sharma",
     sellerCollege: "Campus Verified"
   });
 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      alert("Please enter a note title");
+      setErrorMessage("Please enter a note title.");
       return;
     }
     onSubmit(formData);
@@ -30,12 +30,18 @@ export default function UploadNoteForm({ subjects, onClose, onSubmit }) {
           <div className="modal-title-wrap">
             <span className="modal-icon">📤</span>
             <div>
-              <h3>Publish & Sell Course Notes</h3>
-              <p>Upload your semester revision notes and earn 70% royalty per download.</p>
+              <h3>Upload Semester Notes</h3>
+              <p>Share verified semester revision notes with fellow students.</p>
             </div>
           </div>
-          <button onClick={onClose} className="modal-close">✕</button>
+          <button type="button" onClick={onClose} className="modal-close">✕</button>
         </div>
+
+        {errorMessage && (
+          <div style={{ color: "var(--error, #8C2A3E)", background: "var(--error-bg, #FAF0F0)", padding: "8px 12px", borderRadius: "8px", fontSize: "12px", fontWeight: "600", marginBottom: "12px", border: "1px solid var(--error-border, #ECCBCB)" }}>
+            {errorMessage}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="modal-form-content">
           <div className="form-field">
@@ -45,7 +51,10 @@ export default function UploadNoteForm({ subjects, onClose, onSubmit }) {
               required
               placeholder="e.g. Complete Operating Systems & CPU Scheduling Notes"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, title: e.target.value });
+                if (errorMessage) setErrorMessage("");
+              }}
               className="input-text"
             />
           </div>
@@ -93,47 +102,21 @@ export default function UploadNoteForm({ subjects, onClose, onSubmit }) {
             />
           </div>
 
-          <div className="form-grid-2">
-            <div className="form-field">
-              <label>Price (₹)</label>
-              <input
-                type="number"
-                disabled={formData.isFree}
-                value={formData.isFree ? 0 : formData.price}
-                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                className="input-text"
-                min="0"
-                max="199"
-              />
-            </div>
-
-            <div className="form-field checkbox-field" style={{ paddingTop: "28px" }}>
-              <label className="checkbox-wrap">
-                <input
-                  type="checkbox"
-                  checked={formData.isFree}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      isFree: e.target.checked,
-                      price: e.target.checked ? 0 : 39
-                    })
-                  }
-                />
-                <span>Make this note FREE for students</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="file-upload-dropzone">
-            <span className="dropzone-icon">📁</span>
-            <p>Drag & drop PDF note file here, or click to browse</p>
-            <small>Supported format: PDF (Max 50MB)</small>
+          <div className="form-field">
+            <label>Short Description</label>
+            <textarea
+              rows="3"
+              placeholder="Brief summary of what these notes cover..."
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="input-text"
+              style={{ width: "100%", resize: "vertical" }}
+            />
           </div>
 
           <div className="modal-buttons-row">
             <button type="button" onClick={onClose} className="btn-cancel">Cancel</button>
-            <button type="submit" className="btn-confirm-submit">Publish Note</button>
+            <button type="submit" className="btn-confirm-submit">Upload Note</button>
           </div>
         </form>
       </div>
