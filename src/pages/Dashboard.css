@@ -1109,3 +1109,362 @@
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* =============================================================================
+   DARK THEME OVERRIDES FOR DASHBOARD & INTERACTIVE ATTENDANCE CARD
+   ============================================================================= */
+
+[data-theme="dark"] .dash-top-header {
+  background-color: #1A1513;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .dash-header-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-header-subtitle {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-icon-btn {
+  border-color: #382E28;
+  color: #C8BAAC;
+  background-color: #221B18;
+}
+
+[data-theme="dark"] .dash-icon-btn:hover {
+  background-color: #2E2420;
+  color: #FAF8F5;
+  border-color: #4D3F37;
+}
+
+[data-theme="dark"] .dash-notifications-panel {
+  background-color: #1E1815;
+  border-color: #382E28;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .dash-notif-header {
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .dash-notif-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-notif-item {
+  border-bottom-color: #261F1C;
+}
+
+[data-theme="dark"] .dash-notif-item:hover {
+  background-color: #251E1A;
+}
+
+[data-theme="dark"] .dash-notif-text {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-notif-time {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .dash-welcome-card {
+  background: linear-gradient(135deg, #1C1513 0%, #261D19 50%, #211915 100%);
+  border-color: #382E28;
+  box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .dash-welcome-badge {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .dash-welcome-headline {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-welcome-desc {
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .dash-welcome-pill-btn {
+  background: #3B2E28;
+  color: #FAF8F5;
+  border: 1px solid #52423A;
+}
+
+[data-theme="dark"] .dash-welcome-pill-btn:hover {
+  background: #4A3A33;
+}
+
+[data-theme="dark"] .dash-welcome-ghost-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FAF8F5;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .dash-welcome-ghost-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .dash-standing-box {
+  background: rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .dash-standing-val {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-standing-label {
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .dash-standing-status {
+  color: #78B587;
+}
+
+[data-theme="dark"] .dash-quick-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .dash-quick-card:hover {
+  background-color: #221B18;
+  border-color: #4A3C34;
+}
+
+[data-theme="dark"] .dash-quick-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-quick-subtitle {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-quick-icon-wrap {
+  background-color: #261E1A;
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .dash-metric-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .dash-metric-label {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-metric-number {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-metric-sub {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .dash-section-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-section-desc {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-module-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .dash-module-card:hover {
+  background-color: #201916;
+  border-color: #4A3C34;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .dash-mod-icon-halo {
+  background-color: #261E1A;
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .dash-mod-tag {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .dash-module-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-module-desc {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-stat-badge {
+  background-color: #221B18;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .dash-stat-metric {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-stat-label {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-action-btn {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-action-btn:hover {
+  background-color: #332822;
+  border-color: #4D3C33;
+}
+
+[data-theme="dark"] .dash-notice-banner {
+  background-color: #1F1916;
+  border-color: #332822;
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .dash-notice-banner strong {
+  color: #FAF8F5;
+}
+
+/* Interactive Attendance Card Dark Mode */
+[data-theme="dark"] .dash-att-calculator-card {
+  background-color: #1A1513;
+  border-color: #2E2724;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .dash-att-calc-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-att-calc-sub {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-att-calc-icon {
+  background-color: #261E1A;
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .dash-att-calc-tag {
+  background-color: #241C1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .dash-att-demo-pill {
+  background-color: #221B18;
+  color: #C8BAAC;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .dash-att-reset-btn {
+  background-color: #221B18;
+  border-color: #382E28;
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .dash-att-reset-btn:hover {
+  background-color: #2C231F;
+  color: #FAF8F5;
+  border-color: #4D3C33;
+}
+
+[data-theme="dark"] .dash-att-overall-banner {
+  background-color: #201917;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .dash-att-overall-label {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-att-overall-pct {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-att-overall-counts {
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .dash-att-bar-track {
+  background-color: #2C231F;
+}
+
+[data-theme="dark"] .dash-att-marker-label {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .dash-att-calc-formula-note {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .dash-subject-item-card {
+  background-color: #201917;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .dash-subject-item-card:hover {
+  border-color: #4A3C34;
+}
+
+[data-theme="dark"] .dash-subj-name {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .dash-subj-faculty {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .dash-subj-code {
+  background-color: #2A211D;
+  color: #D8C9B9;
+  border: 1px solid #382E28;
+}
+
+[data-theme="dark"] .dash-subj-count-text {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .dash-subj-mini-bar-track {
+  background-color: #2C231F;
+}
+
+[data-theme="dark"] .dash-subj-actions-row {
+  border-top-color: #2C231F;
+}
+
+[data-theme="dark"] .dash-subj-btn.btn-plus {
+  background-color: #3D302A;
+  color: #FAF8F5;
+  border-color: #52423A;
+}
+
+[data-theme="dark"] .dash-subj-btn.btn-plus:hover {
+  background-color: #4C3C34;
+}
+
+[data-theme="dark"] .dash-subj-btn.btn-minus {
+  background-color: #221B18;
+  color: #FAF8F5;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .dash-subj-btn.btn-minus:hover:not(:disabled) {
+  background-color: #2C231F;
+  border-color: #4D3C33;
+}
