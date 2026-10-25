@@ -190,16 +190,7 @@ export default function AppLayout({ children, activePath }) {
         </div>
 
         {/* Desktop Sidebar Control Bar: Theme & Language */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0.75rem 1rem",
-          borderTop: "1px solid var(--light-border)",
-          borderBottom: "1px solid var(--light-border)",
-          background: "var(--cream-light)",
-          marginBottom: "0.75rem"
-        }}>
+        <div className="sidebar-system-controls">
           <LanguageSelector />
           <ThemeToggle />
         </div>

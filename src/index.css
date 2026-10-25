@@ -58,6 +58,20 @@
   --warning-border: #D8C9B9;
 
   /* Standard Element Defaults */
+  --bg-primary: #EAE8E4;
+  --bg-secondary: #FAF9F6;
+  --bg-card: #FAF9F6;
+  --text-primary: #211D1A;
+  --text-secondary: #8D857D;
+  --border-color: #D6D0C8;
+  --accent-color: #B7A594;
+  --input-bg: #FAF9F6;
+  --input-text: #211D1A;
+  --input-border: #D6D0C8;
+  --input-placeholder: #8D857D;
+  --dropdown-bg: #FAF9F6;
+  --dropdown-text: #211D1A;
+  --dropdown-border: #D6D0C8;
   --bg-main: #EAE8E4;
   --bg-surface: #FAF9F6;
   --text-main: #211D1A;
@@ -787,6 +801,19 @@ button {
   justify-content: center;
 }
 
+/* Sidebar System Controls */
+.sidebar-system-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--light-border);
+  border-bottom: 1px solid var(--light-border);
+  background: var(--cream-light);
+  margin-bottom: 0.75rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
 /* ==========================================================================
    DARK THEME PALETTE OVERRIDES ([data-theme="dark"])
    Luxury Obsidian & Dark Espresso Velvet Institutional Aesthetic
@@ -805,11 +832,12 @@ button {
   --unisphere-border: #2E2724;
 
   /* Global Brand Core in Dark Mode */
-  --primary-burgundy: #D8C9B9;
+  --primary-burgundy: #B7A594;
+  --primary-burgundy-hover: #C8BAAC;
   --dark-burgundy: #141110;
   --deep-wine: #0D0B0A;
   --burgundy-light: #2A221E;
-  --burgundy-glow: rgba(216, 201, 185, 0.16);
+  --burgundy-glow: rgba(183, 165, 148, 0.2);
 
   /* Warm Taupe & Sand Accents */
   --champagne-accent: #C4B3A2;
@@ -819,7 +847,7 @@ button {
   --cream: #141110;
   --cream-light: #1C1715;
   --cream-dark: #26201C;
-  --warm-white: #1C1715;
+  --warm-white: #1A1513;
 
   /* Typography */
   --dark-text: #FAF8F5;
@@ -833,15 +861,358 @@ button {
 
   /* Standard Element Defaults */
   --bg-main: #141110;
+  --bg-primary: #141110;
+  --bg-secondary: #1A1513;
+  --bg-card: #1C1715;
   --bg-surface: #1C1715;
   --text-main: #FAF8F5;
+  --text-primary: #FAF8F5;
+  --text-secondary: #A89F96;
   --text-muted: #A89F96;
+  --border-color: #2E2724;
+  --accent-color: #C4B3A2;
+  --input-bg: #221C1A;
+  --input-text: #FAF8F5;
+  --input-border: #3A312C;
+  --input-placeholder: #7E746C;
+  --dropdown-bg: #1C1715;
+  --dropdown-text: #FAF8F5;
+  --dropdown-border: #3A312C;
+
+  /* Functional Status in Dark Mode */
+  --success: #78B587;
+  --success-bg: rgba(79, 122, 90, 0.18);
+  --success-border: rgba(120, 181, 135, 0.3);
+
+  --error: #E57388;
+  --error-bg: rgba(140, 42, 62, 0.2);
+  --error-border: rgba(229, 115, 136, 0.35);
+
+  --warning: #D8C9B9;
+  --warning-bg: rgba(183, 165, 148, 0.16);
+  --warning-border: rgba(216, 201, 185, 0.3);
 
   /* Refined Dark Shadows */
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 6px 14px -2px rgba(0, 0, 0, 0.6);
   --shadow-lg: 0 14px 28px -4px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   GLOBAL DARK THEME COMPONENT OVERRIDES
+   ========================================================================== */
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: #FAF8F5;
+}
+
+/* Global Form Elements in Dark Mode */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--input-bg, #221C1A);
+  color: var(--input-text, #FAF8F5);
+  border-color: var(--input-border, #3A312C);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--input-placeholder, #7E746C);
+}
+
+[data-theme="dark"] select option {
+  background-color: #221C1A;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] select:focus,
+[data-theme="dark"] textarea:focus {
+  border-color: #C4B3A2;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(196, 179, 162, 0.2);
+}
+
+/* Sidebar and Header in Dark Mode */
+[data-theme="dark"] .app-sidebar {
+  background-color: #171311;
+  border-right-color: #2E2724;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .app-sidebar-header {
+  background-color: #171311;
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-header:hover {
+  background-color: #221B18;
+}
+
+[data-theme="dark"] .app-sidebar-logo-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-sidebar-home-pill {
+  background-color: #241C1A;
+  color: #D8C9B9;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .app-sidebar-header:hover .app-sidebar-home-pill {
+  background-color: #382E28;
+  color: #FAF8F5;
+  border-color: #4D3F37;
+}
+
+[data-theme="dark"] .sidebar-system-controls {
+  background-color: #1E1816;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-nav-title {
+  color: #8E8278;
+}
+
+[data-theme="dark"] .app-sidebar-nav-item {
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .app-sidebar-nav-item:hover {
+  background-color: #241D1A;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-sidebar-nav-item.active {
+  background-color: #2E231E;
+  color: #FAF8F5;
+  border-color: #4A3A32;
+}
+
+[data-theme="dark"] .app-sidebar-nav-item.active .app-sidebar-nav-icon {
+  color: #D8C9B9;
+}
+
+[data-theme="dark"] .app-sidebar-footer {
+  border-top-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-user-card {
+  background-color: #1E1815;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-user-avatar {
+  background-color: #332822;
+  border-color: #4A3A32;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-sidebar-user-name {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-sidebar-user-role {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .app-sidebar-logout-btn {
+  color: #A89F96;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-logout-btn:hover {
+  background-color: rgba(140, 42, 62, 0.25);
+  color: #E57388;
+  border-color: rgba(229, 115, 136, 0.35);
+}
+
+[data-theme="dark"] .app-mobile-header {
+  background-color: #171311;
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .app-mobile-drawer {
+  background-color: #171311;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .mobile-drawer-header,
+[data-theme="dark"] .mobile-drawer-divider,
+[data-theme="dark"] .mobile-drawer-footer {
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .app-sidebar-link {
+  color: #C8BAAC;
+}
+
+[data-theme="dark"] .app-sidebar-link:hover {
+  background-color: #241D1A;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-sidebar-link.active {
+  background-color: #2E231E;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-top-header {
+  background-color: rgba(23, 19, 17, 0.95);
+  border-bottom-color: #2E2724;
+}
+
+[data-theme="dark"] .app-top-header-title {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .app-top-header-subtitle {
+  color: #A89F96;
+}
+
+/* Primary & Secondary Buttons in dark mode */
+[data-theme="dark"] .unisphere-btn-primary {
+  background-color: #42322A;
+  color: #FAF8F5;
+  border: 1px solid #5C473C;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .unisphere-btn-primary:hover {
+  background-color: #523F35;
+  border-color: #70574A;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .unisphere-btn-secondary {
+  background-color: #221C1A;
+  color: #FAF8F5;
+  border: 1px solid #382E28;
+}
+
+[data-theme="dark"] .unisphere-btn-secondary:hover {
+  background-color: #2D2420;
+  border-color: #4D3E36;
+}
+
+[data-theme="dark"] .unisphere-btn-ghost {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .unisphere-btn-ghost:hover {
+  background-color: #241C1A;
+}
+
+/* Badges & Tabs in dark mode */
+[data-theme="dark"] .unisphere-badge-neutral {
+  background-color: #221C1A;
+  color: #C8BAAC;
+  border-color: #382E28;
+}
+
+[data-theme="dark"] .unisphere-badge-burgundy {
+  background-color: #2D201A;
+  color: #D8C9B9;
+  border-color: #453229;
+}
+
+[data-theme="dark"] .unisphere-tabs-bar {
+  background-color: #1E1816;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] .unisphere-tab-pill {
+  color: #A89F96;
+}
+
+[data-theme="dark"] .unisphere-tab-pill:hover {
+  color: #FAF8F5;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .unisphere-tab-pill.active {
+  background-color: #2E231E;
+  color: #FAF8F5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Cards & Modals */
+[data-theme="dark"] .unisphere-card {
+  background-color: #1C1715;
+  border-color: #2E2724;
+  color: #FAF8F5;
+}
+
+/* Tables in dark mode */
+[data-theme="dark"] table {
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] th {
+  background-color: #1E1815;
+  color: #D8C9B9;
+  border-color: #2E2724;
+}
+
+[data-theme="dark"] td {
+  border-color: #2A221E;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] tr:hover td {
+  background-color: #251E1A;
+}
+
+/* Controls: Theme & Language in Dark Mode */
+[data-theme="dark"] .theme-toggle-btn {
+  background: #241C1A;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: #2E2420;
+  border-color: #4D3F37;
+}
+
+[data-theme="dark"] .lang-selector-trigger {
+  background: #241C1A;
+  border-color: #382E28;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .lang-selector-trigger:hover {
+  background: #2E2420;
+  border-color: #4D3F37;
+}
+
+[data-theme="dark"] .lang-dropdown-menu {
+  background: #1C1715;
+  border-color: #382E28;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .lang-dropdown-item {
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .lang-dropdown-item:hover {
+  background: #28201C;
+}
+
+[data-theme="dark"] .lang-dropdown-item.active {
+  background: #332822;
+  color: #FAF8F5;
+}
+
+[data-theme="dark"] .lang-check {
+  color: #D8C9B9;
 }
 
 /* Smooth background transition when toggling */
