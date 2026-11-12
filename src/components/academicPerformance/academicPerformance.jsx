@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import PerformanceNavbar from "./PerformanceNavbar";
+import PerformanceNavbar from "./PerformanceNavBar";
 import PerformanceOverview from "./PerformanceOverview";
 import ClassPerformance from "./ClassPerformance";
 import StudentMarks from "./StudentMarks";
