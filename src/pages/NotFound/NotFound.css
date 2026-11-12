@@ -1,0 +1,137 @@
+/* =============================================================================
+   NOT FOUND (404) PAGE STYLESHEET
+   UniSphere Institutional Error Boundary
+   Pure CSS3 • Editorial Espresso & Warm Palette
+   ============================================================================= */
+
+.not-found-root {
+  min-height: 100vh;
+  background-color: #EAE8E4;
+  color: #211D1A;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.not-found-header {
+  padding: 20px 32px;
+  background-color: #FAF9F6;
+  border-bottom: 1px solid #D6D0C8;
+}
+
+.not-found-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.not-found-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: #3B302A;
+  color: #FAF9F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found-brand-text {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #211D1A;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.not-found-accent {
+  color: #B7A594;
+}
+
+.not-found-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.not-found-card {
+  max-width: 580px;
+  width: 100%;
+  background-color: #FAF9F6;
+  border: 1px solid #D6D0C8;
+  border-radius: 24px;
+  padding: 48px 36px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(33, 29, 26, 0.06);
+}
+
+.not-found-error-code {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: #3B302A;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.not-found-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #211D1A;
+  margin: 0 0 12px 0;
+}
+
+.not-found-desc {
+  font-size: 14px;
+  color: #8D857D;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+}
+
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.not-found-btn-primary {
+  background-color: #3B302A;
+  color: #FAF9F6;
+  border: 1px solid #3B302A;
+}
+
+.not-found-btn-primary:hover {
+  background-color: #211D1A;
+}
+
+.not-found-btn-secondary {
+  background-color: #EAE8E4;
+  color: #211D1A;
+  border: 1px solid #D6D0C8;
+}
+
+.not-found-btn-secondary:hover {
+  background-color: #D8C9B9;
+}

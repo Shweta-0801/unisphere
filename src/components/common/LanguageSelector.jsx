@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown, Check } from "lucide-react";
 import { useLanguage } from "../../context/LanguageContext";
 
-export default function LanguageSelector({ className = "" }) {
+export default function LanguageSelector({ className = "", dropDirection = "down" }) {
   const { lang, setLanguage, languages } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -21,14 +21,17 @@ export default function LanguageSelector({ className = "" }) {
   const currentLang = languages.find((l) => l.code === lang) || languages[0];
 
   return (
-    <div className={`lang-selector-root ${className}`} ref={dropdownRef}>
+    <div
+      className={`lang-selector-root ${dropDirection === "up" ? "drop-up" : "drop-down"} ${className}`}
+      ref={dropdownRef}
+    >
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="lang-selector-trigger"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        title="Change Language"
+        aria-label="Select Language"
       >
         <Globe size={15} className="lang-globe-icon" />
         <span className="lang-code-text">{currentLang.code.toUpperCase()}</span>

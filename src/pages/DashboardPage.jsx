@@ -16,24 +16,45 @@ import {
 } from "lucide-react";
 import AppLayout from "../components/layout/AppLayout";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import InteractiveAttendanceCard from "../components/dashboard/InteractiveAttendanceCard";
+import TeacherDashboard from "../components/teacher/TeacherDashboard";
 import "./Dashboard.css";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-  const firstName = user?.name ? user.name.split(" ")[0] : "Student";
+  const isFaculty = user?.role === "Faculty" || user?.role === "Teacher";
+
+  if (isFaculty) {
+    return (
+      <AppLayout activePath="/dashboard">
+        <TeacherDashboard />
+      </AppLayout>
+    );
+  }
+
+  const getWelcomeName = () => {
+    if (!user?.name) return isFaculty ? "Faculty Member" : "Student";
+    const trimmed = user.name.trim();
+    if (["dr.", "dr", "prof.", "prof"].includes(trimmed.toLowerCase())) {
+      return isFaculty ? "Dr. Faculty Member" : "Student";
+    }
+    return trimmed;
+  };
+  const displayName = getWelcomeName();
   const deptText = user?.department || "Computer Science & Engineering";
-  const semText = user?.semester || "4th Semester";
+  const semText = isFaculty ? "Faculty Member • Department Portal" : (user?.semester || "4th Semester");
 
   // Core Campus Student Modules (Attendance integrated directly on the Dashboard)
   const modules = [
     {
       id: "complaints",
-      title: "Grievances & Redressal",
-      description: "Report hostel, lab, cafeteria, or academic infrastructure issues with 9-stage transparent tracking.",
+      title: t("dashboard.grievanceTitle", "Grievances & Redressal"),
+      description: t("dashboard.grievanceDesc", "Report hostel, lab, cafeteria, or academic infrastructure issues with 9-stage transparent tracking."),
       icon: MessageSquare,
       stat: "0 Pending Tickets",
       tag: "Direct Escalation",
@@ -42,8 +63,8 @@ export default function DashboardPage() {
     },
     {
       id: "lostfound",
-      title: "Lost & Found Network",
-      description: "Locate misplaced belongings plotted on the interactive campus map and earn voucher points.",
+      title: t("dashboard.lostFoundTitle", "Lost & Found Network"),
+      description: t("dashboard.lostFoundDesc", "Locate misplaced belongings plotted on the interactive campus map and earn voucher points."),
       icon: Search,
       stat: "120+ Recovered",
       tag: "Campus Grid",
@@ -52,8 +73,8 @@ export default function DashboardPage() {
     },
     {
       id: "notes",
-      title: "Notes Marketplace",
-      description: "Access verified semester lecture notes, handwritten cheatsheets, and sample 6-page previews.",
+      title: t("dashboard.notesTitle", "Notes Marketplace"),
+      description: t("dashboard.notesDesc", "Access verified semester lecture notes, handwritten cheatsheets, and sample 6-page previews."),
       icon: BookOpen,
       stat: "450+ Verified",
       tag: "Peer Knowledge",
@@ -62,18 +83,18 @@ export default function DashboardPage() {
     },
     {
       id: "group-study",
-      title: "Virtual Study Lounge",
-      description: "Collaborate in synchronous study rooms with live peer presence, shared notes, and Pomodoro focus timer.",
+      title: t("dashboard.studyTitle", "Virtual Study Lounge"),
+      description: t("dashboard.studyDesc", "Collaborate in synchronous study rooms with live peer presence, shared notes, and Pomodoro focus timer."),
       icon: Users,
-      stat: "24 Active Peers",
+      stat: t("dashboard.activePeers", "24 Active Peers"),
       tag: "Live Sync",
       route: "/group-study",
       btnText: "Enter Study Lounge"
     },
     {
       id: "library",
-      title: "Smart Library System",
-      description: "Check 36-seat live floor layout availability, reserve study desks, and search catalog return dates.",
+      title: t("dashboard.libraryTitle", "Smart Library System"),
+      description: t("dashboard.libraryDesc", "Check 36-seat live floor layout availability, reserve study desks, and search catalog return dates."),
       icon: Library,
       stat: "17 Seats Available",
       tag: "Seat Map",
@@ -196,54 +217,150 @@ export default function DashboardPage() {
             <div className="dash-welcome-left">
               <div className="dash-welcome-badge">
                 <Sparkles size={13} />
-                <span>Academic Overview • Term 2026</span>
+                <span>{isFaculty ? t("dashboard.facultyBadge", "Faculty Teaching Suite • Term 2026") : t("dashboard.semesterBadge", "Academic Overview • Term 2026")}</span>
               </div>
 
               <h2 className="dash-welcome-headline">
-                Welcome back, {firstName}
+                {t("dashboard.welcomeBack", "Welcome back, {name}", { name: displayName })}
               </h2>
 
               <p className="dash-welcome-desc">
-                Your cumulative attendance stands well above the 75% university condonation cutoff. Review today's schedule, reserve study seats, or inspect recovery pins on campus.
+                {isFaculty
+                  ? t("dashboard.subtitleFaculty", "Manage course rosters, track attendance, and evaluate marks & grade distribution.")
+                  : t("dashboard.subtitleStudent", "Monitor academic metrics, track attendance, and engage with live campus modules.")}
               </p>
 
               <div className="dash-welcome-quicklinks">
-                <button
-                  type="button"
-                  onClick={() => navigate("/lost-found")}
-                  className="dash-welcome-pill-btn"
-                >
-                  <Search size={14} />
-                  <span>Lost &amp; Found Grid</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/group-study")}
-                  className="dash-welcome-ghost-btn"
-                >
-                  <Users size={14} />
-                  <span>Join Study Room</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigate("/library")}
-                  className="dash-welcome-ghost-btn"
-                >
-                  <Library size={14} />
-                  <span>View Seat Map</span>
-                </button>
+                {isFaculty ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/attendance-management")}
+                      className="dash-welcome-pill-btn"
+                    >
+                      <CheckCircle2 size={14} />
+                      <span>Attendance Management</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/academic-performance")}
+                      className="dash-welcome-ghost-btn"
+                    >
+                      <Sparkles size={14} />
+                      <span>Academic Performance</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/complaints")}
+                      className="dash-welcome-ghost-btn"
+                    >
+                      <MessageSquare size={14} />
+                      <span>Student Grievances</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/lost-found")}
+                      className="dash-welcome-pill-btn"
+                    >
+                      <Search size={14} />
+                      <span>Lost &amp; Found Grid</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/group-study")}
+                      className="dash-welcome-ghost-btn"
+                    >
+                      <Users size={14} />
+                      <span>Join Study Room</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/library")}
+                      className="dash-welcome-ghost-btn"
+                    >
+                      <Library size={14} />
+                      <span>View Seat Map</span>
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
             <div className="dash-standing-box">
-              <span className="dash-standing-val">88.4%</span>
+              <span className="dash-standing-val">{isFaculty ? "Data Structures" : "88.4%"}</span>
               <div className="dash-standing-meta">
-                <span className="dash-standing-label">Cohort Standing</span>
-                <span className="dash-standing-status">Exam Admittance Safe</span>
+                <span className="dash-standing-label">{isFaculty ? "CSE-A • B • C • D" : "Cohort Standing"}</span>
+                <span className="dash-standing-status">{isFaculty ? "80 Enrolled Students" : "Exam Admittance Safe"}</span>
               </div>
             </div>
           </div>
         </section>
+
+        {/* If Faculty: Dedicated Teacher Management Modules */}
+        {isFaculty && (
+          <section className="dash-faculty-modules" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1rem", margin: "1.5rem 0" }}>
+            {/* Card 1: Attendance Management */}
+            <div style={{ background: "#FAF9F6", border: "1px solid #D6D0C8", borderRadius: "16px", padding: "1.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1rem", boxShadow: "0 2px 5px rgba(36, 26, 28, 0.06)" }}>
+              <div>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#EBF3ED", color: "#4F7A5A", border: "1px solid #C8DACD", borderRadius: "9999px", padding: "4px 10px", fontSize: "11px", fontWeight: "700", marginBottom: "10px" }}>
+                  <CheckCircle2 size={12} />
+                  <span>Attendance Management</span>
+                </div>
+                <h3 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#211D1A", margin: "0 0 6px 0", fontFamily: "var(--font-serif, serif)" }}>
+                  Attendance Management
+                </h3>
+                <p style={{ fontSize: "13px", color: "#8D857D", margin: 0, lineHeight: 1.5 }}>
+                  Manage attendance across CSE-A, CSE-B, CSE-C, and CSE-D for Data Structures. Conduct daily roll calls, view calendar lecture history, and monitor condonation alerts (&lt;75%).
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid #E5E0D8" }}>
+                <span style={{ fontSize: "12px", fontWeight: "700", color: "#4F7A5A" }}>
+                  4 Sections • 18 Lectures Each
+                </span>
+                <button
+                  type="button"
+                  onClick={() => navigate("/attendance-management")}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#3B302A", color: "#FAF9F6", border: "none", borderRadius: "9999px", padding: "8px 16px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}
+                >
+                  <span>Open Attendance</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+
+            {/* Card 2: Academic Performance */}
+            <div style={{ background: "#FAF9F6", border: "1px solid #D6D0C8", borderRadius: "16px", padding: "1.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "1rem", boxShadow: "0 2px 5px rgba(36, 26, 28, 0.06)" }}>
+              <div>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#EFEAE4", color: "#7A4B3A", border: "1px solid #D6D0C8", borderRadius: "9999px", padding: "4px 10px", fontSize: "11px", fontWeight: "700", marginBottom: "10px" }}>
+                  <Sparkles size={12} />
+                  <span>Academic Performance</span>
+                </div>
+                <h3 style={{ fontSize: "1.25rem", fontWeight: "800", color: "#211D1A", margin: "0 0 6px 0", fontFamily: "var(--font-serif, serif)" }}>
+                  Academic Performance
+                </h3>
+                <p style={{ fontSize: "13px", color: "#8D857D", margin: 0, lineHeight: 1.5 }}>
+                  Review section averages, evaluate student marks (Internal, Mid-Term, End-Term), track grade distribution (A+, A, B, C, F), and identify students needing academic support.
+                </p>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: "12px", borderTop: "1px solid #E5E0D8" }}>
+                <span style={{ fontSize: "12px", fontWeight: "700", color: "#7A4B3A" }}>
+                  80 Students • 78.4% Average
+                </span>
+                <button
+                  type="button"
+                  onClick={() => navigate("/academic-performance")}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#3B302A", color: "#FAF9F6", border: "none", borderRadius: "9999px", padding: "8px 16px", fontSize: "12px", fontWeight: "700", cursor: "pointer" }}
+                >
+                  <span>Open Performance</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Interactive Attendance Calculator (Requirement 3) */}
         <InteractiveAttendanceCard />

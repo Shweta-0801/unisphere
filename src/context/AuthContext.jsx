@@ -1,9 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-// Safe profile updater fallback for teacher session
-const updateTeacherProfile = (user) => {
-  // Syncs teacher profile if available
-};
+import { updateTeacherProfile } from "../data/teacherDashboardData";
 
 const AuthContext = createContext(null);
 

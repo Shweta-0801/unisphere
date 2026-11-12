@@ -22,7 +22,6 @@ import {
   Award
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
-
 export default function AppLayout({ children, activePath }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -49,6 +48,7 @@ export default function AppLayout({ children, activePath }) {
   const facultyNavItems = [
     { label: t("nav.myClasses", "My Classes & Students"), icon: GraduationCap, path: "/teacher/classes" },
     { label: t("nav.dashboard", "Teacher Dashboard"), icon: LayoutDashboard, path: "/dashboard" },
+    { label: t("nav.attendance", "Attendance Hub"), icon: CalendarCheck, path: "/attendance" },
     { label: t("nav.assignments", "Assignments Portal"), icon: FileText, path: "/teacher/assignments" },
     { label: t("nav.performance", "Academic Performance"), icon: Award, path: "/academic-performance" },
     { label: t("nav.attendanceMgmt", "Attendance Management"), icon: CalendarCheck, path: "/attendance-management" }
@@ -76,8 +76,7 @@ export default function AppLayout({ children, activePath }) {
     if (itemPath !== "/dashboard" && currentPath.startsWith(itemPath)) return true;
     return false;
   };
-
-  return (
+   return (
     <div className="app-shell">
       {/* ================= 1. MOBILE HEADER BAR ================= */}
       <header className="app-mobile-header">
@@ -107,7 +106,7 @@ export default function AppLayout({ children, activePath }) {
               className="app-sidebar-user-avatar"
               title={`${user.name} (${user.role || (isFaculty ? "Faculty" : "Student")})`}
             >
-              {user.initials || (isFaculty ? "FC" : "ST")}
+               {user.initials || (isFaculty ? "FC" : "ST")}
             </div>
           ) : (
             <button
@@ -128,8 +127,7 @@ export default function AppLayout({ children, activePath }) {
           </button>
         </div>
       </header>
-
-      {/* ================= 2. DESKTOP PERSISTENT SIDEBAR ================= */}
+       {/* ================= 2. DESKTOP PERSISTENT SIDEBAR ================= */}
       <aside className="app-sidebar">
         <div>
           {/* Brand Header */}
@@ -153,13 +151,13 @@ export default function AppLayout({ children, activePath }) {
             <div className="app-sidebar-header-text">
               <div className="app-sidebar-logo-title-row">
                 <span className="app-sidebar-logo-title">UNISPHERE</span>
-                <span className="app-sidebar-home-pill">Home ↗</span>
+                <span className="app-sidebar-home-pill">{t("nav.homePill", "Home ↗")}</span>
               </div>
               <span className="app-sidebar-logo-sub">
-                Academic Campus Suite
+                {t("nav.academicSuite", "Academic Campus Suite")}
               </span>
             </div>
-          </div>
+            </div>
 
           {/* Navigation Items List */}
           <div className="app-sidebar-nav">
@@ -188,15 +186,14 @@ export default function AppLayout({ children, activePath }) {
             })}
           </div>
         </div>
-
-        {/* Desktop Sidebar Control Bar: Theme & Language */}
-        <div className="sidebar-system-controls">
-          <LanguageSelector />
-          <ThemeToggle />
-        </div>
-
-        {/* User Profile Box at Bottom */}
+         {/* User Profile Box & Controls at Bottom */}
         <div className="app-sidebar-footer">
+          {/* Quick System Controls: Language & Theme */}
+          <div className="sidebar-system-controls">
+            <LanguageSelector dropDirection="up" />
+            <ThemeToggle />
+          </div>
+
           {user ? (
             <div className="app-sidebar-user-card">
               <div className="user-card-inner">
@@ -215,24 +212,23 @@ export default function AppLayout({ children, activePath }) {
 
               <button
                 onClick={handleLogout}
-                title="Log out"
+                title={t("nav.logOut", "Log out")}
                 className="app-sidebar-logout-btn"
-                aria-label="Log out"
-              >
-                <LogOut size={16} />
+                aria-label={t("nav.logOut", "Log out")}>
+                  <LogOut size={16} />
               </button>
             </div>
           ) : (
             <div className="app-sidebar-user-card">
               <div className="user-card-guest">
                 <User size={16} />
-                <span>Guest Student</span>
+                <span>{t("nav.guestStudent", "Guest Student")}</span>
               </div>
               <button
                 onClick={() => navigate("/login")}
                 className="user-card-signin-btn"
               >
-                <LogIn size={13} /> Sign In
+                <LogIn size={13} /> {t("nav.signIn", "Sign In")}
               </button>
             </div>
           )}
@@ -248,7 +244,7 @@ export default function AppLayout({ children, activePath }) {
           />
           <div className="app-mobile-drawer">
             <div>
-              <div className="mobile-drawer-header">
+               <div className="mobile-drawer-header">
                 <div
                   className="mobile-header-brand-wrap"
                   onClick={() => {
@@ -278,7 +274,7 @@ export default function AppLayout({ children, activePath }) {
                   >
                     <X size={20} />
                   </button>
-                </div>
+                   </div>
               </div>
 
               <div className="mobile-drawer-nav-list">
@@ -304,8 +300,7 @@ export default function AppLayout({ children, activePath }) {
                 })}
               </div>
             </div>
-
-            {/* Mobile User Profile Footer */}
+             {/* Mobile User Profile Footer */}
             <div className="mobile-drawer-footer">
               {user ? (
                 <div className="app-sidebar-user-card">
@@ -334,7 +329,7 @@ export default function AppLayout({ children, activePath }) {
                     navigate("/login");
                     setMobileMenuOpen(false);
                   }}
-                  className="unisphere-btn unisphere-btn-primary full-width"
+                                   className="unisphere-btn unisphere-btn-primary full-width"
                 >
                   Sign In to UniSphere
                 </button>

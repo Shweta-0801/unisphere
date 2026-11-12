@@ -1,799 +1,1496 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ThemeToggle from "../components/common/ThemeToggle";
-import LanguageSelector from "../components/common/LanguageSelector";
 import {
   GraduationCap,
   CalendarCheck,
   Search,
   BookOpen,
   MessageSquare,
+  Users,
+  Library,
   ArrowRight,
   ShieldCheck,
   Sparkles,
-  Layers,
   ChevronRight,
-  Award,
-  Clock,
+  ChevronLeft,
+  ChevronDown,
   Lock,
   CheckCircle2,
-  MapPin,
-  FileText,
-  TrendingUp,
-  BarChart3,
-  Users,
   Check,
-  ExternalLink
+  Menu,
+  X,
+  Terminal,
+  Cpu,
+  Compass,
+  Award,
+  BookCheck,
+  HelpCircle,
+  Clock,
+  Layers,
+  MapPin,
+  RotateCcw,
+  Maximize2,
+  Minimize2,
+  LogOut,
+  Image as ImageIcon
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import "./Home.css";
+
+// Campus imagery assets for editorial hero composition
+import campusReferenceImg from "../assets/campus-columns.jpg";
+import campusPillarsImg from "../assets/campus-pillars.png";
+import campusColumnsImg from "../assets/campus-columns.jpg";
 
 function HomePage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("attendance");
+  const { user, isAuthenticated, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeModuleTab, setActiveModuleTab] = useState("attendance");
+  const [heroSlideIndex, setHeroSlideIndex] = useState(0);
 
-  const modules = [
+  // Smooth scroll back to top of homepage when brand logo/name is clicked
+  const handleBrandClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Role Selection Modal State
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
+  // Listen for Escape key to close modal & toggle body scroll lock class
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsRoleModalOpen(false);
+      }
+    };
+    if (isRoleModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.classList.remove("modal-open");
+    };
+  }, [isRoleModalOpen]);
+
+  // Accordion state for FAQ section
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
+
+  const toggleFaq = (index) => {
+    setOpenFaqIndex((prev) => (prev === index ? null : index));
+  };
+
+  const heroAnnouncements = [
+    {
+      year: "2026",
+      tag: "Academic Excellence",
+      title: "Admissions Open for Undergraduate & Engineering Cohorts 2026–2027",
+      desc: "Explore interdisciplinary programs blending computer science, software engineering, and university leadership."
+    },
+    {
+      year: "2026",
+      tag: "Campus Innovation",
+      title: "Fully Funded Research Fellowships & Undergraduate Innovation Grants",
+      desc: "Review available research positions across cutting-edge systems and collaborative laboratories."
+    },
+    {
+      year: "2026",
+      tag: "Frontend Engineering",
+      title: "Full-Stack Single Page Application Curriculum Now Live",
+      desc: "Master modern React, State Architecture, and Component Systems integrated with campus operations."
+    }
+  ];
+
+  const nextHeroSlide = () => {
+    setHeroSlideIndex((prev) => (prev + 1) % heroAnnouncements.length);
+  };
+
+  const prevHeroSlide = () => {
+    setHeroSlideIndex((prev) => (prev - 1 + heroAnnouncements.length) % heroAnnouncements.length);
+  };
+
+  const currentAnnouncement = heroAnnouncements[heroSlideIndex];
+
+  // Complete 6 Core Campus Operating Modules
+  const campusModules = [
     {
       id: "attendance",
       title: "Smart Attendance Hub",
-      subtitle: "Academic Precision & Safe Bunk Analytics",
+      subtitle: "Predictive Analytics & Cutoff Defense",
       icon: CalendarCheck,
-      tag: "Mandatory 75% Cutoff Defense",
+      tag: "Integrated in Dashboard",
+      route: "/dashboard",
       description:
-        "Effortlessly monitor your lectures, labs, and attendance percentages with decimal accuracy. UniSphere calculates safe bunks, warns when approaching condonation thresholds, and forecasts exam eligibility before semester finals.",
+        "Accurately track lectures, laboratory sessions, and attendance percentages with decimal precision. UniSphere calculates safe bunks, warns ahead of condonation thresholds, and forecasts exam admittance.",
       highlights: [
-        "Real-time attendance ratio & institutional criteria breakdown",
+        "Mathematical formula: (Attended / Total Scheduled) × 100",
         "Predictive safe-bunk and consecutive class recovery calculator",
-        "Interactive schedule calendar & one-click session roll call register",
-        "Configurable target thresholds (65% condonation, 75% standard, 80%, 85%)"
+        "Today's interactive timetable with 1-click attendance marking",
+        "Configurable target thresholds (65% condonation, 75% standard, 85% honors)"
       ],
-      previewStats: {
-        metric: "88.4%",
-        label: "Current Semester Average",
-        status: "Safe Exam Standing"
-      }
-    },
-    {
-      id: "complaints",
-      title: "Complaints & Grievances",
-      subtitle: "Transparent Campus Resolution System",
-      icon: MessageSquare,
-      tag: "Direct Administration Escalation",
-      description:
-        "A formal, transparent channel for students to lodge campus grievances regarding laboratories, hostels, canteens, infrastructure, and faculty. Track every ticket's status through to verified resolution.",
-      highlights: [
-        "9 structured categories (Hostel, Mess, Wi-Fi, Classrooms, Transport)",
-        "Automated routing to appropriate campus administrators",
-        "Live progress timeline: Submitted → Pending → In Progress → Resolved",
-        "Document and photo attachment support with student privacy assurance"
-      ],
-      previewStats: {
-        metric: "94.2%",
-        label: "Tickets Resolved On-Time",
-        status: "High Efficiency"
-      }
+      metric: "88.4%",
+      metricLabel: "Active Cohort Standing",
+      status: "Safe Exam Admittance"
     },
     {
       id: "lostfound",
       title: "Lost & Found Network",
       subtitle: "Coordinate-Mapped Campus Recovery",
       icon: Search,
-      tag: "Interactive Campus Coordinate Grid",
+      tag: "Interactive Campus Grid",
+      route: "/lost-found",
       description:
-        "Misplaced your student ID, calculator, laptop charger, or notebook? The Lost & Found network connects finders and owners across all campus blocks with visual pins on an interactive canvas map.",
+        "Misplaced your student ID, calculator, laptop charger, or notebook? The Lost & Found network links finders and owners across all campus blocks with pinpoint location coordinates.",
       highlights: [
-        "Interactive campus map with pinpoint zone coordinates",
-        "Color-coded status pins: Lost (Crimson) vs Found (Forest Sage)",
-        "Photo uploads, secure claim verification, and contact notes",
-        "Community recognition & karma reward points for helpful students"
+        "Interactive campus block map with pinpoint zone coordinates",
+        "Distinct status markers: Missing (Crimson) vs Recovered (Sage)",
+        "3-hour live map visibility filter with permanent archive history",
+        "Community recognition: Earn +100 recovery points (1,000 pts = Cafe voucher)"
       ],
-      previewStats: {
-        metric: "120+",
-        label: "Belongings Returned Safely",
-        status: "Active Campus Grid"
-      }
+      metric: "120+",
+      metricLabel: "Belongings Recovered",
+      status: "Active Campus Grid"
+    },
+    {
+      id: "complaints",
+      title: "Complaints & Grievances",
+      subtitle: "Transparent Campus Resolution System",
+      icon: MessageSquare,
+      tag: "Direct Escalation",
+      route: "/complaints",
+      description:
+        "A formal, transparent channel for students to lodge and track campus grievances regarding laboratories, hostels, dining facilities, Wi-Fi connectivity, and academic infrastructure.",
+      highlights: [
+        "9 standardized categories (Hostel, Mess, Wi-Fi, Classrooms, Transport, etc.)",
+        "Automated routing to appropriate department administrators",
+        "Live status timeline: Submitted → Under Review → In Progress → Resolved",
+        "Photo evidence upload and community +1 issue upvoting"
+      ],
+      metric: "94.2%",
+      metricLabel: "Resolution Efficiency",
+      status: "Verified Timeline"
     },
     {
       id: "notes",
-      title: "Peer Notes & Study Circle",
+      title: "Notes Marketplace",
       subtitle: "Curated Academic Knowledge Base",
       icon: BookOpen,
-      tag: "Collaborative Learning Hub",
+      tag: "Collaborative Learning",
+      route: "/notes",
       description:
-        "Never scramble before midterms or finals again. Access verified lecture summaries, unit-wise question banks, and handwritten cheatsheets, or collaborate in synchronous live study rooms.",
+        "Never scramble before midterms or finals again. Access verified lecture summaries, unit-wise question banks, handwritten cheatsheets, and synchronous virtual study circles.",
       highlights: [
-        "Semester-wise course repositories & unit summaries",
-        "Handwritten notes marketplace with free & premium community options",
-        "First-3 / last-3 page preview modal before unlocking",
-        "Realtime virtual study rooms with synchronous cursors and reactions"
+        "Semester-wise course repositories and unit lecture notes",
+        "6-Page Sample Preview Modal (first 3 and last 3 pages) before buy",
+        "Verified student cheatsheet repository with peer ratings",
+        "Instant purchase demo flow with immediate library download"
       ],
-      previewStats: {
-        metric: "450+",
-        label: "Verified Study Resources",
-        status: "Updated Daily"
-      }
+      metric: "450+",
+      metricLabel: "Verified Resources",
+      status: "Updated Daily"
+    },
+    {
+      id: "group-study",
+      title: "Virtual Study Lounge",
+      subtitle: "Synchronous Real-Time Collaboration",
+      icon: Users,
+      tag: "Synchronous Rooms",
+      route: "/group-study",
+      description:
+        "Join virtual peer study rooms designed for focused academic sprints. Share notes, view active peer pages, track mock cursors, and keep your focus with Pomodoro timers.",
+      highlights: [
+        "Live peer presence status ('Person 1 — Online') and page tracking",
+        "Interactive mock peer cursors with participant name tags",
+        "Non-disruptive reaction stickers and integrated discussion chat",
+        "Integrated 25-minute Pomodoro focus timer with interval alerts"
+      ],
+      metric: "24",
+      metricLabel: "Peers Online Now",
+      status: "Synchronous Pods"
+    },
+    {
+      id: "library",
+      title: "Smart Library System",
+      subtitle: "Live Floor Layout & Catalog System",
+      icon: Library,
+      tag: "36-Seat Floor Map",
+      route: "/library",
+      description:
+        "Eliminate study desk hunting. View a live 36-seat visual map across quiet, collaborative, and terminal zones, and track expected return dates for high-demand engineering textbooks.",
+      highlights: [
+        "Visual 36-seat interactive floor grid (Quiet, Pods, Terminals)",
+        "Strict count matching: Total (36) === Available + Occupied seats",
+        "1-click interactive seat reservation and instant release",
+        "Book catalog with search, category filters, and expected return dates"
+      ],
+      metric: "17 / 36",
+      metricLabel: "Seats Available",
+      status: "Live Floor Layout"
     }
   ];
 
-  const activeModuleData = modules.find((m) => m.id === activeTab) || modules[0];
+  const activeModuleIndex = campusModules.findIndex((m) => m.id === activeModuleTab);
+  const activeModule = campusModules[activeModuleIndex !== -1 ? activeModuleIndex : 0];
+
+  const handleNextModule = () => {
+    const nextIdx = (activeModuleIndex + 1) % campusModules.length;
+    setActiveModuleTab(campusModules[nextIdx].id);
+  };
+
+  const handlePrevModule = () => {
+    const prevIdx = (activeModuleIndex - 1 + campusModules.length) % campusModules.length;
+    setActiveModuleTab(campusModules[prevIdx].id);
+  };
+
+  // Comprehensive FAQ Accordion Data for All 6 Modules
+  const faqItems = [
+    {
+      id: "faq-attendance",
+      category: "Attendance & Cutoff Defense",
+      question: "How does the Smart Attendance safe-bunk formula calculate safe bunks and recovery classes?",
+      answer:
+        "UniSphere applies the university mathematical formula: (Attended Classes / Total Scheduled Classes) ≥ 75.0%. To calculate safe bunks, the algorithm computes: Safe Bunks = floor((Attended - (0.75 × Total)) / 0.75). This is the exact number of future consecutive classes you can afford to miss without falling below the 75% threshold. If your attendance is currently below 75%, it calculates the required recovery classes: Required Classes = ceil(((0.75 × Total) - Attended) / 0.25). This ensures zero last-minute condonation surprises before exam hall tickets are issued."
+    },
+    {
+      id: "faq-lostfound",
+      category: "Lost & Found Campus Network",
+      question: "How does the campus map work, how long do reports stay visible, and what are voucher rewards?",
+      answer:
+        "The Lost & Found network visualizes campus zones (Library, Turing Block, Academic Block, Cafeteria, Hostel, Main Gate, Sports Ground) with Crimson pins for missing belongings and Sage pins for found items. Active reports remain highlighted on the live campus map for 3 hours to encourage immediate local recovery, after which they remain permanently accessible under your 'My Reports' history. Students who report or return found items earn +100 recovery points. Accumulating 1,000 points unlocks a 1-day food discount voucher redeemable at campus cafes like Bev Cafe."
+    },
+    {
+      id: "faq-complaints",
+      category: "Grievances & Redressal",
+      question: "Which 9 categories are supported in the Complaint Portal and how are grievances tracked?",
+      answer:
+        "Complaints can be lodged across 9 structured categories: Hostel Facilities, Mess & Dining, Wi-Fi & Network, Classrooms & Labs, Campus Transportation, Cleanliness & Hygiene, Faculty & Academic, Campus Infrastructure, and Other Inquiries. Every complaint is assigned a tracking ID and moves through a 4-stage lifecycle: Submitted → Under Department Review → In Progress (Maintenance Assigned) → Resolved. Students can upload photo attachments and view department resolution updates in real-time."
+    },
+    {
+      id: "faq-notes",
+      category: "Notes Marketplace",
+      question: "How does the Notes Marketplace 6-Page Preview feature work before unlocking a document?",
+      answer:
+        "To guarantee academic quality, every note listing features an interactive 6-page preview modal. The reader opens with the first 3 pages (fundamental syllabus introduction, definitions, and core formulas) and the last 3 pages (high-yield exam cheat sheets, solved semester questions, and final summary tables). This allows students to verify handwriting legibility and curriculum relevance before downloading or completing the demo purchase flow."
+    },
+    {
+      id: "faq-groupstudy",
+      category: "Virtual Study Lounge",
+      question: "What collaborative features are available in the Group Study Lounge?",
+      answer:
+        "The Group Study Lounge is a synchronous digital collaboration space. It displays real-time peer presence indicators ('Person 1 — Online', active page numbers), a shared PDF/document viewer, simulated peer cursors with names moving across the document, quick reaction emojis/stickers for instant non-disruptive feedback, an integrated peer discussion chat, and a 25-minute Pomodoro study focus timer with interval alerts."
+    },
+    {
+      id: "faq-library",
+      category: "Smart Library System",
+      question: "How does the Smart Library 36-seat live layout work and how are book return dates determined?",
+      answer:
+        "The Smart Library features a 36-seat interactive floor grid divided into three distinct zones: Quiet Study Zone (12 seats), Collaborative Pods (12 seats), and Tech Terminal Zone (12 seats). The total displayed seat count strictly matches the individual seat states: Total (36) = Available (17) + Occupied (19). Clicking any seat allows instant local reservation. In the book catalog, checked-out volumes display their expected return dates and reservation queue counts."
+    }
+  ];
 
   return (
-    <div className="homepage-root min-h-screen bg-[#F8F3EA] text-[#241A1C] font-sans selection:bg-[#B8A08A]/30 selection:text-[#351019]">
-      {/* Subtle ambient lighting */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[500px] bg-gradient-to-tr from-[#EFE8DC]/60 via-[#F8F3EA]/40 to-[#D8CBBE]/30 blur-3xl rounded-full" />
-        <div className="absolute top-[40%] -right-40 w-[450px] h-[450px] bg-[#6B1E2D]/5 blur-3xl rounded-full" />
-        <div className="absolute bottom-10 -left-40 w-[450px] h-[450px] bg-[#B8A08A]/10 blur-3xl rounded-full" />
-      </div>
-
-      {/* Top Academic Status Ticker */}
-      <div className="relative z-50 bg-[#351019] text-[#D8CBBE] text-[11px] font-medium py-1.5 px-6 border-b border-[#48121E]">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#4F7A5A] animate-pulse" />
-            <span>Academic Term 2026 Active • Institutional Verification Online</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-4 text-[#D8CBBE]/80">
-            <span>Mandatory Cutoff: 75.0%</span>
-            <span>•</span>
-            <span>Daily Roll Calls Enabled</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Modern Navigation Header with Login & Register */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFFDF8]/90 border-b border-[#E5DCD4] transition-all">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Brand Logo */}
-          <div
-            onClick={() => navigate("/")}
-            className="flex items-center gap-3 cursor-pointer group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[#6B1E2D] flex items-center justify-center text-[#FFFDF8] shadow-sm shadow-[#6B1E2D]/20 group-hover:bg-[#48121E] transition-all">
-              <GraduationCap size={22} strokeWidth={2.2} />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-serif text-xl font-bold tracking-tight text-[#241A1C]">
-                  Uni<span className="text-[#6B1E2D]">Sphere</span>
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FAF6F0] text-[#75666A] border border-[#E5DCD4]">
-                  University Edition
-                </span>
-              </div>
-              <p className="text-[10px] text-[#75666A] font-medium -mt-0.5">
-                Integrated Campus Management Operating System
-              </p>
-            </div>
-          </div>
-
-          {/* Nav Links */}
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-[#75666A]">
-            <a href="#about" className="hover:text-[#6B1E2D] transition-colors">
-              Platform Overview
-            </a>
-            <a href="#modules" className="hover:text-[#6B1E2D] transition-colors">
-              Core Pillars
-            </a>
-            <a href="#workflow" className="hover:text-[#6B1E2D] transition-colors">
-              Workflow
-            </a>
-            <a href="#comparison" className="hover:text-[#6B1E2D] transition-colors">
-              Why UniSphere
-            </a>
-          </nav>
-
-          {/* Action CTAs: Login + Register + Dashboard */}
-          <div className="flex items-center gap-2.5">
-            <LanguageSelector />
-            <ThemeToggle />
-            {/* Login Button */}
-            <button
-              onClick={() => navigate("/login")}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#241A1C] hover:text-[#6B1E2D] px-3.5 sm:px-4 py-2 rounded-xl border border-[#E5DCD4] hover:border-[#B8A08A] bg-[#FFFDF8] hover:bg-[#F8F3EA] transition-all cursor-pointer shadow-2xs"
-            >
-              <Lock size={14} className="text-[#B8A08A]" />
-              <span>Log In</span>
-            </button>
-
-            {/* Register Button */}
-            <button
-              onClick={() => navigate("/register")}
-              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#FFFDF8] bg-[#6B1E2D] hover:bg-[#48121E] px-4 sm:px-5 py-2 rounded-xl shadow-sm shadow-[#6B1E2D]/25 transition-all cursor-pointer active:scale-95"
-            >
-              <span>Register</span>
-              <Sparkles size={14} className="text-[#D8CBBE]" />
-            </button>
-
-            {/* Direct Dashboard Quick Access */}
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="hidden md:inline-flex items-center gap-1.5 text-xs font-semibold text-[#75666A] hover:text-[#241A1C] px-3 py-2 rounded-xl hover:bg-[#E5DCD4]/40 transition cursor-pointer"
-              title="Quick demo access directly to Dashboard"
-            >
-              <span>Demo Hub</span>
-              <ArrowRight size={13} />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="relative z-10">
-        {/* HERO SECTION */}
-        <section className="pt-16 pb-20 px-6 max-w-7xl mx-auto text-center">
-          {/* Announcement pill */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFFDF8] border border-[#E5DCD4] text-[#6B1E2D] text-xs font-bold mb-6 shadow-xs animate-fade-in">
-            <Sparkles size={14} className="text-[#B8A08A]" />
-            <span>Executive Campus SaaS Suite • Burgundy Luxe Architecture</span>
-          </div>
-
-          {/* Hero Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-[#241A1C] max-w-4xl mx-auto leading-[1.15]">
-            Unified Campus Operations. <br />
-            <span className="font-serif italic font-normal bg-gradient-to-r from-[#6B1E2D] via-[#48121E] to-[#B8A08A] bg-clip-text text-transparent">
-              Engineered for Academic Distinction.
+    <div className="unisphere-root">
+      {/* =========================================================================
+          TOP INSTITUTIONAL TICKER
+          ========================================================================= */}
+      <div className="unisphere-ticker">
+        <div className="unisphere-container unisphere-ticker-inner">
+          <div className="ticker-left">
+            <span className="ticker-pulse-dot" />
+            <span className="ticker-text-primary">
+              {isAuthenticated
+                ? `UNISPHERE ACADEMIC SYSTEM • SIGNED IN: ${user?.name?.toUpperCase() || "STUDENT"} (${user?.role?.toUpperCase() || "STUDENT"})`
+                : "UNISPHERE ACADEMIC SYSTEM • 2026 TERM ACTIVE"}
             </span>
-          </h1>
-
-          {/* Description */}
-          <p className="mt-6 text-base sm:text-lg text-[#75666A] max-w-2xl mx-auto font-normal leading-relaxed">
-            UniSphere unifies mathematical attendance defense, peer lecture repositories, transparent grievance resolution, and lost property recovery into a single, cohesive student operating workspace.
-          </p>
-
-          {/* Primary CTA Buttons */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <button
-              onClick={() => navigate("/register")}
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white font-bold text-sm shadow-md shadow-[#6B1E2D]/20 hover:-translate-y-0.5 transition-all cursor-pointer active:scale-95"
-            >
-              <span>Create Free Student Account</span>
-              <ArrowRight size={16} />
-            </button>
-
-            <button
-              onClick={() => navigate("/login")}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#FFFDF8] hover:bg-[#FAF6F0] border border-[#E5DCD4] text-[#241A1C] font-bold text-sm shadow-xs hover:border-[#B8A08A] transition-all cursor-pointer"
-            >
-              <Lock size={15} className="text-[#B8A08A]" />
-              <span>Student Portal Login</span>
-            </button>
-
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="inline-flex items-center gap-1.5 px-4 py-3.5 text-xs font-bold text-[#75666A] hover:text-[#6B1E2D] transition-colors cursor-pointer"
-            >
-              <span>Enter Demo Dashboard</span>
-              <ChevronRight size={14} />
-            </button>
           </div>
-
-          {/* INTERACTIVE LIVE MINI-PREVIEW COCKPIT CARD */}
-          <div className="mt-14 max-w-4xl mx-auto bg-[#FFFDF8] rounded-3xl border border-[#E5DCD4] shadow-xl shadow-[#241A1C]/5 overflow-hidden text-left">
-            {/* Cockpit Window Header */}
-            <div className="bg-[#FAF6F0] px-6 py-3.5 border-b border-[#E5DCD4] flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-[#6B1E2D]" />
-                  <div className="w-3 h-3 rounded-full bg-[#B8A08A]" />
-                  <div className="w-3 h-3 rounded-full bg-[#4F7A5A]" />
-                </div>
-                <div className="h-4 w-px bg-[#E5DCD4]" />
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#4F7A5A]" />
-                  <span className="text-xs font-bold text-[#241A1C]">Alex Sharma</span>
-                  <span className="text-[11px] text-[#75666A]">· B.Tech Computer Science, Semester 4</span>
-                </div>
-              </div>
-              <span className="text-[11px] font-mono text-[#75666A] bg-[#FFFDF8] px-2.5 py-0.5 rounded-full border border-[#E5DCD4]">
-                portal.unisphere.edu/dashboard
-              </span>
-            </div>
-
-            {/* 4 Interactive Snapshot Widgets */}
-            <div className="p-6 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-[#FFFDF8]">
-              {/* Widget 1: Attendance */}
-              <div
-                onClick={() => navigate("/attendance")}
-                className="p-4 rounded-2xl bg-[#F8F3EA]/70 border border-[#E5DCD4] hover:border-[#B8A08A] hover:bg-[#F8F3EA] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">Attendance</span>
-                  <CalendarCheck size={16} className="text-[#6B1E2D]" />
-                </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-2xl font-serif font-bold text-[#241A1C]">88.4%</span>
-                  <span className="text-[10px] text-[#4F7A5A] font-bold">Safe</span>
-                </div>
-                <div className="mt-2 text-[11px] text-[#75666A] flex items-center justify-between">
-                  <span>Target: 75.0%</span>
-                  <span className="text-[#4F7A5A] font-semibold">+4 Safe Bunks</span>
-                </div>
-              </div>
-
-              {/* Widget 2: Grievances */}
-              <div
-                onClick={() => navigate("/complaints")}
-                className="p-4 rounded-2xl bg-[#F8F3EA]/70 border border-[#E5DCD4] hover:border-[#B8A08A] hover:bg-[#F8F3EA] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">Grievance Portal</span>
-                  <MessageSquare size={16} className="text-[#6B1E2D]" />
-                </div>
-                <div className="text-sm font-serif font-bold text-[#241A1C] truncate">
-                  Hostel Wi-Fi Upgrade
-                </div>
-                <div className="mt-2.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#EBF2EC] text-[#4F7A5A] text-[10px] font-bold">
-                  <Check size={11} />
-                  <span>Resolved Today</span>
-                </div>
-              </div>
-
-              {/* Widget 3: Lost & Found */}
-              <div
-                onClick={() => navigate("/lost-found")}
-                className="p-4 rounded-2xl bg-[#F8F3EA]/70 border border-[#E5DCD4] hover:border-[#B8A08A] hover:bg-[#F8F3EA] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">Campus Grid</span>
-                  <Search size={16} className="text-[#6B1E2D]" />
-                </div>
-                <div className="text-sm font-serif font-bold text-[#241A1C] truncate">
-                  Calculator (FX-991EX)
-                </div>
-                <div className="mt-2 text-[11px] text-[#75666A] flex items-center gap-1">
-                  <MapPin size={12} className="text-[#B8A08A]" />
-                  <span>Library 2nd Floor</span>
-                </div>
-              </div>
-
-              {/* Widget 4: Notes */}
-              <div
-                onClick={() => navigate("/notes")}
-                className="p-4 rounded-2xl bg-[#F8F3EA]/70 border border-[#E5DCD4] hover:border-[#B8A08A] hover:bg-[#F8F3EA] transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-bold text-[#B8A08A] uppercase tracking-wider">Peer Notes</span>
-                  <BookOpen size={16} className="text-[#6B1E2D]" />
-                </div>
-                <div className="text-sm font-serif font-bold text-[#241A1C] truncate">
-                  DSA Normalization PDF
-                </div>
-                <div className="mt-2 text-[11px] text-[#B8A08A] font-semibold flex items-center gap-1">
-                  <span>★ 4.8 Rating</span>
-                  <span className="text-[#75666A] font-normal">(18 reviews)</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer inside Cockpit */}
-            <div className="bg-[#FAF6F0] px-6 py-3 border-t border-[#E5DCD4] flex items-center justify-between text-xs text-[#75666A]">
-              <span>Real-time local data persistence active</span>
+          <div className="ticker-center">
+            <span className="ticker-text-secondary">
+              Mandatory Cutoff Defense: 75.0% • Engineering Syllabus Integrated
+            </span>
+          </div>
+          <div className="ticker-right">
+            {isAuthenticated ? (
               <button
                 onClick={() => navigate("/dashboard")}
-                className="text-[#6B1E2D] font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                className="ticker-action-link"
+                title="Go to Campus Dashboard"
               >
-                <span>Launch Full Workspace</span>
-                <ArrowRight size={13} />
+                <span>Go to Dashboard</span>
+                <ArrowRight size={12} />
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsRoleModalOpen(true)}
+                className="ticker-action-link"
+              >
+                <span>Choose Role</span>
+                <ArrowRight size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          PRIMARY NAVIGATION BAR
+          ========================================================================= */}
+      <header className="unisphere-navbar">
+        <div className="unisphere-container unisphere-nav-inner">
+          {/* Brand Logo: Clicking smoothly scrolls to top of page */}
+          <div
+            onClick={handleBrandClick}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleBrandClick();
+              }
+            }}
+            className="unisphere-brand"
+            role="button"
+            tabIndex={0}
+            title="UniSphere Academic System — Return to Top"
+            aria-label="UniSphere Academic System — Return to Top"
+          >
+            <div className="brand-monogram">
+              <GraduationCap size={20} strokeWidth={2.4} />
+            </div>
+            <div className="brand-text-group">
+              <span className="brand-name">
+                UNI<span className="brand-name-serif">SPHERE</span>
+              </span>
+              <span className="brand-sub">University Academic System</span>
+            </div>
+          </div>
+
+          {/* Desktop Navigation Links */}
+          <nav className="unisphere-desktop-nav" aria-label="Main Navigation">
+            <a href="#hero" className="nav-item-link active">
+              Home
+            </a>
+            <a href="#campus" className="nav-item-link">Programs</a>
+            <a href="#workflow" className="nav-item-link">How It Works</a>
+            <a href="#value" className="nav-item-link">Campus</a>
+            <a href="#glance" className="nav-item-link">About</a>
+          </nav>
+
+          {/* Navigation CTAs */}
+          <div className="unisphere-nav-cta-group">
+            {isAuthenticated ? (
+              <>
+                <div
+                  className="nav-user-badge"
+                  onClick={() => navigate("/dashboard")}
+                  title={`Signed in as ${user?.name || "Student"} (${user?.role || "Student"})`}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className="nav-user-avatar">
+                    {user?.initials || "ST"}
+                  </div>
+                  <div className="nav-user-info">
+                    <span className="nav-user-name">{user?.name?.split(" ")[0] || "User"}</span>
+                    <span className="nav-user-role-chip">{user?.role || "Student"}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="btn-nav-primary btn-nav-dashboard"
+                >
+                  <span>Dashboard</span>
+                  <ArrowRight size={13} />
+                </button>
+
+                <button
+                  onClick={() => logout()}
+                  className="btn-nav-signout"
+                  title="Sign out of UniSphere"
+                >
+                  <LogOut size={13} />
+                  <span>Sign Out</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="btn-nav-login"
+                >
+                  <Lock size={13} />
+                  <span>Log In</span>
+                </button>
+
+                <button
+                  onClick={() => setIsRoleModalOpen(true)}
+                  className="btn-nav-primary btn-nav-choose-role"
+                >
+                  <span>Choose Role</span>
+                  <ArrowRight size={13} />
+                </button>
+              </>
+            )}
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="btn-mobile-menu-toggle"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="unisphere-mobile-drawer">
+            <nav className="mobile-nav-links">
+              <a
+                href="#hero"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Home
+              </a>
+              <a
+                href="#glance"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                UNISPHERE at a Glance
+              </a>
+              <a
+                href="#campus"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Campus Modules (All 6)
+              </a>
+              <a
+                href="#workflow"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                How It Works
+              </a>
+              <a
+                href="#value"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Student &amp; Faculty Value
+              </a>
+              <a
+                href="#faq"
+                className="mobile-nav-item"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Module FAQ &amp; Guidance
+              </a>
+            </nav>
+            <div className="mobile-drawer-actions">
+              {isAuthenticated ? (
+                <>
+                  <div className="mobile-drawer-user-info">
+                    <div className="nav-user-avatar">
+                      {user?.initials || "ST"}
+                    </div>
+                    <div>
+                      <div className="mobile-drawer-user-name">{user?.name || "User"}</div>
+                      <div className="mobile-drawer-user-role">{user?.role || "Student"} • {user?.department || "Campus"}</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate("/dashboard");
+                    }}
+                    className="btn-mobile-dashboard"
+                  >
+                    <span>Go to Dashboard</span>
+                    <ArrowRight size={14} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="btn-mobile-logout"
+                  >
+                    <LogOut size={14} />
+                    <span>Sign Out</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setIsRoleModalOpen(true);
+                    }}
+                    className="btn-mobile-register"
+                  >
+                    <span>Choose Role</span>
+                    <ArrowRight size={14} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      navigate("/login");
+                    }}
+                    className="btn-mobile-login"
+                  >
+                    <Lock size={14} />
+                    <span>Student Portal Login</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Full-screen cinematic campus hero inspired by the reference */}
+      <section id="hero" className="unisphere-hero-editorial-section reference-hero">
+        <img className="reference-hero-image" src={campusReferenceImg} alt="Classical university campus framed by grand columns" />
+        <div className="reference-hero-shade" />
+        <div className="reference-hero-content">
+          <span className="reference-hero-kicker"><span /> YOUR CAMPUS. ONE CONNECTED WORLD.</span>
+          <h1 className="reference-hero-title">UniSphere<span>.</span></h1>
+          <p className="reference-hero-subtitle">A smarter way to experience university life.</p>
+          {isAuthenticated ? (
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+              className="reference-hero-cta"
+              aria-label="Continue to your campus dashboard"
+            >
+              <span>Go to Dashboard</span>
+              <span className="reference-hero-arrow"><ArrowRight size={17} /></span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsRoleModalOpen(true)}
+              className="reference-hero-cta"
+              aria-label="Choose whether you are a student or teacher"
+            >
+              <span>Choose Role</span>
+              <span className="reference-hero-arrow"><ArrowRight size={17} /></span>
+            </button>
+          )}
+        </div>
+        <button
+          type="button"
+          className="reference-hero-scroll"
+          onClick={() => document.getElementById("glance")?.scrollIntoView({ behavior: "smooth" })}
+        >
+          <span>SCROLL TO EXPLORE</span><ChevronDown size={16} />
+        </button>
+        <div className="reference-hero-stats">
+          <div><strong>6</strong><span>Campus tools</span></div>
+          <i />
+          <div><strong>One</strong><span>Connected platform</span></div>
+          <i />
+          <div><strong>Every day</strong><span>Made simpler</span></div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          INTRODUCTION & AT A GLANCE
+          ========================================================================= */}
+      <section id="glance" className="unisphere-glance-section">
+        <div className="unisphere-container">
+          <div className="glance-intro-grid">
+            {/* Left Column */}
+            <div className="glance-left-col">
+              <span className="section-eyebrow-label">2026 RECAP</span>
+              <h2 className="glance-main-title">
+                UNISPHERE at a Glance
+              </h2>
+              <div className="editorial-divider-line" />
+              <p className="glance-sub-note">
+                An integrated platform uniting academic governance, curriculum engineering, and student campus welfare.
+              </p>
+            </div>
+
+            {/* Right Column */}
+            <div className="glance-right-col">
+              <span className="section-mini-tag">About UNISPHERE</span>
+              <h3 className="glance-editorial-quote">
+                Our numbers reflect a tradition of academic distinction and forward-thinking impact in education, research, and campus innovation.
+              </h3>
+              <p className="glance-editorial-paragraph">
+                University life should not be fragmented between informal group chats, forgotten paper complaint books, unverified notes, and unexpected attendance shortages. UNISPHERE bridges classroom pedagogy, real-time analytics, and campus life into a cohesive, high-performance ecosystem.
+              </p>
+            </div>
+          </div>
+
+          {/* Statistics & Highlights Cards Grid */}
+          <div className="glance-cards-grid">
+            {/* Card 1: Students */}
+            <div className="glance-stat-card card-cream">
+              <div className="stat-card-header">
+                <span className="stat-card-category">Students</span>
+                <Users size={20} className="stat-icon-taupe" />
+              </div>
+              <div className="stat-card-number">40,000+</div>
+              <p className="stat-card-caption">
+                Undergraduate, graduate, and engineering scholars thriving across connected digital campuses.
+              </p>
+              <div className="stat-card-footer-pill">
+                <CheckCircle2 size={13} className="footer-pill-check" />
+                <span>Verified Enrollment</span>
+              </div>
+            </div>
+
+            {/* Card 2: Research Centers */}
+            <div className="glance-stat-card card-dark-chocolate">
+              <div className="stat-card-header">
+                <span className="stat-card-category text-light-beige">Research Centers</span>
+                <Cpu size={20} className="stat-icon-gold" />
+              </div>
+              <div className="stat-card-number text-cream">100+</div>
+              <p className="stat-card-caption text-light-taupe">
+                World-leading innovation laboratories, developer study pods, and specialized computational research units.
+              </p>
+              <div className="stat-card-footer-pill pill-dark-mode">
+                <Sparkles size={13} className="footer-pill-gold" />
+                <span>Interdisciplinary Hubs</span>
+              </div>
+            </div>
+
+            {/* Card 3: Attendance Defense */}
+            <div className="glance-stat-card card-offwhite">
+              <div className="stat-card-header">
+                <span className="stat-card-category">Cutoff Defense</span>
+                <CalendarCheck size={20} className="stat-icon-taupe" />
+              </div>
+              <div className="stat-card-number">75.0%</div>
+              <p className="stat-card-caption">
+                Rigorous mathematical safe-bunk formula safeguarding students from semester condonation penalties.
+              </p>
+              <div className="stat-card-footer-pill">
+                <ShieldCheck size={13} className="footer-pill-check" />
+                <span>Zero Shortage Surprises</span>
+              </div>
+            </div>
+
+            {/* Card 4: Curated Resources */}
+            <div className="glance-stat-card card-warm-taupe">
+              <div className="stat-card-header">
+                <span className="stat-card-category">Academic Notes</span>
+                <BookCheck size={20} className="stat-icon-taupe" />
+              </div>
+              <div className="stat-card-number">450+</div>
+              <p className="stat-card-caption">
+                Verified lecture repositories, unit-wise question banks, and collaborative cheatsheets shared campus-wide.
+              </p>
+              <div className="stat-card-footer-pill">
+                <CheckCircle2 size={13} className="footer-pill-check" />
+                <span>Peer-Reviewed Archives</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CAMPUS OPERATING PILLARS (Interactive Sliding Cards for ALL 6 MODULES)
+          ========================================================================= */}
+      <section id="campus" className="unisphere-pillars-section">
+        <div className="unisphere-container">
+          <div className="pillars-section-header">
+            <span className="section-eyebrow-label">INTEGRATED PLATFORM</span>
+            <h2 className="section-main-title">
+              The 6 Operating Pillars of UniSphere
+            </h2>
+            <p className="section-main-description">
+              Browse any foundational module below to inspect live metrics, architectural capabilities, and launch its dedicated student workspace.
+            </p>
+          </div>
+
+          {/* Module Carousel Controls Header */}
+          <div className="pillars-carousel-controls-bar">
+            <div className="pillars-carousel-arrows">
+              <button
+                type="button"
+                onClick={handlePrevModule}
+                className="carousel-arrow-btn"
+                aria-label="Previous Campus Module"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <span className="carousel-counter-label">
+                0{activeModuleIndex + 1} / 0{campusModules.length}
+              </span>
+              <button
+                type="button"
+                onClick={handleNextModule}
+                className="carousel-arrow-btn"
+                aria-label="Next Campus Module"
+              >
+                <ChevronRight size={16} />
               </button>
             </div>
-          </div>
 
-          {/* Quick Metrics Banner */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-            <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-5 shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#6B1E2D]">4-in-1</div>
-              <div className="text-[11px] font-bold text-[#75666A] mt-1 uppercase tracking-wider">
-                Integrated Modules
-              </div>
+            {/* Module Selector Pill Bar */}
+            <div className="pillars-tab-nav">
+              {campusModules.map((mod) => {
+                const Icon = mod.icon;
+                const isCurrent = activeModuleTab === mod.id;
+                return (
+                  <button
+                    key={mod.id}
+                    onClick={() => setActiveModuleTab(mod.id)}
+                    className={`pillar-nav-btn ${isCurrent ? "active" : ""}`}
+                  >
+                    <Icon size={16} className="pillar-nav-icon" />
+                    <span>{mod.title.split(" ")[0]}</span>
+                    {isCurrent && <span className="pillar-active-indicator" />}
+                  </button>
+                );
+              })}
             </div>
-
-            <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-5 shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#4F7A5A]">75.0%</div>
-              <div className="text-[11px] font-bold text-[#75666A] mt-1 uppercase tracking-wider">
-                Cutoff Defense
-              </div>
-            </div>
-
-            <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-5 shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#241A1C]">Real-Time</div>
-              <div className="text-[11px] font-bold text-[#75666A] mt-1 uppercase tracking-wider">
-                Status Resolution
-              </div>
-            </div>
-
-            <div className="bg-[#FFFDF8] border border-[#E5DCD4] rounded-2xl p-5 shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#B8A08A]">100%</div>
-              <div className="text-[11px] font-bold text-[#75666A] mt-1 uppercase tracking-wider">
-                Student Focused
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ABOUT / PROBLEM SOLVED SECTION */}
-        <section id="about" className="py-16 px-6 max-w-7xl mx-auto border-t border-[#E5DCD4]">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#FFFDF8] px-3.5 py-1 rounded-full border border-[#E5DCD4]">
-              Campus Bottlenecks Solved
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#241A1C] mt-3">
-              Engineered to Eliminate Campus Friction
-            </h2>
-            <p className="text-[#75666A] mt-3 text-base sm:text-lg leading-relaxed">
-              University life shouldn't be scattered across informal WhatsApp chats, unbacked spreadsheets, lost noticeboards, and disconnected department websites.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs hover:border-[#B8A08A] transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-[#F8F1F2] text-[#6B1E2D] flex items-center justify-center mb-5 border border-[#E5DCD4]">
-                <Clock size={22} />
-              </div>
-              <h3 className="text-lg font-serif font-bold text-[#241A1C]">
-                Attendance Shortage Surprises
-              </h3>
-              <p className="text-sm text-[#75666A] mt-2 leading-relaxed">
-                Students frequently miscalculate safe bunk allowances and discover too late that they fall beneath the university's 75% condonation barrier.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#E5DCD4] flex items-center gap-2 text-xs font-bold text-[#6B1E2D]">
-                <CheckCircle2 size={15} className="text-[#4F7A5A]" />
-                <span>UniSphere's Bunk Simulator eliminates ambiguity</span>
-              </div>
-            </div>
-
-            <div className="bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs hover:border-[#B8A08A] transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-[#FAF6F0] text-[#75666A] flex items-center justify-center mb-5 border border-[#E5DCD4]">
-                <MessageSquare size={22} />
-              </div>
-              <h3 className="text-lg font-serif font-bold text-[#241A1C]">
-                Unresolved Campus Grievances
-              </h3>
-              <p className="text-sm text-[#75666A] mt-2 leading-relaxed">
-                Defective lab equipment, hostel maintenance bottlenecks, and canteen complaints stall when submitted through informal oral channels.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#E5DCD4] flex items-center gap-2 text-xs font-bold text-[#6B1E2D]">
-                <CheckCircle2 size={15} className="text-[#4F7A5A]" />
-                <span>Structured department tickets with transparent timelines</span>
-              </div>
-            </div>
-
-            <div className="bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs hover:border-[#B8A08A] transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-[#EFE8DC] text-[#241A1C] flex items-center justify-center mb-5 border border-[#E5DCD4]">
-                <Layers size={22} />
-              </div>
-              <h3 className="text-lg font-serif font-bold text-[#241A1C]">
-                Fragmented Academic Materials
-              </h3>
-              <p className="text-sm text-[#75666A] mt-2 leading-relaxed">
-                Essential lecture summaries and lost valuable items vanish into fast-moving group message logs where links expire and files corrupt.
-              </p>
-              <div className="mt-5 pt-4 border-t border-[#E5DCD4] flex items-center gap-2 text-xs font-bold text-[#6B1E2D]">
-                <CheckCircle2 size={15} className="text-[#4F7A5A]" />
-                <span>Curated PDF repositories & campus coordinate recovery map</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CORE MODULES INTERACTIVE SHOWCASE */}
-        <section id="modules" className="py-16 px-6 max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#FFFDF8] px-3 py-1 rounded-full border border-[#E5DCD4]">
-              Platform Architecture
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#241A1C] mt-3">
-              Explore the 4 Pillars of UniSphere
-            </h2>
-            <p className="text-[#75666A] mt-2 text-base">
-              Select any core pillar below to inspect its dedicated tools and capabilities.
-            </p>
-          </div>
-
-          {/* Module Selector Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mx-auto mb-10 p-1.5 bg-[#EFE8DC] rounded-2xl border border-[#E5DCD4]">
-            {modules.map((m) => {
-              const Icon = m.icon;
-              const isActive = activeTab === m.id;
-              return (
-                <button
-                  key={m.id}
-                  onClick={() => setActiveTab(m.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[#6B1E2D] text-white shadow-xs"
-                      : "text-[#75666A] hover:text-[#241A1C] hover:bg-[#FFFDF8]"
-                  }`}
-                >
-                  <Icon size={16} className={isActive ? "text-[#B8A08A]" : "text-[#75666A]"} />
-                  <span>{m.title.split(" ")[0]}</span>
-                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#B8A08A]" />}
-                </button>
-              );
-            })}
           </div>
 
           {/* Active Module Showcase Card */}
-          <div className="bg-[#FFFDF8] rounded-3xl p-8 sm:p-12 border border-[#E5DCD4] shadow-sm max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-12 gap-8 items-center">
-              {/* Left Column: Details */}
-              <div className="md:col-span-7">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-bold bg-[#FAF6F0] text-[#6B1E2D] border border-[#E5DCD4] mb-4">
-                  <span>{activeModuleData.tag}</span>
+          <div className="pillar-showcase-card">
+            <div className="pillar-showcase-grid">
+              {/* Pillar Details */}
+              <div className="pillar-details-pane">
+                <div className="pillar-tag-row">
+                  <span className="pillar-meta-tag">{activeModule.tag}</span>
+                  <span className="pillar-status-chip">
+                    <CheckCircle2 size={12} className="status-chip-icon" />
+                    <span>Active in Term 2026</span>
+                  </span>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#241A1C]">
-                  {activeModuleData.title}
-                </h3>
-                <p className="text-xs font-bold text-[#B8A08A] uppercase tracking-wider mt-1">
-                  {activeModuleData.subtitle}
-                </p>
+                <h3 className="pillar-display-title">{activeModule.title}</h3>
+                <p className="pillar-display-subtitle">{activeModule.subtitle}</p>
+                <p className="pillar-display-desc">{activeModule.description}</p>
 
-                <p className="mt-4 text-[#75666A] text-sm leading-relaxed">
-                  {activeModuleData.description}
-                </p>
-
-                {/* Highlights List */}
-                <div className="mt-6 space-y-2.5">
-                  {activeModuleData.highlights.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3">
-                      <div className="mt-0.5 w-5 h-5 rounded-full bg-[#F8F1F2] text-[#6B1E2D] flex items-center justify-center flex-shrink-0 border border-[#E5DCD4]">
-                        <CheckCircle2 size={13} />
+                {/* Highlights */}
+                <div className="pillar-highlights-group">
+                  {activeModule.highlights.map((point, pIdx) => (
+                    <div key={pIdx} className="pillar-highlight-line">
+                      <div className="highlight-check-bullet">
+                        <Check size={12} />
                       </div>
-                      <span className="text-xs font-semibold text-[#241A1C]">
-                        {item}
-                      </span>
+                      <span className="highlight-point-text">{point}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Direct Action Link */}
-                <div className="mt-8 flex items-center gap-4">
+                {/* Direct Action Link to Role Selection or Route */}
+                <div className="pillar-action-row">
                   <button
-                    onClick={() => navigate("/dashboard")}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#6B1E2D] hover:bg-[#48121E] text-white text-xs font-bold transition shadow-xs cursor-pointer active:scale-95"
+                    onClick={() => navigate("/role-selection")}
+                    className="pillar-launch-btn"
                   >
-                    <span>Open in Dashboard</span>
+                    <span>Launch {activeModule.title}</span>
                     <ArrowRight size={14} />
                   </button>
-
-                  <span className="text-xs text-[#75666A] font-medium">
-                    Integrated with UniSphere Auth
-                  </span>
+                  <button
+                    onClick={() => navigate("/role-selection")}
+                    className="pillar-secondary-btn"
+                  >
+                    <span>Access via Student Suite</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Right Column: Visual Preview Box */}
-              <div className="md:col-span-5 bg-[#FAF6F0] p-6 rounded-2xl border border-[#E5DCD4]">
-                <div className="flex items-center justify-between pb-4 border-b border-[#E5DCD4]">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#6B1E2D]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#B8A08A]" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#4F7A5A]" />
-                  </div>
-                  <span className="text-[10px] font-mono text-[#75666A]">
-                    unisphere://{activeModuleData.id}
+              {/* Pillar Metric Preview Pane */}
+              <div className="pillar-metric-pane">
+                <div className="metric-pane-header">
+                  <span className="metric-pane-route">
+                    unisphere://workspace{activeModule.route}
                   </span>
+                  <span className="metric-pane-live-badge">Live System</span>
                 </div>
 
-                <div className="mt-6 text-center py-6">
-                  <div className="w-16 h-16 rounded-2xl bg-[#FFFDF8] shadow-xs border border-[#E5DCD4] mx-auto flex items-center justify-center mb-4 text-[#6B1E2D]">
-                    <activeModuleData.icon size={30} />
+                <div className="metric-pane-center">
+                  <div className="metric-pane-icon-halo">
+                    <activeModule.icon size={36} className="metric-pane-icon" />
                   </div>
 
-                  <div className="text-4xl font-serif font-bold text-[#241A1C]">
-                    {activeModuleData.previewStats.metric}
-                  </div>
-                  <div className="text-xs font-bold text-[#75666A] mt-1">
-                    {activeModuleData.previewStats.label}
-                  </div>
+                  <div className="metric-pane-big-number">{activeModule.metric}</div>
+                  <div className="metric-pane-label">{activeModule.metricLabel}</div>
 
-                  <div className="mt-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF2F3] text-[#6B1E2D] border border-[#E5DCD4] text-xs font-bold">
-                    <ShieldCheck size={14} className="text-[#B8A08A]" />
-                    <span>{activeModuleData.previewStats.status}</span>
+                  <div className="metric-pane-standing-pill">
+                    <ShieldCheck size={14} className="standing-shield-icon" />
+                    <span>{activeModule.status}</span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-[#E5DCD4] text-center">
-                  <p className="text-[11px] text-[#75666A]">
-                    Designed for students, faculty & administrators
-                  </p>
+                <div className="metric-pane-footer">
+                  <span className="metric-footer-note">
+                    Integrated with UniSphere Client-Side Persistence
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* WORKFLOW SECTION */}
-        <section id="workflow" className="py-16 px-6 max-w-7xl mx-auto border-t border-[#E5DCD4]">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#FFFDF8] px-3.5 py-1 rounded-full border border-[#E5DCD4]">
-              Frictionless Process
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#241A1C] mt-3">
-              How Students Use UniSphere
+      {/* =========================================================================
+          HOW IT WORKS (Step-by-Step Experience for Students & Teachers)
+          ========================================================================= */}
+      <section id="workflow" className="unisphere-workflow-section">
+        <div className="unisphere-container">
+          <div className="workflow-section-header">
+            <span className="section-eyebrow-label">STREAMLINED ONBOARDING</span>
+            <h2 className="section-main-title">
+              How Students &amp; Teachers Use UniSphere
             </h2>
-            <p className="text-[#75666A] mt-2 text-base">
-              A 3-step streamlined workflow tailored to fast-paced university schedules.
+            <p className="section-main-description">
+              A frictionless three-stage onboarding journey designed to eliminate administrative friction, protect academic standing, and foster collaborative learning.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="relative bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#B8A08A] mb-3">01</div>
-              <h3 className="text-base font-serif font-bold text-[#241A1C]">
-                Register with University Email
+          <div className="workflow-cards-grid workflow-grid-3">
+            {/* Step 1: Choose Role */}
+            <div className="workflow-step-card">
+              <div className="step-num-watermark">01</div>
+              <span className="step-tag-pill">Stage 01 • Identification</span>
+              <h3 className="step-card-title">
+                Choose Your Affiliation
               </h3>
-              <p className="text-xs text-[#75666A] mt-2 leading-relaxed">
-                Create your verified profile in seconds or access immediately via the one-click demo sandbox.
+              <p className="step-card-desc">
+                Select your university profile as a Student or Teacher. Seamlessly enter the dedicated portal tailored to your daily academic workflows.
               </p>
+              <div className="step-card-footer">
+                <button
+                  type="button"
+                  onClick={() => setIsRoleModalOpen(true)}
+                  className="step-footer-action-link"
+                >
+                  <span>Choose Role Now</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
             </div>
 
-            <div className="relative bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#B8A08A] mb-3">02</div>
-              <h3 className="text-base font-serif font-bold text-[#241A1C]">
-                Simulate Bunks & Lodge Tickets
+            {/* Step 2: Access Modules */}
+            <div className="workflow-step-card">
+              <div className="step-num-watermark">02</div>
+              <span className="step-tag-pill">Stage 02 • Digital Ecosystem</span>
+              <h3 className="step-card-title">
+                Access Unified Modules
               </h3>
-              <p className="text-xs text-[#75666A] mt-2 leading-relaxed">
-                Log daily classes, forecast safe bunks with what-if scenarios, register complaints, and drop recovery pins on campus maps.
+              <p className="step-card-desc">
+                Log roll call records, browse verified 6-page note previews, join synchronous study lounges with Pomodoro timers, and view the 36-seat live library map.
               </p>
+              <div className="step-card-footer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById("campus");
+                    if (el) el.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="step-footer-action-link"
+                >
+                  <span>Explore All 6 Modules</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
             </div>
 
-            <div className="relative bg-[#FFFDF8] rounded-3xl p-7 border border-[#E5DCD4] shadow-xs">
-              <div className="text-3xl font-serif font-bold text-[#B8A08A] mb-3">03</div>
-              <h3 className="text-base font-serif font-bold text-[#241A1C]">
-                Clear Exam Admittance
+            {/* Step 3: Excel with Safeguards */}
+            <div className="workflow-step-card">
+              <div className="step-num-watermark">03</div>
+              <span className="step-tag-pill">Stage 03 • Academic Mastery</span>
+              <h3 className="step-card-title">
+                Defend Cutoffs &amp; Collaborate
               </h3>
-              <p className="text-xs text-[#75666A] mt-2 leading-relaxed">
-                Defend your mandatory 75% attendance criteria with zero last-minute surprises and collaborate over peer study materials.
+              <p className="step-card-desc">
+                Receive proactive attendance shortage warnings before condonation deadlines, resolve grievances with photo tracking, and earn campus cafe vouchers.
               </p>
+              <div className="step-card-footer">
+                <button
+                  type="button"
+                  onClick={() => setIsRoleModalOpen(true)}
+                  className="step-footer-action-link"
+                >
+                  <span>Launch Campus Hub</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* COMPARISON / WHY UNISPHERE SECTION */}
-        <section id="comparison" className="py-16 px-6 max-w-7xl mx-auto border-t border-[#E5DCD4]">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#6B1E2D] bg-[#FFFDF8] px-3.5 py-1 rounded-full border border-[#E5DCD4]">
-              System Comparison
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#241A1C] mt-3">
-              The UniSphere Advantage
+      {/* =========================================================================
+          STUDENT & TEACHER VALUE SECTION (Side-by-Side Comparison Panels)
+          ========================================================================= */}
+      <section id="value" className="unisphere-value-section">
+        <div className="unisphere-container">
+          <div className="value-section-header">
+            <span className="section-eyebrow-label">TAILORED IMPACT</span>
+            <h2 className="section-main-title">
+              Designed for Both Students &amp; Teachers
             </h2>
-            <p className="text-[#75666A] mt-2 text-base">
-              Comparing chaotic informal channels against UniSphere's unified student workspace.
+            <p className="section-main-description">
+              UniSphere provides distinct, purpose-built toolsets for every member of the university community.
             </p>
           </div>
 
-          <div className="bg-[#FFFDF8] rounded-3xl border border-[#E5DCD4] overflow-hidden shadow-sm max-w-4xl mx-auto">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="bg-[#FAF6F0] border-b border-[#E5DCD4]">
-                    <th className="p-4 text-xs font-bold uppercase tracking-wider text-[#75666A]">Campus Workflow</th>
-                    <th className="p-4 text-xs font-bold uppercase tracking-wider text-[#A63D40]">Traditional Channels</th>
-                    <th className="p-4 text-xs font-bold uppercase tracking-wider text-[#6B1E2D]">UniSphere Enterprise</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#E5DCD4]">
-                  <tr>
-                    <td className="p-4 font-bold text-[#241A1C]">Attendance Cutoff Defense</td>
-                    <td className="p-4 text-[#75666A] text-xs">Spreadsheet guesswork & sudden condonation fines</td>
-                    <td className="p-4 text-[#4F7A5A] text-xs font-bold">Predictive safe bunk formula with automated alerts</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-bold text-[#241A1C]">Campus Grievances</td>
-                    <td className="p-4 text-[#75666A] text-xs">Unanswered paper complaint books & forgotten forms</td>
-                    <td className="p-4 text-[#4F7A5A] text-xs font-bold">Transparent status timeline & admin escalation</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-bold text-[#241A1C]">Lost & Found Recovery</td>
-                    <td className="p-4 text-[#75666A] text-xs">Spamming 500-person WhatsApp groups & noticeboards</td>
-                    <td className="p-4 text-[#4F7A5A] text-xs font-bold">Interactive canvas map with precise building pins</td>
-                  </tr>
-                  <tr>
-                    <td className="p-4 font-bold text-[#241A1C]">Lecture Notes & Sharing</td>
-                    <td className="p-4 text-[#75666A] text-xs">Broken Google Drive links & expiring attachments</td>
-                    <td className="p-4 text-[#4F7A5A] text-xs font-bold">Curated PDF previews & collaborative study circles</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="value-grid-2col">
+            {/* Panel 1: For Students */}
+            <div className="value-card value-card-student">
+              <div className="value-card-header">
+                <div className="value-role-badge badge-student-luxe">
+                  <GraduationCap size={16} />
+                  <span>FOR STUDENTS</span>
+                </div>
+                <span className="value-card-tag">Academic Excellence &amp; Welfare</span>
+              </div>
+
+              <h3 className="value-card-title">
+                Master Your Studies &amp; Campus Life
+              </h3>
+
+              <p className="value-card-desc">
+                Everything you need to safeguard your attendance, collaborate with classmates, and navigate university facilities with confidence.
+              </p>
+
+              <div className="value-features-list">
+                <div className="value-feature-item">
+                  <div className="value-check-icon"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Mandatory 75% Cutoff Defense:</strong> Mathematical safe-bunk formula and consecutive recovery calculator.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Verified Notes Marketplace:</strong> Unit-wise cheat sheets with interactive 6-page previews before downloading.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Synchronous Virtual Study Lounge:</strong> Live peer presence, simulated cursors, and 25-minute Pomodoro timers.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>36-Seat Smart Library &amp; Lost Map:</strong> Real-time desk booking and coordinate-mapped recovery with cafe vouchers.
+                  </div>
+                </div>
+              </div>
+
+              <div className="value-card-cta-wrap">
+                <button
+                  type="button"
+                  onClick={() => navigate("/login?role=student")}
+                  className="value-btn-primary btn-student"
+                >
+                  <span>Enter Student Portal</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+
+            {/* Panel 2: For Teachers */}
+            <div className="value-card value-card-faculty">
+              <div className="value-card-header">
+                <div className="value-role-badge badge-faculty-luxe">
+                  <BookOpen size={16} />
+                  <span>FOR TEACHERS &amp; FACULTY</span>
+                </div>
+                <span className="value-card-tag">Curriculum Governance &amp; Mentorship</span>
+              </div>
+
+              <h3 className="value-card-title">
+                Streamline Academic Administration
+              </h3>
+
+              <p className="value-card-desc">
+                Empower your lectures with instant cohort attendance tracking, syllabus material distribution, and transparent grievance redressal.
+              </p>
+
+              <div className="value-features-list">
+                <div className="value-feature-item">
+                  <div className="value-check-icon check-faculty"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Cohort Attendance Insights:</strong> Automated condonation risk alerts and instant roll call administration.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon check-faculty"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Curriculum &amp; Notes Distribution:</strong> Upload verified lecture summaries, course schemes, and question banks.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon check-faculty"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Department Grievance Resolution:</strong> Review assigned laboratory, classroom, or infrastructure maintenance tickets.
+                  </div>
+                </div>
+
+                <div className="value-feature-item">
+                  <div className="value-check-icon check-faculty"><Check size={13} /></div>
+                  <div className="value-feature-text">
+                    <strong>Campus Announcements &amp; Office Hours:</strong> Broadcast critical academic notices and schedule mentorship sessions.
+                  </div>
+                </div>
+              </div>
+
+              <div className="value-card-cta-wrap">
+                <button
+                  type="button"
+                  onClick={() => navigate("/login?role=faculty")}
+                  className="value-btn-primary btn-faculty"
+                >
+                  <span>Enter Faculty Portal</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CALL TO ACTION BANNER */}
-        <section className="py-16 px-6 max-w-7xl mx-auto">
-          <div className="bg-gradient-to-r from-[#48121E] via-[#6B1E2D] to-[#351019] rounded-3xl p-10 sm:p-14 text-center text-white shadow-xl shadow-[#6B1E2D]/15 relative overflow-hidden">
-            {/* Subtle background ambient glow */}
-            <div className="absolute -top-24 -right-24 w-80 h-80 bg-white/5 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#B8A08A]/10 rounded-full blur-2xl pointer-events-none" />
+      {/* =========================================================================
+          COMPREHENSIVE MODULE FAQ SECTION (Interactive Accordion for All 6 Modules)
+          ========================================================================= */}
+      <section id="faq" className="unisphere-faq-section">
+        <div className="unisphere-container">
+          <div className="faq-section-header">
+            <span className="section-eyebrow-label">STUDENT GUIDANCE &amp; SYLLABUS FAQ</span>
+            <h2 className="section-main-title">
+              Frequently Asked Questions
+            </h2>
+            <p className="section-main-description">
+              Detailed answers explaining how UniSphere calculates safe bunks, handles campus recoveries, verifies lecture notes, synchronizes study lounges, and coordinates library seats.
+            </p>
+          </div>
 
-            <div className="relative z-10 max-w-2xl mx-auto space-y-4">
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider bg-white/10 px-3.5 py-1 rounded-full text-[#D8CBBE] border border-white/10">
-                <Sparkles size={13} className="text-[#B8A08A]" />
-                <span>Ready to Experience UniSphere?</span>
-              </span>
+          <div className="faq-accordion-container">
+            {faqItems.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <div
+                  key={faq.id}
+                  className={`faq-accordion-item ${isOpen ? "open" : ""}`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(idx)}
+                    className="faq-question-button"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="faq-question-text-wrap">
+                      <span className="faq-category-tag">{faq.category}</span>
+                      <span className="faq-question-heading">{faq.question}</span>
+                    </div>
+                    <div className="faq-toggle-icon">
+                      <ChevronDown
+                        size={18}
+                        className={`chevron-icon ${isOpen ? "rotated" : ""}`}
+                      />
+                    </div>
+                  </button>
 
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold tracking-tight text-white mt-2">
-                Elevate Your Campus Journey Today
+                  {isOpen && (
+                    <div className="faq-answer-panel">
+                      <div className="faq-answer-inner">
+                        <p>{faq.answer}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          CALL TO ACTION BANNER (Dark Chocolate Luxe Card)
+          ========================================================================= */}
+      <section className="unisphere-cta-section">
+        <div className="unisphere-container">
+          <div className="cta-banner-card">
+            <div className="cta-card-content">
+              <div className="cta-pill-badge">
+                <Sparkles size={13} className="cta-sparkle-icon" />
+                <span>Begin Your Academic &amp; Engineering Journey</span>
+              </div>
+
+              <h2 className="cta-banner-title">
+                Elevate Your University Experience Today
               </h2>
 
-              <p className="text-[#D8CBBE] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
-                Create your student account in under 30 seconds or sign in to verify your courses, calculate safe bunks, and resolve campus tickets.
+              <p className="cta-banner-subtitle">
+                Join over 40,000 students defending their attendance cutoffs, resolving campus tickets, accessing verified notes, collaborating in virtual study lounges, and checking library seats.
               </p>
 
-              <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+              <div className="cta-buttons-cluster">
                 <button
-                  onClick={() => navigate("/register")}
-                  className="px-7 py-3.5 rounded-xl bg-[#FFFDF8] text-[#6B1E2D] font-bold text-xs hover:bg-[#F8F3EA] transition shadow-md shadow-black/10 cursor-pointer active:scale-95"
+                  onClick={() => setIsRoleModalOpen(true)}
+                  className="btn-cta-primary"
                 >
-                  Create Student Account →
+                  <span>Choose Role</span>
+                  <ArrowRight size={15} />
                 </button>
 
                 <button
-                  onClick={() => navigate("/login")}
-                  className="px-7 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-[#FFFDF8] font-bold text-xs transition cursor-pointer"
+                  onClick={() => navigate("/login?role=student")}
+                  className="btn-cta-secondary"
                 >
-                  Log In to Existing Account
+                  <Lock size={14} />
+                  <span>Student Portal Login</span>
                 </button>
 
                 <button
-                  onClick={() => navigate("/dashboard")}
-                  className="px-5 py-3.5 rounded-xl text-xs font-bold text-[#D8CBBE] hover:text-white transition cursor-pointer"
+                  onClick={() => navigate("/login?role=faculty")}
+                  className="btn-cta-ghost"
                 >
-                  Explore Demo Dashboard
+                  <span>Faculty Access</span>
+                  <ChevronRight size={15} />
                 </button>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="border-t border-[#E5DCD4] bg-[#FFFDF8] py-14 px-6">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
-          <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-[#6B1E2D] text-white flex items-center justify-center">
-                <GraduationCap size={18} />
-              </div>
-              <span className="font-serif font-bold text-lg text-[#241A1C] tracking-tight">
-                Uni<span className="text-[#6B1E2D]">Sphere</span>
-              </span>
-            </div>
-            <p className="text-xs text-[#75666A] max-w-sm leading-relaxed">
-              Intelligent academic and campus operations platform uniting attendance defense, peer knowledge, grievance escalation, and campus asset recovery.
-            </p>
-            <div className="flex items-center gap-2 text-xs text-[#4F7A5A] font-semibold pt-2">
-              <span className="w-2 h-2 rounded-full bg-[#4F7A5A] animate-pulse" />
-              <span>All Campus Services Operational • 2026</span>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#241A1C] mb-3">Core Modules</h4>
-            <ul className="space-y-2 text-xs text-[#75666A]">
-              <li><button onClick={() => navigate("/attendance")} className="hover:text-[#6B1E2D] cursor-pointer">Attendance Calculator & Predictor</button></li>
-              <li><button onClick={() => navigate("/complaints")} className="hover:text-[#6B1E2D] cursor-pointer">Campus Grievance Portal</button></li>
-              <li><button onClick={() => navigate("/lost-found")} className="hover:text-[#6B1E2D] cursor-pointer">Lost & Found Coordinate Grid</button></li>
-              <li><button onClick={() => navigate("/notes")} className="hover:text-[#6B1E2D] cursor-pointer">Peer Notes & Study Circle</button></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#241A1C] mb-3">Student Access</h4>
-            <ul className="space-y-2 text-xs text-[#75666A]">
-              <li><button onClick={() => navigate("/login")} className="hover:text-[#6B1E2D] cursor-pointer">Student Portal Log In</button></li>
-              <li><button onClick={() => navigate("/register")} className="hover:text-[#6B1E2D] cursor-pointer">Register New Account</button></li>
-              <li><button onClick={() => navigate("/dashboard")} className="hover:text-[#6B1E2D] cursor-pointer">Live Demo Workspace</button></li>
-            </ul>
           </div>
         </div>
+      </section>
 
-        <div className="max-w-7xl mx-auto pt-8 mt-8 border-t border-[#E5DCD4] flex flex-col sm:flex-row items-center justify-between text-xs text-[#75666A]">
-          <p>© 2026 UniSphere Academic Operating System • Burgundy Luxe Edition.</p>
-          <p className="mt-2 sm:mt-0">Designed for student success and administrative transparency.</p>
+      {/* =========================================================================
+          FOOTER (Clean, Minimal, Sophisticated)
+          ========================================================================= */}
+      <footer className="unisphere-footer">
+        <div className="unisphere-container">
+          <div className="footer-top-grid">
+            {/* Brand Column */}
+            <div className="footer-col-brand">
+              <div
+                className="footer-brand-lockup"
+                onClick={handleBrandClick}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handleBrandClick();
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                style={{ cursor: "pointer" }}
+                title="Scroll back to top"
+                aria-label="UniSphere — Scroll to top"
+              >
+                <div className="brand-monogram">
+                  <GraduationCap size={18} strokeWidth={2.4} />
+                </div>
+                <span className="footer-brand-title">
+                  UNI<span className="brand-name-serif">SPHERE</span>
+                </span>
+              </div>
+              <p className="footer-brand-bio">
+                The premier university operating system uniting academic governance, curriculum engineering, attendance defense, peer knowledge, study lounges, and campus student welfare.
+              </p>
+              <div className="footer-status-indicator">
+                <span className="ticker-pulse-dot" />
+                <span className="status-indicator-text">
+                  All 6 Campus Systems Operational • 2026 Academic Term
+                </span>
+              </div>
+            </div>
+
+            {/* Navigation Column */}
+            <div className="footer-col-nav">
+              <h4 className="footer-heading">Navigation</h4>
+              <ul className="footer-links-list">
+                <li><a href="#hero" className="footer-nav-link">Home</a></li>
+                <li><a href="#glance" className="footer-nav-link">UNISPHERE at a Glance</a></li>
+                <li><a href="#campus" className="footer-nav-link">Campus Operating Pillars</a></li>
+                <li><a href="#workflow" className="footer-nav-link">How It Works</a></li>
+                <li><a href="#value" className="footer-nav-link">Student &amp; Faculty Value</a></li>
+                <li><a href="#faq" className="footer-nav-link">Module FAQ</a></li>
+              </ul>
+            </div>
+
+            {/* Core 6 Modules Column */}
+            <div className="footer-col-nav">
+              <h4 className="footer-heading">Campus Modules</h4>
+              <ul className="footer-links-list">
+                <li>
+                  <button onClick={() => navigate("/dashboard")} className="footer-btn-link">
+                    Student Dashboard &amp; Attendance
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/complaints")} className="footer-btn-link">
+                    Complaints &amp; Grievances
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/lost-found")} className="footer-btn-link">
+                    Lost &amp; Found Campus Map
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/notes")} className="footer-btn-link">
+                    Notes Marketplace (6-Pg Preview)
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/group-study")} className="footer-btn-link">
+                    Virtual Study Lounge
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/library")} className="footer-btn-link">
+                    Smart Library (36 Seats)
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Access & Authentication Column */}
+            <div className="footer-col-nav">
+              <h4 className="footer-heading">University Access</h4>
+              <ul className="footer-links-list">
+                <li>
+                  <button onClick={() => setIsRoleModalOpen(true)} className="footer-btn-link">
+                    Choose Role
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/login?role=student")} className="footer-btn-link">
+                    Student Portal Login
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/login?role=faculty")} className="footer-btn-link">
+                    Faculty Portal Login
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => navigate("/register")} className="footer-btn-link">
+                    Register Verified Account
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="footer-bottom-bar">
+            <p className="footer-copyright-text">
+              © 2026 UNISPHERE Academic Operating System. Engineered with academic distinction.
+            </p>
+            <div className="footer-bottom-meta">
+              <span>Warm Neutral Editorial Edition</span>
+              <span>•</span>
+              <span>React 19 &amp; Pure CSS3</span>
+            </div>
+          </div>
         </div>
       </footer>
+
+      {/* =========================================================================
+          CHOOSE ROLE MODAL (Accessible, Custom Editorial Dialog)
+          ========================================================================= */}
+      {isRoleModalOpen && (
+        <div
+          className="role-modal-overlay"
+          onClick={() => setIsRoleModalOpen(false)}
+          role="presentation"
+        >
+          <div
+            className="role-modal-dialog"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="role-modal-title"
+          >
+            {/* Modal Header */}
+            <div className="role-modal-header">
+              <div className="role-modal-title-group">
+                <div className="role-modal-eyebrow">
+                  <Sparkles size={13} />
+                  <span>UNISPHERE ACADEMIC SYSTEM</span>
+                </div>
+                <h2 id="role-modal-title" className="role-modal-title">
+                  Choose Your Role
+                </h2>
+                <p className="role-modal-subtitle">
+                  Select your university affiliation to enter the UniSphere portal and access your personalized academic tools.
+                </p>
+                {isAuthenticated && (
+                  <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "10px",
+                    background: "#EFEAE4",
+                    border: "1px solid #D6D0C8",
+                    borderRadius: "10px",
+                    padding: "10px 14px",
+                    margin: "12px 0 4px",
+                    fontSize: "12.5px",
+                    color: "#3B302A"
+                  }}>
+                    <span>Active session: <strong>{user?.name}</strong> ({user?.role || "Student"})</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsRoleModalOpen(false);
+                        navigate("/dashboard");
+                      }}
+                      style={{
+                        background: "#3B302A",
+                        color: "#FAF9F6",
+                        border: "none",
+                        borderRadius: "9999px",
+                        padding: "5px 12px",
+                        fontSize: "11.5px",
+                        fontWeight: "700",
+                        cursor: "pointer"
+                      }}
+                    >
+                      Go to Dashboard →
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsRoleModalOpen(false)}
+                className="role-modal-close-btn"
+                aria-label="Close role selector"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Role Options Grid */}
+            <div className="role-options-grid">
+              {/* Option 1: Student */}
+              <div
+                className="role-choice-card student-choice-card"
+                onClick={() => {
+                  setIsRoleModalOpen(false);
+                  navigate("/login?role=student");
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setIsRoleModalOpen(false);
+                    navigate("/login?role=student");
+                  }
+                }}
+              >
+                <div className="role-choice-top">
+                  <div className="role-choice-icon-wrap icon-student">
+                    <GraduationCap size={28} />
+                  </div>
+                  <span className="role-choice-chip chip-student">Student</span>
+                </div>
+
+                <h3 className="role-choice-title">Student</h3>
+
+                <p className="role-choice-desc">
+                  Explore campus life, discover resources, and connect with your university community.
+                </p>
+
+                <div className="role-choice-features">
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>75% Cutoff Defense &amp; Safe Bunks</span>
+                  </div>
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>6-Page Notes Preview &amp; Cheat Sheets</span>
+                  </div>
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>Synchronous Study Lounge &amp; 36-Seat Library</span>
+                  </div>
+                </div>
+
+                <div className="role-choice-action-btn btn-action-student">
+                  <span>Continue as Student</span>
+                  <ArrowRight size={14} />
+                </div>
+              </div>
+
+              {/* Option 2: Teacher */}
+              <div
+                className="role-choice-card teacher-choice-card"
+                onClick={() => {
+                  setIsRoleModalOpen(false);
+                  navigate("/login?role=faculty");
+                }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setIsRoleModalOpen(false);
+                    navigate("/login?role=faculty");
+                  }
+                }}
+              >
+                <div className="role-choice-top">
+                  <div className="role-choice-icon-wrap icon-teacher">
+                    <BookOpen size={28} />
+                  </div>
+                  <span className="role-choice-chip chip-teacher">Teacher / Faculty</span>
+                </div>
+
+                <h3 className="role-choice-title">Teacher</h3>
+
+                <p className="role-choice-desc">
+                  Access your teaching resources and connect with your university community.
+                </p>
+
+                <div className="role-choice-features">
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>Cohort Attendance Insights &amp; Cutoff Alerts</span>
+                  </div>
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>Curriculum &amp; Verified Lecture Notes</span>
+                  </div>
+                  <div className="role-feature-bullet">
+                    <Check size={12} className="bullet-check" />
+                    <span>Department Grievance Escalations</span>
+                  </div>
+                </div>
+
+                <div className="role-choice-action-btn btn-action-teacher">
+                  <span>Continue as Teacher</span>
+                  <ArrowRight size={14} />
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer Note */}
+            <div className="role-modal-footer">
+              <span className="modal-footer-note">
+                Need an account? New students can register via the student portal.
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

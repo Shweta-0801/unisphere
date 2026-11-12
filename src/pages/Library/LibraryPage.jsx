@@ -26,18 +26,62 @@ import {
   formatDisplayDate
 } from "../../data/libraryData";
 import IssuedBookCard from "../../components/library/IssuedBookCard";
+import { useAuth } from "../../context/AuthContext";
+import { loadFromStorage, saveToStorage } from "../../utils/storage";
 import "./Library.css";
+
+const SEAT_STORAGE_KEY = "unisphere_library_seats";
+const SEAT_RESERVATION_DURATION_MS = 30 * 60 * 1000;
+
+function releaseExpiredReservations(savedSeats, now = Date.now()) {
+  if (!Array.isArray(savedSeats)) return initialLibrarySeats;
+
+  return savedSeats.map((seat) => {
+    const reservationExpired =
+      seat.reservedByUserId &&
+      seat.reservedAt &&
+      now - seat.reservedAt >= SEAT_RESERVATION_DURATION_MS;
+
+    if (!reservationExpired) return seat;
+
+    const { reservedByUserId, reservedAt, occupiedBy, ...availableSeat } = seat;
+    return { ...availableSeat, isOccupied: false };
+  });
+}
+
+function buildDefaultSeatsForUser(userId, userName) {
+  return initialLibrarySeats.map((seat) => {
+    if (!seat.isOccupied || !seat.occupiedBy?.includes("(You)")) return seat;
+    return {
+      ...seat,
+      occupiedBy: userName || "Current user",
+      reservedByUserId: userId,
+      reservedAt: Date.now()
+    };
+  });
+}
+
+function getInitialSeats(userId, userName) {
+  const savedSeats = loadFromStorage(SEAT_STORAGE_KEY, null);
+  const seatsToLoad = Array.isArray(savedSeats)
+    ? savedSeats
+    : buildDefaultSeatsForUser(userId, userName);
+  return releaseExpiredReservations(seatsToLoad);
+}
 
 export default function LibraryPage() {
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const currentUserId = String(user?.email || user?.rollNo || user?.name || "anonymous").toLowerCase();
   // Navigation: Sub-navbar Tab State ("overview" | "issued" | "catalog" | "seats")
   const [activeLibraryTab, setActiveLibraryTab] = useState("overview");
 
   // Seats state
-  const [seats, setSeats] = useState(initialLibrarySeats);
+  const [seats, setSeats] = useState(() => getInitialSeats(currentUserId, user?.name));
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [activeZoneFilter, setActiveZoneFilter] = useState("all");
   const [toastMessage, setToastMessage] = useState(null);
+  const [currentTime, setCurrentTime] = useState(Date.now());
 
   // Books state
   const [books, setBooks] = useState(libraryBooksCatalog);
@@ -54,6 +98,49 @@ export default function LibraryPage() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
   };
+
+  // Keep seat reservations across reloads and automatically free them after 30 minutes.
+  useEffect(() => {
+    saveToStorage(SEAT_STORAGE_KEY, seats);
+  }, [seats]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      const now = Date.now();
+      setCurrentTime(now);
+      setSeats((previousSeats) => {
+        let expiredCount = 0;
+        const nextSeats = releaseExpiredReservations(previousSeats, now);
+        expiredCount = previousSeats.filter((seat, index) => seat !== nextSeats[index]).length;
+        if (expiredCount > 0) {
+          setToastMessage(`Your ${expiredCount === 1 ? "seat reservation has" : "seat reservations have"} expired after 30 minutes.`);
+        }
+        return expiredCount > 0 ? nextSeats : previousSeats;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const syncSeatsFromStorage = (event) => {
+      if (event.key === SEAT_STORAGE_KEY && event.newValue) {
+        try {
+          setSeats(releaseExpiredReservations(JSON.parse(event.newValue)));
+        } catch {
+          // Ignore malformed updates from another browser tab.
+        }
+      }
+    };
+    window.addEventListener("storage", syncSeatsFromStorage);
+    return () => window.removeEventListener("storage", syncSeatsFromStorage);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedSeat) return;
+    const latestSeat = seats.find((seat) => seat.id === selectedSeat.id);
+    if (latestSeat && latestSeat !== selectedSeat) setSelectedSeat(latestSeat);
+  }, [seats, selectedSeat]);
 
   /**
    * useEffect: Checks and calculates return reminders whenever issuedBooks changes.
@@ -120,32 +207,54 @@ export default function LibraryPage() {
   const windowTotal = seats.filter((s) => s.zone.includes("Window")).length;
   const windowAvail = seats.filter((s) => s.zone.includes("Window") && !s.isOccupied).length;
 
-  // Toggle seat occupancy (Local frontend demonstration)
+  const myActiveSeat = seats.find(
+    (seat) => seat.isOccupied && seat.reservedByUserId === currentUserId
+  );
+  const remainingSeatMs = myActiveSeat
+    ? Math.max(0, SEAT_RESERVATION_DURATION_MS - (currentTime - myActiveSeat.reservedAt))
+    : 0;
+  const remainingSeatTime = `${String(Math.floor(remainingSeatMs / 60000)).padStart(2, "0")}:${String(Math.floor((remainingSeatMs % 60000) / 1000)).padStart(2, "0")}`;
+
+  // A user can release only their own reservation and may hold one seat at a time.
   const handleToggleSeat = (seatId) => {
-    setSeats((prevSeats) =>
-      prevSeats.map((seat) => {
-        if (seat.id === seatId) {
-          const newState = !seat.isOccupied;
-          const updated = {
-            ...seat,
-            isOccupied: newState,
-            occupiedBy: newState ? "You (Reserved via UniSphere)" : undefined
-          };
-          setSelectedSeat(updated);
-          showToast(
-            newState
-              ? `Seat ${seat.id} reserved for your study session.`
-              : `Seat ${seat.id} released and marked available.`
-          );
-          return updated;
-        }
-        return seat;
-      })
+    const seat = seats.find((item) => item.id === seatId);
+    if (!seat) return;
+
+    if (seat.isOccupied && seat.reservedByUserId !== currentUserId) {
+      showToast(`Seat ${seat.id} is occupied by someone else. You can only release your own seat.`);
+      return;
+    }
+
+    if (!seat.isOccupied && myActiveSeat) {
+      showToast(`You already have seat ${myActiveSeat.id}. Release it before reserving another seat.`);
+      return;
+    }
+
+    const now = Date.now();
+    const updatedSeat = seat.isOccupied
+      ? (({ reservedByUserId, reservedAt, occupiedBy, ...availableSeat }) => ({
+          ...availableSeat,
+          isOccupied: false
+        }))(seat)
+      : {
+          ...seat,
+          isOccupied: true,
+          occupiedBy: user?.name || "Current user",
+          reservedByUserId: currentUserId,
+          reservedAt: now
+        };
+
+    setSeats((previousSeats) => previousSeats.map((item) => item.id === seatId ? updatedSeat : item));
+    setSelectedSeat(updatedSeat);
+    showToast(
+      seat.isOccupied
+        ? `Seat ${seat.id} released.`
+        : `Seat ${seat.id} reserved. It will be released automatically after 30 minutes.`
     );
   };
 
   const handleResetSeats = () => {
-    setSeats(initialLibrarySeats);
+    setSeats(buildDefaultSeatsForUser(currentUserId, user?.name));
     setSelectedSeat(null);
     showToast("Library seat occupancy restored to default campus sample.");
   };
@@ -374,7 +483,7 @@ export default function LibraryPage() {
                   <span className="stat-card-label">Circulation Hours</span>
                   <span className="stat-card-badge-open">Open Today</span>
                 </div>
-                <div className="stat-card-value-small">08:00 AM – 11:00 PM</div>
+                <div className="stat-card-value-small">08:00 AM - 11:00 PM</div>
                 <div className="stat-card-footer">
                   <span className="stat-card-hint">
                     Desk Assistance Ground Level • All 36 Desks Powered
@@ -671,6 +780,44 @@ export default function LibraryPage() {
                 </div>
               </div>
 
+              <div className="my-active-seat-card">
+                <div className="my-active-seat-copy">
+                  <span className="my-active-seat-kicker">Seat reservation</span>
+                  <h3>My Active Seat</h3>
+                  {myActiveSeat ? (
+                    <>
+                      <p>
+                        <strong>{myActiveSeat.id}</strong> · {myActiveSeat.zone}, Row {myActiveSeat.row}
+                      </p>
+                      <span className="my-active-seat-expiry">
+                        Automatically releases in <strong>{remainingSeatTime}</strong>
+                      </span>
+                    </>
+                  ) : (
+                    <p>You do not have an active seat reservation.</p>
+                  )}
+                </div>
+                {myActiveSeat ? (
+                  <button
+                    type="button"
+                    className="my-active-seat-release"
+                    onClick={() => handleToggleSeat(myActiveSeat.id)}
+                  >
+                    <RotateCcw size={14} />
+                    <span>Release My Seat</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="my-active-seat-release"
+                    onClick={() => setActiveLibraryTab("seats")}
+                  >
+                    <span>Find a Seat</span>
+                    <ArrowRight size={14} />
+                  </button>
+                )}
+              </div>
+
               {/* Conditional Rendering: Empty State vs Cards Grid */}
               {issuedBooks.length === 0 ? (
                 <div className="issued-empty-box">
@@ -951,86 +1098,103 @@ export default function LibraryPage() {
                         <button
                           key={seat.id}
                           onClick={() => setSelectedSeat(seat)}
-                          className={`seat-unit-btn ${
-                            seat.isOccupied ? "seat-occupied" : "seat-available"
-                          } ${isSelected ? "seat-selected" : ""}`}
+                          className={`seat-box ${
+                            seat.isOccupied ? "occupied" : "available"
+                          } ${isSelected ? "selected" : ""}`}
+                          aria-pressed={isSelected}
+                          aria-label={`Desk ${seat.id}, ${seat.isOccupied ? "occupied" : "free"}`}
                           title={`Desk ${seat.id} (${seat.zone}) • ${
                             seat.isOccupied ? "Occupied" : "Available"
                           }`}
                         >
-                          <span className="seat-id-label">{seat.id}</span>
-                          {seat.hasPowerOutlet && (
-                            <Zap size={10} className="seat-power-dot" />
-                          )}
+                          <span className="seat-header-row">
+                            <span className="seat-id-tag">{seat.id}</span>
+                            {seat.hasPowerOutlet && (
+                              <Zap size={10} className="seat-power-indicator" aria-label="Power outlet" />
+                            )}
+                          </span>
+                          <span className="seat-status-text">
+                            {seat.isOccupied ? "Occupied" : "Free"}
+                          </span>
                         </button>
                       );
                     })}
                   </div>
+                  <div className="floor-footer-note">
+                    <Info size={12} className="info-icon" />
+                    <span>Seat states reflect real-time local state. Reservation applies to your active session.</span>
+                  </div>
                 </div>
 
                 {/* Selected Seat Inspector Panel */}
-                <div className="seat-inspector-panel">
+                <div className="seat-detail-panel">
                   {selectedSeat ? (
-                    <div className="inspector-card">
-                      <div className="inspector-header">
-                        <div>
-                          <span className="inspector-zone-pill">{selectedSeat.zone}</span>
-                          <h3 className="inspector-title">Desk {selectedSeat.id}</h3>
-                        </div>
+                    <div className="selected-seat-content">
+                      <div className="panel-badge-row">
+                        <span className="panel-seat-badge">{selectedSeat.id}</span>
                         <span
-                          className={`inspector-status-pill ${
-                            selectedSeat.isOccupied ? "pill-occupied" : "pill-available"
+                          className={`panel-status-pill ${
+                            selectedSeat.isOccupied ? "status-pill-occupied" : "status-pill-available"
                           }`}
                         >
                           {selectedSeat.isOccupied ? "Occupied" : "Available"}
                         </span>
                       </div>
 
-                      <div className="inspector-details-list">
-                        <div className="inspector-detail-row">
-                          <span className="detail-key">Location:</span>
-                          <span className="detail-val">Row {selectedSeat.row}, Station #{selectedSeat.number}</span>
-                        </div>
-                        <div className="inspector-detail-row">
-                          <span className="detail-key">Power Outlet:</span>
-                          <span className="detail-val">
-                            {selectedSeat.hasPowerOutlet ? "230V Standard Socket (Active)" : "No Power Socket"}
-                          </span>
-                        </div>
-                        <div className="inspector-detail-row">
-                          <span className="detail-key">Current Occupant:</span>
-                          <span className="detail-val">
-                            {selectedSeat.occupiedBy || "None (Vacant)"}
-                          </span>
+                      <h3 className="panel-seat-title">{selectedSeat.zone}</h3>
+                      <p className="panel-seat-desc">
+                        Row {selectedSeat.row}, Station #{selectedSeat.number}
+                      </p>
+
+                      <div className="panel-amenities-box">
+                        <span className="amenities-title">Desk amenities</span>
+                        <div className="amenity-item">
+                          <Zap size={14} className="amenity-icon" />
+                          <span>{selectedSeat.hasPowerOutlet ? "230V power outlet available" : "No power outlet"}</span>
                         </div>
                       </div>
 
-                      <div className="inspector-actions">
-                        <button
-                          onClick={() => handleToggleSeat(selectedSeat.id)}
-                          className={`btn-seat-action ${
-                            selectedSeat.isOccupied ? "btn-release-seat" : "btn-reserve-seat"
-                          }`}
-                        >
-                          {selectedSeat.isOccupied ? (
+                      <div className="panel-occupant-note">
+                        <span className="occupant-label">Current occupant</span>
+                        <p className="occupant-val">{selectedSeat.occupiedBy || "None (Vacant)"}</p>
+                      </div>
+
+                      <div className="panel-action-box">
+                        {selectedSeat.isOccupied ? (
+                          selectedSeat.reservedByUserId === currentUserId ? (
                             <>
-                              <RotateCcw size={14} />
-                              <span>Release Seat</span>
+                              <p className="seat-reservation-note">Your seat will be released automatically in {remainingSeatTime}.</p>
+                              <button
+                                onClick={() => handleToggleSeat(selectedSeat.id)}
+                                className="panel-toggle-btn btn-release"
+                              >
+                                <RotateCcw size={14} />
+                                <span>Release My Seat</span>
+                              </button>
                             </>
                           ) : (
-                            <>
-                              <CheckCircle2 size={14} />
-                              <span>Reserve This Seat</span>
-                            </>
-                          )}
-                        </button>
+                            <p className="seat-reservation-note">This seat is occupied by another student. Only the student who reserved it can release it.</p>
+                          )
+                        ) : myActiveSeat ? (
+                          <p className="seat-reservation-note">You already reserved {myActiveSeat.id}. Release it before choosing another seat.</p>
+                        ) : (
+                          <button
+                            onClick={() => handleToggleSeat(selectedSeat.id)}
+                            className="panel-toggle-btn btn-reserve"
+                          >
+                            <CheckCircle2 size={14} />
+                            <span>Reserve This Seat</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   ) : (
-                    <div className="inspector-placeholder">
-                      <Info size={28} className="placeholder-icon" />
-                      <h4>Select a Study Desk</h4>
-                      <p>Click any desk on the floor map to inspect power outlets and reserve your study spot.</p>
+                    <div className="seat-placeholder-empty">
+                      <div className="placeholder-icon-wrap">
+                        <BookmarkCheck size={24} />
+                      </div>
+                      <h4>No Seat Selected</h4>
+                      <p>Click any desk marker on the floor layout to inspect details, power outlets, or toggle reservation.</p>
                     </div>
                   )}
                 </div>
