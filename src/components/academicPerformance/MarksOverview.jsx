@@ -20,7 +20,7 @@ export default function MarksOverview({ marksList }) {
           </thead>
           <tbody>
             {marksList.map((item) => {
-              const needsSupport = item.marks < 40;
+              const needsSupport = item.marks < 45;
               const isLowAtt = item.attendance < 75;
 
               return (

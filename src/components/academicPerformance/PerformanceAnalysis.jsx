@@ -40,7 +40,7 @@ export default function PerformanceAnalysis({ students, onSelectClass, onTabChan
     }
   });
 
-  // Students Needing Support (<50 total marks)
+  // Students Needing Support (<45 total marks)
   const supportStudents = students
     .map((s) => {
       const total = calculateTotalMarks(s.marks);
@@ -48,7 +48,7 @@ export default function PerformanceAnalysis({ students, onSelectClass, onTabChan
       const attPct = calculateAttendancePercentage(s.attendance.present, s.attendance.total);
       return { ...s, total, grade, attPct };
     })
-    .filter((s) => s.total < 50);
+    .filter((s) => s.total < 45);
 
   // Correlation: Group by attendance brackets
   const highAttStudents = students.filter(
@@ -202,7 +202,7 @@ export default function PerformanceAnalysis({ students, onSelectClass, onTabChan
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <AlertCircle size={18} className="text-danger" />
-              <h3 className="tchr-table-title">Students Needing Academic Improvement (&lt;50 Marks)</h3>
+              <h3 className="tchr-table-title">Students Needing Academic Improvement (&lt;45 Marks)</h3>
             </div>
             <p className="tchr-table-subtitle">Targeted revision recommendations and doubt-clearing plans for low scorers.</p>
           </div>

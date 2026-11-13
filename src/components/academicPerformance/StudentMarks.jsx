@@ -53,7 +53,7 @@ export default function StudentMarks({
     if (filterGrade === "A") return grade === "A";
     if (filterGrade === "B") return grade === "B";
     if (filterGrade === "C") return grade === "C";
-    if (filterGrade === "remedial") return total < 50;
+    if (filterGrade === "remedial") return total < 45;
 
     return true;
   });
@@ -177,7 +177,7 @@ export default function StudentMarks({
               <option value="A">Grade A (80-89)</option>
               <option value="B">Grade B (70-79)</option>
               <option value="C">Grade C (60-69)</option>
-              <option value="remedial">Needs Remedial (&lt;50)</option>
+              <option value="remedial">Needs Remedial (&lt;45)</option>
             </select>
           </div>
 
@@ -228,7 +228,7 @@ export default function StudentMarks({
               {sortedStudents.map((student) => {
                 const total = calculateTotalMarks(student.marks);
                 const grade = calculateGrade(total);
-                const isRemedial = total < 50;
+                const isRemedial = total < 45;
 
                 return (
                   <tr key={student.id} className={isRemedial ? "row-warning" : ""}>

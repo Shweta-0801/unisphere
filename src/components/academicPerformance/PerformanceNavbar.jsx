@@ -1,40 +1,43 @@
 import React from "react";
 import { LayoutDashboard, Users, Award, TrendingUp, BarChart3, AlertCircle } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 
 /**
  * PerformanceNavbar - Clean sub-navigation for Academic Performance Module
  * Uses identical design language and structure as AttendanceNavbar
  */
 export default function PerformanceNavbar({ activeTab, onTabChange, stats }) {
+  const { t } = useLanguage();
+
   const navTabs = [
     {
       id: "overview",
-      label: "Overview",
+      label: t("academicPerformance.overviewTab", "Overview"),
       icon: LayoutDashboard,
       badge: null
     },
     {
       id: "classes",
-      label: "Classes",
+      label: t("academicPerformance.classesTab", "Classes"),
       icon: Users,
       badge: "4 Sections"
     },
     {
       id: "marks",
-      label: "Marks",
+      label: t("academicPerformance.marksTab", "Marks"),
       icon: Award,
       badge: `${stats?.totalStudents || 80} Students`
     },
     {
       id: "performance",
-      label: "Performance",
+      label: t("academicPerformance.analysisTab", "Performance"),
       icon: TrendingUp,
       badge: stats?.needingImprovement ? `${stats.needingImprovement} Remedial` : null,
       badgeAlert: true
     },
     {
       id: "statistics",
-      label: "Statistics",
+      label: t("academicPerformance.statsTab", "Statistics"),
       icon: BarChart3,
       badge: "Rankings"
     }

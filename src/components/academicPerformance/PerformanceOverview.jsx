@@ -162,7 +162,7 @@ export default function PerformanceOverview({
               <span className="tchr-stat-value stat-danger">{stats.needingImprovement}</span>
               <span className="tchr-badge-alert">Remedial Support</span>
             </div>
-            <p className="tchr-stat-desc">Scoring &lt;50% marks in Data Structures</p>
+            <p className="tchr-stat-desc">Scoring &lt;45 marks in Data Structures</p>
           </div>
         </div>
       </section>
