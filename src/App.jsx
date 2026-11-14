@@ -4,7 +4,6 @@ import { LanguageProvider } from "./context/LanguageContext";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import ScrollToTop from "./components/common/ScrollToTop";
-import AppLayout from "./components/layout/AppLayout";
 
 import HomePage from "./pages/HomePage";
 import RoleSelectionPage from "./pages/RoleSelection/RoleSelectionPage";
@@ -22,49 +21,6 @@ import AcademicPerformancePage from "./pages/AcademicPerformancePage";
 import ComplaintsPage from "./pages/ComplaintsPage";
 import AttendanceManagementPage from "./pages/AttendanceManagementPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
-
-// Clean placeholder for other team members' modules in progress
-const TeammateModulePlaceholder = ({ name, path }) => (
-  <AppLayout activePath={path}>
-    <div style={{ padding: "5rem 2rem", textAlign: "center", maxWidth: "600px", margin: "0 auto" }}>
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "56px",
-          height: "56px",
-          borderRadius: "50%",
-          background: "var(--cream-light, #F5F2EB)",
-          border: "1px solid var(--light-border, #E6E1D8)",
-          marginBottom: "1.25rem",
-          fontSize: "24px"
-        }}
-      >
-        ⏳
-      </div>
-      <h2
-        style={{
-          fontFamily: "var(--font-serif, serif)",
-          fontSize: "1.75rem",
-          marginBottom: "0.75rem",
-          color: "var(--unisphere-text-dark, #211D1A)"
-        }}
-      >
-        {name}
-      </h2>
-      <p
-        style={{
-          color: "var(--unisphere-text-muted, #8D857D)",
-          lineHeight: 1.6,
-          fontSize: "0.95rem"
-        }}
-      >
-        This module is assigned to a teammate and will be fully integrated when their respective branch is merged into the project repository.
-      </p>
-    </div>
-  </AppLayout>
-);
 
 function App() {
   return (
