@@ -16,6 +16,9 @@ import MyClassesPage from "./pages/Teacher/MyClassesPage";
 import AssignmentsPage from "./pages/Teacher/AssignmentsPage";
 import TeacherDashboardPage from "./pages/Teacher/TeacherDashboardPage";
 import LostFoundPage from "./pages/LostFoundPage";
+import NotesPage from "./pages/NotesPage";
+import GroupStudyPage from "./pages/GroupStudy/GroupStudyPage";
+import AcademicPerformancePage from "./pages/AcademicPerformancePage";
 import AttendanceManagementPage from "./pages/AttendanceManagementPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 
@@ -160,30 +163,47 @@ function App() {
               }
             />
 
-            {/* ================= TEAMMATE ROUTE PLACEHOLDERS ================= */}
-            {/* Aditi: Notes Repository & Group Study Hub */}
+            {/* ================= ADITI'S MODULES ================= */}
+            {/* Notes Repository */}
             <Route
               path="/notes"
-              element={<TeammateModulePlaceholder name="Notes Repository" path="/notes" />}
+              element={
+                <ProtectedRoute>
+                  <NotesPage />
+                </ProtectedRoute>
+              }
             />
+
+            {/* Group Study Hub */}
             <Route
               path="/group-study"
-              element={<TeammateModulePlaceholder name="Group Study Hub" path="/group-study" />}
+              element={
+                <ProtectedRoute>
+                  <GroupStudyPage />
+                </ProtectedRoute>
+              }
             />
 
             {/* Academic Performance */}
             <Route
               path="/academic-performance"
-              element={<TeammateModulePlaceholder name="Academic Performance" path="/academic-performance" />}
+              element={
+                <ProtectedRoute>
+                  <AcademicPerformancePage />
+                </ProtectedRoute>
+              }
             />
             <Route path="/teacher/academic-performance" element={<Navigate to="/academic-performance" replace />} />
             <Route path="/teacher/performance" element={<Navigate to="/academic-performance" replace />} />
 
-            {/* Gungun: Complaints Portal & Attendance Management */}
+            {/* ================= GUNGUN'S MODULES ================= */}
+            {/* Complaints Portal Placeholder (Wired in Step 4) */}
             <Route
               path="/complaints"
               element={<TeammateModulePlaceholder name="Complaints Portal" path="/complaints" />}
             />
+
+            {/* Attendance Management */}
             <Route
               path="/attendance-management"
               element={

@@ -849,7 +849,7 @@ export function getTeacherDashboardStats(students) {
   const overallHighest = Math.max(...allMarks);
   const overallLowest = Math.min(...allMarks);
   const totalPassed = allMarks.filter((m) => m >= 40).length;
-  const needingImprovement = allMarks.filter((m) => m < 50).length;
+  const needingImprovement = allMarks.filter((m) => m < 45).length;
 
   return {
     teacher: teacherProfile,
