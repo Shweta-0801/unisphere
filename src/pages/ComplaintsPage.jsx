@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import AppLayout from '../components/layout/AppLayout';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -133,11 +133,41 @@ export function ComplaintsPage() {
     };
   }, [complaints]);
 
-  // Genuinely unique ticket ID generator that prevents collisions
+  // Initialize persistent counter from existing complaints if not yet set in localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('unisphere_complaint_counter');
+      if (!stored && complaints.length > 0) {
+        const max = complaints.reduce((m, c) => {
+          const match = (c.id || '').match(/CMP-\d+-(\d+)/);
+          return match ? Math.max(m, parseInt(match[1], 10)) : m;
+        }, 0);
+        if (max > 0) {
+          localStorage.setItem('unisphere_complaint_counter', String(max));
+        }
+      }
+    } catch {
+      // localStorage fallback
+    }
+  }, [complaints]);
+
+  // Genuinely unique ticket ID generator that prevents collisions and re-use even after deletions & page refreshes
   const generateUniqueTicketId = (list) => {
     const year = new Date().getFullYear();
     const existingIds = new Set(list.map((c) => c.id));
-    const maxNum = list.reduce((max, c) => {
+
+    // Read persistent counter from localStorage so deleted highest IDs are never reused
+    let storedCounter = 0;
+    try {
+      const savedCounter = localStorage.getItem('unisphere_complaint_counter');
+      if (savedCounter) {
+        storedCounter = parseInt(savedCounter, 10) || 0;
+      }
+    } catch {
+      // localStorage fallback
+    }
+
+    const maxNumFromList = list.reduce((max, c) => {
       const match = (c.id || '').match(/CMP-\d+-(\d+)/);
       if (match) {
         const num = parseInt(match[1], 10);
@@ -146,12 +176,20 @@ export function ComplaintsPage() {
       return max;
     }, 0);
 
-    let nextNum = maxNum + 1;
+    const highestKnown = Math.max(storedCounter, maxNumFromList);
+    let nextNum = highestKnown + 1;
     let candidate = `CMP-${year}-${String(nextNum).padStart(3, '0')}`;
     while (existingIds.has(candidate)) {
       nextNum += 1;
       candidate = `CMP-${year}-${String(nextNum).padStart(3, '0')}`;
     }
+
+    try {
+      localStorage.setItem('unisphere_complaint_counter', String(nextNum));
+    } catch {
+      // localStorage fallback
+    }
+
     return candidate;
   };
 
