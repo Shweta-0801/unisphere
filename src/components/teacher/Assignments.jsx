@@ -12,7 +12,13 @@ import {
   Sparkles,
   X,
   Check,
-  Paperclip
+  Paperclip,
+  CheckCircle2,
+  AlertCircle,
+  Eye,
+  Send,
+  User,
+  GraduationCap
 } from "lucide-react";
 import {
   initialTeacherAssignments,
@@ -21,15 +27,28 @@ import {
   sampleStudentsByClass
 } from "../../data/teacherData";
 import { loadFromStorage, saveToStorage } from "../../utils/storage";
-import { useLanguage } from "../../context/LanguageContext";
+import { useAuth } from "../../context/AuthContext";
 import "./Assignments.css";
 
-export default function Assignments() {
-  const { t } = useLanguage();
+export default function Assignments({ initialMode = "student", currentStudentUser }) {
   const ASG_KEY = "unisphere_faculty_assignments";
   const MAT_KEY = "unisphere_faculty_study_materials";
 
-  // 1. State: Assignments & Materials
+  const { user } = useAuth();
+  // Dynamic current student profile using AuthContext with fallback
+  const currentStudent = {
+    name: currentStudentUser?.name || user?.name || "Student",
+    rollNo: currentStudentUser?.rollNo || user?.rollNo || "2024-CSE-042",
+    classId: user?.classId || "cls-1",
+    classCode: user?.classCode || "CS-301",
+    className: user?.className || "Data Structures & Algorithms",
+    section: user?.section || "Section A"
+  };
+
+  // 1. Portal Mode: 'student' (Student Submission Portal) or 'faculty' (Teacher Coursework Management)
+  const [portalMode, setPortalMode] = useState(initialMode);
+
+  // 2. State: Assignments & Materials from localStorage
   const [assignments, setAssignments] = useState(() =>
     loadFromStorage(ASG_KEY, initialTeacherAssignments)
   );
@@ -37,18 +56,19 @@ export default function Assignments() {
     loadFromStorage(MAT_KEY, initialStudyMaterials)
   );
 
-  // 2. Active Tab: 'assignments' | 'materials'
+  // 3. Active Tab: 'assignments' | 'materials'
   const [activeTab, setActiveTab] = useState("assignments");
 
-  // 3. Search query
+  // 4. Search & Filters
   const [searchQuery, setSearchQuery] = useState("");
+  const [studentStatusFilter, setStudentStatusFilter] = useState("all");
 
-  // 4. Modals
+  // 5. Teacher Modals
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [activeGradingAsg, setActiveGradingAsg] = useState(null);
 
-  // 5. Create Assignment Form State
+  // 6. Teacher Form State
   const [newTitle, setNewTitle] = useState("");
   const [newClassId, setNewClassId] = useState("cls-1");
   const [newMarks, setNewMarks] = useState(50);
@@ -59,21 +79,26 @@ export default function Assignments() {
   });
   const [newDescription, setNewDescription] = useState("");
 
-  // 6. Upload Study Material Form State
   const [matTitle, setMatTitle] = useState("");
   const [matClassId, setMatClassId] = useState("cls-1");
   const [matUnit, setMatUnit] = useState("Unit 3");
   const [matType, setMatType] = useState("Lecture Slides");
   const [matDescription, setMatDescription] = useState("");
 
-  // 7. Grading inputs map: { [submissionId]: { marks: 45, feedback: "Great work" } }
   const [gradingInputs, setGradingInputs] = useState({});
+
+  // 7. Student Submission Modal State
+  const [activeSubmitAsg, setActiveSubmitAsg] = useState(null);
+  const [submissionFileName, setSubmissionFileName] = useState("");
+  const [submissionUrl, setSubmissionUrl] = useState("");
+  const [submissionNotes, setSubmissionNotes] = useState("");
+  const [submissionError, setSubmissionError] = useState("");
 
   // 8. Toast Feedback
   const [toastMessage, setToastMessage] = useState(null);
   const showToast = (msg) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   // Sync to localStorage
@@ -85,18 +110,19 @@ export default function Assignments() {
     saveToStorage(MAT_KEY, studyMaterials);
   }, [studyMaterials]);
 
-  // Filtered assignments
+  // Filtered assignments for faculty
   const filteredAssignments = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return assignments;
     return assignments.filter(
       (a) =>
         a.title.toLowerCase().includes(q) ||
-        a.classCode.toLowerCase().includes(q)
+        a.classCode.toLowerCase().includes(q) ||
+        (a.description && a.description.toLowerCase().includes(q))
     );
   }, [assignments, searchQuery]);
 
-  // Filtered materials
+  // Filtered study materials
   const filteredMaterials = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     if (!q) return studyMaterials;
@@ -108,7 +134,139 @@ export default function Assignments() {
     );
   }, [studyMaterials, searchQuery]);
 
-  // Create Assignment Action
+  // Student specific submissions helper
+  const getStudentSubmission = (asg) => {
+    if (!asg.submissions || !Array.isArray(asg.submissions)) return null;
+    return asg.submissions.find(
+      (s) => s.rollNo === currentStudent.rollNo
+    );
+  };
+
+  // Filtered assignments for student
+  const studentAssignments = useMemo(() => {
+    let list = assignments;
+    const q = searchQuery.toLowerCase().trim();
+    if (q) {
+      list = list.filter(
+        (a) =>
+          a.title.toLowerCase().includes(q) ||
+          a.classCode.toLowerCase().includes(q) ||
+          (a.description && a.description.toLowerCase().includes(q))
+      );
+    }
+
+    if (studentStatusFilter === "pending") {
+      return list.filter((a) => {
+        const sub = getStudentSubmission(a);
+        return !sub || sub.status === "Not Submitted";
+      });
+    }
+    if (studentStatusFilter === "submitted") {
+      return list.filter((a) => {
+        const sub = getStudentSubmission(a);
+        return sub && sub.status === "Pending Review";
+      });
+    }
+    if (studentStatusFilter === "graded") {
+      return list.filter((a) => {
+        const sub = getStudentSubmission(a);
+        return sub && sub.status === "Graded";
+      });
+    }
+    return list;
+  }, [assignments, searchQuery, studentStatusFilter]);
+
+  // ==========================================================
+  // STUDENT SUBMISSION ACTIONS
+  // ==========================================================
+
+  const handleOpenStudentSubmit = (asg) => {
+    setActiveSubmitAsg(asg);
+    const existingSub = getStudentSubmission(asg);
+    if (existingSub) {
+      setSubmissionFileName(existingSub.fileName || `${currentStudent.rollNo}_Solution.pdf`);
+      setSubmissionUrl(existingSub.solutionUrl || "");
+      setSubmissionNotes(existingSub.studentNotes || "");
+    } else {
+      setSubmissionFileName(`${currentStudent.rollNo}_Solution.pdf`);
+      setSubmissionUrl("");
+      setSubmissionNotes("");
+    }
+    setSubmissionError("");
+  };
+
+  const handleStudentFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSubmissionFileName(file.name);
+    }
+  };
+
+  const handleConfirmStudentSubmission = (e) => {
+    e.preventDefault();
+    if (!submissionFileName.trim() && !submissionUrl.trim() && !submissionNotes.trim()) {
+      setSubmissionError("Please attach a solution file or provide a repository/solution link.");
+      return;
+    }
+
+    const asgId = activeSubmitAsg.id;
+    const nowStr = new Date().toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    setAssignments((prev) =>
+      prev.map((asg) => {
+        if (asg.id !== asgId) return asg;
+
+        const subs = asg.submissions ? [...asg.submissions] : [];
+        const existingIdx = subs.findIndex(
+          (s) => s.rollNo === currentStudent.rollNo
+        );
+
+        const newSubRecord = {
+          id: existingIdx >= 0 ? subs[existingIdx].id : "sub-" + Date.now().toString(36),
+          studentName: currentStudent.name,
+          rollNo: currentStudent.rollNo,
+          submittedAt: nowStr,
+          status: "Pending Review",
+          fileName: submissionFileName.trim() || `${currentStudent.rollNo}_Solution.pdf`,
+          solutionUrl: submissionUrl.trim(),
+          studentNotes: submissionNotes.trim(),
+          marks: existingIdx >= 0 ? subs[existingIdx].marks : null,
+          feedback: existingIdx >= 0 ? subs[existingIdx].feedback : ""
+        };
+
+        if (existingIdx >= 0) {
+          subs[existingIdx] = newSubRecord;
+        } else {
+          subs.unshift(newSubRecord);
+        }
+
+        const pendingCount = subs.filter((s) => s.status === "Pending Review").length;
+        const submittedCount = subs.filter((s) => s.status !== "Not Submitted").length;
+        const gradedCount = subs.filter((s) => s.status === "Graded").length;
+
+        return {
+          ...asg,
+          submissions: subs,
+          totalSubmissions: submittedCount,
+          pendingGrading: pendingCount,
+          gradedCount: gradedCount
+        };
+      })
+    );
+
+    setActiveSubmitAsg(null);
+    showToast(`âœ“ Assignment "${activeSubmitAsg.title}" submitted successfully! Faculty will evaluate your solution.`);
+  };
+
+  // ==========================================================
+  // FACULTY ACTIONS (CREATE, GRADE, DELETE)
+  // ==========================================================
+
   const handleCreateAssignment = (e) => {
     e.preventDefault();
     if (!newTitle.trim() || !newDescription.trim()) {
@@ -119,8 +277,7 @@ export default function Assignments() {
     const targetClass = assignedClassesData.find((c) => c.id === newClassId) || assignedClassesData[0];
     const targetStudents = sampleStudentsByClass[newClassId] || sampleStudentsByClass["cls-1"] || [];
 
-    // Pre-populate realistic submissions for students in that class
-    const mockSubmissions = targetStudents.slice(0, 6).map((std, idx) => ({
+    const mockSubmissions = targetStudents.slice(0, 5).map((std, idx) => ({
       id: "sub-" + Date.now().toString(36) + idx,
       studentName: std.name,
       rollNo: std.rollNo,
@@ -156,7 +313,6 @@ export default function Assignments() {
     showToast(`Assignment "${newAsg.title}" created successfully!`);
   };
 
-  // Open Grading Modal
   const handleOpenGradingModal = (asg) => {
     setActiveGradingAsg(asg);
     const initialGrades = {};
@@ -169,7 +325,6 @@ export default function Assignments() {
     setGradingInputs(initialGrades);
   };
 
-  // Save Grade for Student
   const handleSaveGrade = (submissionId) => {
     if (!activeGradingAsg) return;
     const gradeData = gradingInputs[submissionId] || {};
@@ -190,7 +345,7 @@ export default function Assignments() {
         return {
           ...sub,
           marks: numericScore,
-          feedback: gradeData.feedback || "Evaluated by faculty.",
+          feedback: gradeData.feedback || "Evaluated by faculty. Good effort.",
           status: "Graded"
         };
       }
@@ -209,10 +364,9 @@ export default function Assignments() {
 
     setActiveGradingAsg(updatedAsg);
     setAssignments((prev) => prev.map((a) => (a.id === updatedAsg.id ? updatedAsg : a)));
-    showToast("Grade and feedback saved successfully!");
+    showToast("âœ“ Grade and feedback saved successfully!");
   };
 
-  // Delete Assignment
   const handleDeleteAssignment = (asgId, title) => {
     if (window.confirm(`Delete assignment "${title}"?`)) {
       setAssignments((prev) => prev.filter((a) => a.id !== asgId));
@@ -220,7 +374,6 @@ export default function Assignments() {
     }
   };
 
-  // Upload Study Material Action
   const handleUploadMaterial = (e) => {
     e.preventDefault();
     if (!matTitle.trim()) {
@@ -249,7 +402,6 @@ export default function Assignments() {
     showToast(`Study resource "${newMat.title}" uploaded!`);
   };
 
-  // Delete Material
   const handleDeleteMaterial = (matId) => {
     setStudyMaterials((prev) => prev.filter((m) => m.id !== matId));
     showToast("Study material removed.");
@@ -257,7 +409,7 @@ export default function Assignments() {
 
   return (
     <div className="asg-root">
-      {/* Toast */}
+      {/* Toast Notification */}
       {toastMessage && (
         <div className="asg-toast">
           <Sparkles size={16} />
@@ -265,38 +417,73 @@ export default function Assignments() {
         </div>
       )}
 
+      {/* Mode Switcher Banner (Student vs Faculty Perspective) */}
+      <div className="asg-mode-switcher-bar">
+        <div className="mode-switcher-info">
+          <span className="mode-switcher-label">PORTAL VIEW MODE:</span>
+          <span className="mode-current-badge">
+            {portalMode === "student" ? "ðŸŽ“ Student Submission View" : "ðŸ‘¨â€ â   Faculty Management View"}
+          </span>
+        </div>
+
+        <div className="mode-toggle-buttons">
+          <button
+            type="button"
+            className={`mode-toggle-btn ${portalMode === "student" ? "active" : ""}`}
+            onClick={() => setPortalMode("student")}
+          >
+            <GraduationCap size={15} />
+            <span>Student Portal (Submit &amp; Track)</span>
+          </button>
+          <button
+            type="button"
+            className={`mode-toggle-btn ${portalMode === "faculty" ? "active" : ""}`}
+            onClick={() => setPortalMode("faculty")}
+          >
+            <User size={15} />
+            <span>Faculty View (Create &amp; Grade)</span>
+          </button>
+        </div>
+      </div>
+
       {/* 1. Header Banner */}
       <div className="asg-header-card">
         <div className="asg-header-left">
           <div className="asg-badge">
             <FileText size={13} />
-            <span>Coursework Management</span>
+            <span>{portalMode === "student" ? "Student Coursework Portal" : "Faculty Coursework Management"}</span>
           </div>
-          <h1 className="asg-title">{t("assignments.title", "Assignments & Study Material")}</h1>
+          <h1 className="asg-title">
+            {portalMode === "student" ? "Assignments & Submissions" : "Coursework & Study Material"}
+          </h1>
           <p className="asg-subtitle">
-            {t("assignments.subtitle", "Create coursework assignments with deadlines and rubric marks, evaluate student submissions, and upload verified study material.")}
+            {portalMode === "student"
+              ? `Enrolled as ${currentStudent.name} (${currentStudent.rollNo}) in ${currentStudent.classCode} ${currentStudent.section}. Inspect deadlines, upload solutions, and review faculty rubric feedback.`
+              : "Create coursework tasks with deadlines and rubric marks, evaluate student submissions in real-time, and publish verified study material."}
           </p>
         </div>
 
         <div className="asg-header-actions">
-          {activeTab === "assignments" ? (
-            <button
-              type="button"
-              onClick={() => setIsCreateModalOpen(true)}
-              className="asg-btn asg-btn-primary"
-            >
-              <Plus size={16} />
-              <span>{t("assignments.createAsgBtn", "Create Assignment")}</span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setIsUploadModalOpen(true)}
-              className="asg-btn asg-btn-primary"
-            >
-              <Upload size={16} />
-              <span>{t("assignments.uploadMatBtn", "Upload Study Material")}</span>
-            </button>
+          {portalMode === "faculty" && (
+            activeTab === "assignments" ? (
+              <button
+                type="button"
+                onClick={() => setIsCreateModalOpen(true)}
+                className="asg-btn asg-btn-primary"
+              >
+                <Plus size={16} />
+                <span>Create Assignment</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsUploadModalOpen(true)}
+                className="asg-btn asg-btn-primary"
+              >
+                <Upload size={16} />
+                <span>Upload Study Material</span>
+              </button>
+            )
           )}
         </div>
       </div>
@@ -312,7 +499,7 @@ export default function Assignments() {
           className={`asg-tab-btn ${activeTab === "assignments" ? "active" : ""}`}
         >
           <FileText size={15} />
-          <span>{t("assignments.assignmentsTab", "Assignments")} ({assignments.length})</span>
+          <span>Assignments ({assignments.length})</span>
         </button>
 
         <button
@@ -324,105 +511,241 @@ export default function Assignments() {
           className={`asg-tab-btn ${activeTab === "materials" ? "active" : ""}`}
         >
           <BookOpen size={15} />
-          <span>{t("assignments.materialsTab", "Study Material")} ({studyMaterials.length})</span>
+          <span>Study Material ({studyMaterials.length})</span>
         </button>
       </div>
 
-      {/* 3. Search Bar */}
-      <div className="asg-search-box">
-        <Search size={16} className="asg-search-icon" />
-        <input
-          type="text"
-          placeholder={
-            activeTab === "assignments"
-              ? "Search assignments by title or course code..."
-              : "Search study materials by title or topic..."
-          }
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="asg-search-input"
-        />
-        {searchQuery && (
-          <button
-            type="button"
-            onClick={() => setSearchQuery("")}
-            className="asg-clear-btn"
-          >
-            <X size={14} />
-          </button>
+      {/* 3. Search Bar & Student Filters */}
+      <div className="asg-search-filters-row">
+        <div className="asg-search-box">
+          <Search size={16} className="asg-search-icon" />
+          <input
+            type="text"
+            placeholder={
+              activeTab === "assignments"
+                ? "Search assignments by title or course code..."
+                : "Search study materials by title or topic..."
+            }
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="asg-search-input"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="asg-clear-btn"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+
+        {portalMode === "student" && activeTab === "assignments" && (
+          <div className="asg-student-filter-chips">
+            <button
+              type="button"
+              className={`filter-chip ${studentStatusFilter === "all" ? "active" : ""}`}
+              onClick={() => setStudentStatusFilter("all")}
+            >
+              All ({assignments.length})
+            </button>
+            <button
+              type="button"
+              className={`filter-chip ${studentStatusFilter === "pending" ? "active" : ""}`}
+              onClick={() => setStudentStatusFilter("pending")}
+            >
+              Pending Submission
+            </button>
+            <button
+              type="button"
+              className={`filter-chip ${studentStatusFilter === "submitted" ? "active" : ""}`}
+              onClick={() => setStudentStatusFilter("submitted")}
+            >
+              Submitted / Under Review
+            </button>
+            <button
+              type="button"
+              className={`filter-chip ${studentStatusFilter === "graded" ? "active" : ""}`}
+              onClick={() => setStudentStatusFilter("graded")}
+            >
+              Graded
+            </button>
+          </div>
         )}
       </div>
 
-      {/* ================= TAB 1: ASSIGNMENTS LIST ================= */}
+      {/* =======================================================
+          TAB 1: ASSIGNMENTS (STUDENT OR FACULTY VIEW)
+          ======================================================= */}
       {activeTab === "assignments" && (
-        <div className="asg-grid">
-          {filteredAssignments.length === 0 ? (
-            <div className="asg-empty-state">
-              <FileText size={36} className="asg-empty-icon" />
-              <h3>No assignments found</h3>
-              <p>Click "Create Assignment" to add coursework for your classes.</p>
-            </div>
-          ) : (
-            filteredAssignments.map((asg) => {
-              const totalSubs = asg.submissions?.length || 0;
-              const submittedCount =
-                asg.submissions?.filter((s) => s.status !== "Not Submitted").length || 0;
+        portalMode === "student" ? (
+          /* ---------------- STUDENT ASSIGNMENTS LISTING ---------------- */
+          <div className="asg-grid">
+            {studentAssignments.length === 0 ? (
+              <div className="asg-empty-state">
+                <FileText size={36} className="asg-empty-icon" />
+                <h3>No assignments found</h3>
+                <p>No coursework matches the selected filter status.</p>
+              </div>
+            ) : (
+              studentAssignments.map((asg) => {
+                const sub = getStudentSubmission(asg);
+                const isSubmitted = sub && sub.status !== "Not Submitted";
+                const isGraded = sub && sub.status === "Graded";
 
-              return (
-                <div key={asg.id} className="asg-card">
-                  <div className="asg-card-top">
-                    <span className="asg-card-class">{asg.classCode}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteAssignment(asg.id, asg.title)}
-                      className="asg-delete-icon-btn"
-                      title="Delete assignment"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-
-                  <h3 className="asg-card-title">{asg.title}</h3>
-                  <div className="asg-card-meta-line">{asg.className}</div>
-                  <p className="asg-card-desc">{asg.description}</p>
-
-                  <div className="asg-card-info-strip">
-                    <div className="asg-info-item">
-                      <Calendar size={13} />
-                      <span>Due: <strong>{asg.dueDate}</strong></span>
-                    </div>
-                    <div className="asg-info-item">
-                      <Clock size={13} />
-                      <span><strong>{asg.totalMarks} Marks</strong></span>
-                    </div>
-                  </div>
-
-                  <div className="asg-submission-progress">
-                    <div className="asg-progress-text">
-                      <span>Submissions: <strong>{submittedCount}</strong> / {totalSubs}</span>
-                      <span className="asg-pending-tag">
-                        {asg.pendingGrading > 0
-                          ? `${asg.pendingGrading} to evaluate`
-                          : "All evaluated"}
+                return (
+                  <div key={asg.id} className="asg-card student-asg-card">
+                    <div className="asg-card-top">
+                      <span className="asg-card-class">{asg.classCode}</span>
+                      <span
+                        className={`student-status-badge ${
+                          isGraded
+                            ? "status-badge-graded"
+                            : isSubmitted
+                            ? "status-badge-submitted"
+                            : "status-badge-pending"
+                        }`}
+                      >
+                        {isGraded
+                          ? "âœ“ Graded"
+                          : isSubmitted
+                          ? "â ³ Under Evaluation"
+                          : "â—  Pending Submission"}
                       </span>
                     </div>
-                  </div>
 
-                  <button
-                    type="button"
-                    onClick={() => handleOpenGradingModal(asg)}
-                    className="asg-btn asg-btn-primary full-width"
-                  >
-                    View Submissions &amp; Grade
-                  </button>
-                </div>
-              );
-            })
-          )}
-        </div>
+                    <h3 className="asg-card-title">{asg.title}</h3>
+                    <div className="asg-card-meta-line">{asg.className}</div>
+                    <p className="asg-card-desc">{asg.description}</p>
+
+                    <div className="asg-card-info-strip">
+                      <div className="asg-info-item">
+                        <Calendar size={13} />
+                        <span>Deadline: <strong>{asg.dueDate}</strong></span>
+                      </div>
+                      <div className="asg-info-item">
+                        <Clock size={13} />
+                        <span>Max Score: <strong>{asg.totalMarks} Marks</strong></span>
+                      </div>
+                    </div>
+
+                    {/* Evaluated Score & Feedback Box */}
+                    {isGraded && (
+                      <div className="student-graded-box">
+                        <div className="graded-score-row">
+                          <span className="graded-score-label">Evaluated Score:</span>
+                          <span className="graded-score-val font-bold">
+                            {sub.marks} / {asg.totalMarks} Marks ({Math.round((sub.marks / asg.totalMarks) * 100)}%)
+                          </span>
+                        </div>
+                        {sub.feedback && (
+                          <div className="graded-feedback-comment">
+                            <strong>Faculty Feedback:</strong> &ldquo;{sub.feedback}&rdquo;
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Submission Meta if Submitted */}
+                    {isSubmitted && !isGraded && (
+                      <div className="student-submitted-box">
+                        <span>Submitted File: <code>{sub.fileName}</code></span>
+                        <span className="submitted-time-text">â€¢ {sub.submittedAt}</span>
+                      </div>
+                    )}
+
+                    <div className="asg-card-footer-actions">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenStudentSubmit(asg)}
+                        className={`asg-btn ${isSubmitted ? "asg-btn-secondary" : "asg-btn-primary"} full-width`}
+                      >
+                        {isGraded
+                          ? "View Evaluation & Submission"
+                          : isSubmitted
+                          ? "Update / Re-submit Solution"
+                          : "Submit Solution Now"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        ) : (
+          /* ---------------- FACULTY ASSIGNMENTS LISTING ---------------- */
+          <div className="asg-grid">
+            {filteredAssignments.length === 0 ? (
+              <div className="asg-empty-state">
+                <FileText size={36} className="asg-empty-icon" />
+                <h3>No assignments found</h3>
+                <p>Click "Create Assignment" to add coursework for your classes.</p>
+              </div>
+            ) : (
+              filteredAssignments.map((asg) => {
+                const totalSubs = asg.submissions?.length || 0;
+                const submittedCount =
+                  asg.submissions?.filter((s) => s.status !== "Not Submitted").length || 0;
+
+                return (
+                  <div key={asg.id} className="asg-card">
+                    <div className="asg-card-top">
+                      <span className="asg-card-class">{asg.classCode}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteAssignment(asg.id, asg.title)}
+                        className="asg-delete-icon-btn"
+                        title="Delete assignment"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+
+                    <h3 className="asg-card-title">{asg.title}</h3>
+                    <div className="asg-card-meta-line">{asg.className}</div>
+                    <p className="asg-card-desc">{asg.description}</p>
+
+                    <div className="asg-card-info-strip">
+                      <div className="asg-info-item">
+                        <Calendar size={13} />
+                        <span>Due: <strong>{asg.dueDate}</strong></span>
+                      </div>
+                      <div className="asg-info-item">
+                        <Clock size={13} />
+                        <span><strong>{asg.totalMarks} Marks</strong></span>
+                      </div>
+                    </div>
+
+                    <div className="asg-submission-progress">
+                      <div className="asg-progress-text">
+                        <span>Submissions: <strong>{submittedCount}</strong> / {totalSubs}</span>
+                        <span className="asg-pending-tag">
+                          {asg.pendingGrading > 0
+                            ? `${asg.pendingGrading} to evaluate`
+                            : "All evaluated"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => handleOpenGradingModal(asg)}
+                      className="asg-btn asg-btn-primary full-width"
+                    >
+                      View Submissions &amp; Grade
+                    </button>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )
       )}
 
-      {/* ================= TAB 2: STUDY MATERIAL LIST ================= */}
+      {/* =======================================================
+          TAB 2: STUDY MATERIAL LIST
+          ======================================================= */}
       {activeTab === "materials" && (
         <div className="asg-grid">
           {filteredMaterials.length === 0 ? (
@@ -457,14 +780,16 @@ export default function Assignments() {
                     <Download size={14} />
                     <span>Download</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteMaterial(mat.id)}
-                    className="asg-delete-icon-btn"
-                    title="Delete"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  {portalMode === "faculty" && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteMaterial(mat.id)}
+                      className="asg-btn asg-btn-outline"
+                      title="Delete material"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  )}
                 </div>
               </div>
             ))
@@ -472,83 +797,334 @@ export default function Assignments() {
         </div>
       )}
 
-      {/* ================= MODAL: CREATE ASSIGNMENT ================= */}
-      {isCreateModalOpen && (
+      {/* =======================================================
+          MODAL 1: STUDENT SUBMISSION FORM
+          ======================================================= */}
+      {activeSubmitAsg && (
         <div className="asg-modal-overlay">
-          <div className="asg-modal-card">
+          <div className="asg-modal-card asg-modal-card-lg">
             <div className="asg-modal-header">
-              <h3 className="asg-modal-title">Create New Assignment</h3>
+              <div>
+                <span className="asg-card-class">{activeSubmitAsg.classCode}</span>
+                <h3 className="asg-modal-title">Submit Solution: {activeSubmitAsg.title}</h3>
+                <p className="asg-modal-subtitle">
+                  Due: {activeSubmitAsg.dueDate} â€¢ Max Score: {activeSubmitAsg.totalMarks} Marks
+                </p>
+              </div>
               <button
                 type="button"
-                onClick={() => setIsCreateModalOpen(false)}
-                className="asg-close-btn"
+                onClick={() => setActiveSubmitAsg(null)}
+                className="asg-modal-close-btn"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleCreateAssignment} className="asg-modal-form">
+            <div className="asg-modal-body">
+              {/* Instructions Box */}
+              <div className="student-asg-instructions-box">
+                <h4>Assignment Instructions &amp; Rubric:</h4>
+                <p>{activeSubmitAsg.description}</p>
+              </div>
+
+              {/* Existing Grade if evaluated */}
+              {(() => {
+                const sub = getStudentSubmission(activeSubmitAsg);
+                if (sub && sub.status === "Graded") {
+                  return (
+                    <div className="student-graded-alert">
+                      <CheckCircle2 size={18} />
+                      <div>
+                        <strong>Evaluated by Faculty:</strong> {sub.marks} / {activeSubmitAsg.totalMarks} Marks.
+                        {sub.feedback && <span> &ldquo;{sub.feedback}&rdquo;</span>}
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
+              {submissionError && (
+                <div className="form-error-alert" style={{ marginBottom: "1rem" }}>
+                  <AlertCircle size={15} />
+                  <span>{submissionError}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleConfirmStudentSubmission}>
+                <div className="asg-form-group">
+                  <label className="asg-label">Student Details</label>
+                  <input
+                    type="text"
+                    disabled
+                    value={`${currentStudent.name} (${currentStudent.rollNo}) â€¢ ${currentStudent.section}`}
+                    className="asg-input disabled-input"
+                  />
+                </div>
+
+                <div className="asg-form-group">
+                  <label className="asg-label">Attach Solution Document / Code Archive</label>
+                  <div className="file-upload-box">
+                    <input
+                      type="file"
+                      onChange={handleStudentFileSelect}
+                      id="student-file-input"
+                      className="hidden-file-input"
+                    />
+                    <label htmlFor="student-file-input" className="file-upload-label">
+                      <Paperclip size={16} />
+                      <span>{submissionFileName || "Choose PDF, ZIP, or code file..."}</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="asg-form-group">
+                  <label className="asg-label">Repository URL / Google Drive Solution Link (Optional)</label>
+                  <input
+                    type="url"
+                    placeholder="https://github.com/... or https://drive.google.com/..."
+                    value={submissionUrl}
+                    onChange={(e) => setSubmissionUrl(e.target.value)}
+                    className="asg-input"
+                  />
+                </div>
+
+                <div className="asg-form-group">
+                  <label className="asg-label">Solution Remarks &amp; Notes for Faculty</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Describe how your solution satisfies the assignment requirements..."
+                    value={submissionNotes}
+                    onChange={(e) => setSubmissionNotes(e.target.value)}
+                    className="asg-textarea"
+                  />
+                </div>
+
+                <div className="asg-modal-actions">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSubmitAsg(null)}
+                    className="asg-btn asg-btn-outline"
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="asg-btn asg-btn-primary">
+                    <Send size={15} />
+                    <span>Confirm &amp; Submit Solution</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =======================================================
+          MODAL 2: TEACHER GRADING SUBMISSIONS
+          ======================================================= */}
+      {activeGradingAsg && (
+        <div className="asg-modal-overlay">
+          <div className="asg-modal-card asg-modal-card-lg">
+            <div className="asg-modal-header">
+              <div>
+                <span className="asg-card-class">{activeGradingAsg.classCode}</span>
+                <h3 className="asg-modal-title">Submissions: {activeGradingAsg.title}</h3>
+                <p className="asg-modal-subtitle">
+                  Max Marks: {activeGradingAsg.totalMarks} â€¢ Due: {activeGradingAsg.dueDate}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveGradingAsg(null)}
+                className="asg-modal-close-btn"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="asg-modal-body">
+              {(!activeGradingAsg.submissions || activeGradingAsg.submissions.length === 0) ? (
+                <p className="asg-empty-subs">No submissions recorded for this assignment yet.</p>
+              ) : (
+                <div className="asg-submissions-list">
+                  {activeGradingAsg.submissions.map((sub) => {
+                    const gradeData = gradingInputs[sub.id] || { marks: "", feedback: "" };
+
+                    return (
+                      <div key={sub.id} className="asg-sub-row">
+                        <div className="asg-sub-student-col">
+                          <div className="asg-sub-name">{sub.studentName}</div>
+                          <div className="asg-sub-roll">{sub.rollNo}</div>
+                          <span
+                            className={`asg-sub-status-pill ${
+                              sub.status === "Graded"
+                                ? "status-graded"
+                                : sub.status === "Pending Review"
+                                ? "status-pending"
+                                : "status-none"
+                            }`}
+                          >
+                            {sub.status}
+                          </span>
+                        </div>
+
+                        <div className="asg-sub-file-col">
+                          {sub.fileName ? (
+                            <button
+                              type="button"
+                              onClick={() => showToast(`Opened submission "${sub.fileName}"`)}
+                              className="asg-sub-file-btn"
+                            >
+                              <Paperclip size={13} />
+                              <span>{sub.fileName}</span>
+                            </button>
+                          ) : (
+                            <span className="asg-no-file">No file submitted</span>
+                          )}
+                          {sub.submittedAt && (
+                            <span className="asg-sub-time">{sub.submittedAt}</span>
+                          )}
+                          {sub.solutionUrl && (
+                            <a
+                              href={sub.solutionUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="asg-sub-link"
+                            >
+                              View Solution Link
+                            </a>
+                          )}
+                        </div>
+
+                        <div className="asg-sub-grading-col">
+                          <div className="asg-grade-input-wrap">
+                            <input
+                              type="number"
+                              min="0"
+                              max={activeGradingAsg.totalMarks}
+                              placeholder="Score"
+                              value={gradeData.marks}
+                              onChange={(e) =>
+                                setGradingInputs((prev) => ({
+                                  ...prev,
+                                  [sub.id]: { ...prev[sub.id], marks: e.target.value }
+                                }))
+                              }
+                              className="asg-score-input"
+                            />
+                            <span className="asg-score-max">/ {activeGradingAsg.totalMarks}</span>
+                          </div>
+
+                          <input
+                            type="text"
+                            placeholder="Feedback comment..."
+                            value={gradeData.feedback}
+                            onChange={(e) =>
+                              setGradingInputs((prev) => ({
+                                ...prev,
+                                [sub.id]: { ...prev[sub.id], feedback: e.target.value }
+                              }))
+                            }
+                            className="asg-feedback-input"
+                          />
+
+                          <button
+                            type="button"
+                            onClick={() => handleSaveGrade(sub.id)}
+                            className="asg-save-grade-btn"
+                          >
+                            <Check size={14} />
+                            <span>Save Grade</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* =======================================================
+          MODAL 3: CREATE ASSIGNMENT (TEACHER)
+          ======================================================= */}
+      {isCreateModalOpen && (
+        <div className="asg-modal-overlay">
+          <div className="asg-modal-card">
+            <div className="asg-modal-header">
+              <h3 className="asg-modal-title">Create Coursework Assignment</h3>
+              <button
+                type="button"
+                onClick={() => setIsCreateModalOpen(false)}
+                className="asg-modal-close-btn"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateAssignment} className="asg-modal-body">
               <div className="asg-form-group">
-                <label>Assignment Title *</label>
+                <label className="asg-label">Assignment Title</label>
                 <input
                   type="text"
+                  required
+                  placeholder="e.g., Assignment 3: Red-Black Trees &amp; AVL Balancing"
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="e.g. Assignment 5: Graph Shortest Path Algorithms"
-                  required
                   className="asg-input"
                 />
               </div>
 
               <div className="asg-form-row">
                 <div className="asg-form-group flex-1">
-                  <label>Assigned Class *</label>
+                  <label className="asg-label">Target Class Section</label>
                   <select
                     value={newClassId}
                     onChange={(e) => setNewClassId(e.target.value)}
-                    className="asg-input"
+                    className="asg-select"
                   >
                     {assignedClassesData.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.code} — {c.name} ({c.section})
+                        {c.code} â€¢ {c.name} ({c.section})
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="asg-form-group flex-1">
-                  <label>Total Marks *</label>
+                  <label className="asg-label">Rubric Marks</label>
                   <input
                     type="number"
-                    min={10}
-                    max={100}
+                    min="10"
+                    max="100"
                     value={newMarks}
                     onChange={(e) => setNewMarks(e.target.value)}
-                    required
                     className="asg-input"
                   />
                 </div>
               </div>
 
               <div className="asg-form-group">
-                <label>Due Date *</label>
+                <label className="asg-label">Submission Deadline</label>
                 <input
                   type="date"
+                  required
                   value={newDueDate}
                   onChange={(e) => setNewDueDate(e.target.value)}
-                  required
                   className="asg-input"
                 />
               </div>
 
               <div className="asg-form-group">
-                <label>Instructions &amp; Problem Statement *</label>
+                <label className="asg-label">Instructions &amp; Evaluation Rubric</label>
                 <textarea
                   rows={4}
+                  required
+                  placeholder="Provide problem specifications, allowed libraries, formatting, and submission rules..."
                   value={newDescription}
                   onChange={(e) => setNewDescription(e.target.value)}
-                  placeholder="Explain the assignment specifications, requirements, and submission format..."
-                  required
                   className="asg-textarea"
                 />
               </div>
@@ -557,13 +1133,12 @@ export default function Assignments() {
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="asg-btn asg-btn-secondary"
+                  className="asg-btn asg-btn-outline"
                 >
                   Cancel
                 </button>
                 <button type="submit" className="asg-btn asg-btn-primary">
-                  <Plus size={16} />
-                  <span>Publish Assignment</span>
+                  Publish Assignment
                 </button>
               </div>
             </form>
@@ -571,213 +1146,90 @@ export default function Assignments() {
         </div>
       )}
 
-      {/* ================= MODAL: VIEW SUBMISSIONS & GRADE ================= */}
-      {activeGradingAsg && (
-        <div className="asg-modal-overlay">
-          <div className="asg-modal-card large">
-            <div className="asg-modal-header">
-              <div>
-                <h3 className="asg-modal-title">Submissions: {activeGradingAsg.title}</h3>
-                <span className="asg-modal-subtitle">
-                  {activeGradingAsg.className} • Total Marks: {activeGradingAsg.totalMarks}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveGradingAsg(null)}
-                className="asg-close-btn"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="asg-submissions-list">
-              {(activeGradingAsg.submissions || []).map((sub) => {
-                const currentGrade = gradingInputs[sub.id] || { marks: "", feedback: "" };
-                const isSubmitted = sub.status !== "Not Submitted";
-                const isGraded = sub.status === "Graded";
-
-                return (
-                  <div key={sub.id} className="asg-submission-row">
-                    <div className="asg-sub-header">
-                      <div>
-                        <strong>{sub.studentName}</strong>
-                        <code>{sub.rollNo}</code>
-                      </div>
-                      <span className={`asg-sub-badge ${isGraded ? "badge-graded" : isSubmitted ? "badge-pending" : "badge-missing"}`}>
-                        {isGraded ? `Graded (${sub.marks}/${activeGradingAsg.totalMarks})` : isSubmitted ? "Pending Review" : "Not Submitted"}
-                      </span>
-                    </div>
-
-                    {isSubmitted ? (
-                      <div className="asg-sub-body">
-                        <div className="asg-file-info">
-                          <Paperclip size={13} />
-                          <span>{sub.fileName || "Solution_File.pdf"}</span>
-                          <span className="asg-sub-time">Submitted: {sub.submittedAt}</span>
-                        </div>
-
-                        {/* Grade Form */}
-                        <div className="asg-grade-inputs">
-                          <div className="asg-score-group">
-                            <label>Marks:</label>
-                            <input
-                              type="number"
-                              min={0}
-                              max={activeGradingAsg.totalMarks}
-                              value={currentGrade.marks}
-                              onChange={(e) =>
-                                setGradingInputs((prev) => ({
-                                  ...prev,
-                                  [sub.id]: {
-                                    ...(prev[sub.id] || {}),
-                                    marks: e.target.value
-                                  }
-                                }))
-                              }
-                              placeholder="Score"
-                              className="asg-score-input"
-                            />
-                            <span>/ {activeGradingAsg.totalMarks}</span>
-                          </div>
-
-                          <div className="asg-feedback-group">
-                            <label>Feedback:</label>
-                            <input
-                              type="text"
-                              value={currentGrade.feedback}
-                              onChange={(e) =>
-                                setGradingInputs((prev) => ({
-                                  ...prev,
-                                  [sub.id]: {
-                                    ...(prev[sub.id] || {}),
-                                    feedback: e.target.value
-                                  }
-                                }))
-                              }
-                              placeholder="e.g. Good implementation, clean structure."
-                              className="asg-feedback-input"
-                            />
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => handleSaveGrade(sub.id)}
-                            className="asg-btn asg-btn-primary asg-btn-sm"
-                          >
-                            <Check size={14} />
-                            <span>{isGraded ? "Update" : "Save Grade"}</span>
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="asg-missing-note">
-                        <span>No files submitted by this student yet.</span>
-                        <button
-                          type="button"
-                          onClick={() => showToast(`Reminder sent to ${sub.studentName}`)}
-                          className="asg-btn asg-btn-secondary asg-btn-sm"
-                        >
-                          Send Reminder
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="asg-modal-actions">
-              <button
-                type="button"
-                onClick={() => setActiveGradingAsg(null)}
-                className="asg-btn asg-btn-secondary"
-              >
-                Close Submissions
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ================= MODAL: UPLOAD STUDY MATERIAL ================= */}
+      {/* =======================================================
+          MODAL 4: UPLOAD STUDY MATERIAL (TEACHER)
+          ======================================================= */}
       {isUploadModalOpen && (
         <div className="asg-modal-overlay">
           <div className="asg-modal-card">
             <div className="asg-modal-header">
-              <h3 className="asg-modal-title">Upload Study Material</h3>
+              <h3 className="asg-modal-title">Upload Verified Study Resource</h3>
               <button
                 type="button"
                 onClick={() => setIsUploadModalOpen(false)}
-                className="asg-close-btn"
+                className="asg-modal-close-btn"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleUploadMaterial} className="asg-modal-form">
+            <form onSubmit={handleUploadMaterial} className="asg-modal-body">
               <div className="asg-form-group">
-                <label>Material Title *</label>
+                <label className="asg-label">Material Title</label>
                 <input
                   type="text"
+                  required
+                  placeholder="e.g., Graph Algorithms Lecture Notes &amp; Proofs"
                   value={matTitle}
                   onChange={(e) => setMatTitle(e.target.value)}
-                  placeholder="e.g. Lecture Notes: Red-Black Tree Balancing & Rotations"
-                  required
                   className="asg-input"
                 />
               </div>
 
               <div className="asg-form-row">
                 <div className="asg-form-group flex-1">
-                  <label>Course *</label>
+                  <label className="asg-label">Target Class Section</label>
                   <select
                     value={matClassId}
                     onChange={(e) => setMatClassId(e.target.value)}
-                    className="asg-input"
+                    className="asg-select"
                   >
                     {assignedClassesData.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.code} — {c.name}
+                        {c.code} â€¢ {c.name} ({c.section})
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="asg-form-group flex-1">
-                  <label>Unit / Module *</label>
-                  <input
-                    type="text"
+                  <label className="asg-label">Syllabus Unit</label>
+                  <select
                     value={matUnit}
                     onChange={(e) => setMatUnit(e.target.value)}
-                    placeholder="e.g. Unit 3: Trees"
-                    required
-                    className="asg-input"
-                  />
+                    className="asg-select"
+                  >
+                    <option value="Unit 1">Unit 1: Foundations</option>
+                    <option value="Unit 2">Unit 2: Trees &amp; BST</option>
+                    <option value="Unit 3">Unit 3: Balanced Trees</option>
+                    <option value="Unit 4">Unit 4: Graph Algorithms</option>
+                    <option value="Unit 5">Unit 5: Hashing &amp; Heaps</option>
+                  </select>
                 </div>
               </div>
 
               <div className="asg-form-group">
-                <label>Resource Type *</label>
+                <label className="asg-label">Resource Type</label>
                 <select
                   value={matType}
                   onChange={(e) => setMatType(e.target.value)}
-                  className="asg-input"
+                  className="asg-select"
                 >
                   <option value="Lecture Slides">Lecture Slides (PDF)</option>
-                  <option value="Formula Sheet">Formula &amp; Cheat Sheet</option>
-                  <option value="Lab Guide">Lab Manual &amp; Practice Code</option>
-                  <option value="Notes">Faculty Handwritten Notes</option>
+                  <option value="Handwritten Notes">Handwritten Faculty Notes</option>
+                  <option value="Lab Guide">Lab Exercise Manual</option>
+                  <option value="Sample Code">Source Code Archive (ZIP)</option>
+                  <option value="Reference Sheet">Formula Reference Cheatsheet</option>
                 </select>
               </div>
 
               <div className="asg-form-group">
-                <label>Description (Optional)</label>
+                <label className="asg-label">Resource Overview (Optional)</label>
                 <textarea
                   rows={3}
+                  placeholder="Summary of topics covered, readings, or accompanying exercises..."
                   value={matDescription}
                   onChange={(e) => setMatDescription(e.target.value)}
-                  placeholder="Summary of formulas, theorems, and topics included..."
                   className="asg-textarea"
                 />
               </div>
@@ -786,13 +1238,12 @@ export default function Assignments() {
                 <button
                   type="button"
                   onClick={() => setIsUploadModalOpen(false)}
-                  className="asg-btn asg-btn-secondary"
+                  className="asg-btn asg-btn-outline"
                 >
                   Cancel
                 </button>
                 <button type="submit" className="asg-btn asg-btn-primary">
-                  <Upload size={16} />
-                  <span>Upload Resource</span>
+                  Publish Material
                 </button>
               </div>
             </form>

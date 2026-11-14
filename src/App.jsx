@@ -15,6 +15,8 @@ import LibraryPage from "./pages/Library/LibraryPage";
 import MyClassesPage from "./pages/Teacher/MyClassesPage";
 import AssignmentsPage from "./pages/Teacher/AssignmentsPage";
 import TeacherDashboardPage from "./pages/Teacher/TeacherDashboardPage";
+import LostFoundPage from "./pages/LostFoundPage";
+import AttendanceManagementPage from "./pages/AttendanceManagementPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 
 // Clean placeholder for other team members' modules in progress
@@ -127,23 +129,38 @@ function App() {
             <Route path="/my-classes" element={<Navigate to="/teacher/classes" replace />} />
             <Route path="/teacher/students" element={<Navigate to="/teacher/classes" replace />} />
 
+            {/* Faculty Coursework & Grading Portal */}
             <Route
               path="/teacher/assignments"
               element={
                 <ProtectedRoute requiredRole="Faculty">
-                  <AssignmentsPage />
+                  <AssignmentsPage initialMode="faculty" />
                 </ProtectedRoute>
               }
             />
-            <Route path="/assignments" element={<Navigate to="/teacher/assignments" replace />} />
 
-            {/* ================= TEAMMATE ROUTE PLACEHOLDERS ================= */}
-            {/* Aanvi: Lost & Found */}
+            {/* Student Coursework & Submissions Portal */}
             <Route
-              path="/lost-found"
-              element={<TeammateModulePlaceholder name="Lost & Found Hub" path="/lost-found" />}
+              path="/assignments"
+              element={
+                <ProtectedRoute>
+                  <AssignmentsPage initialMode="student" />
+                </ProtectedRoute>
+              }
             />
 
+            {/* ================= AANVI'S MODULES ================= */}
+            {/* Lost & Found Network */}
+            <Route
+              path="/lost-found"
+              element={
+                <ProtectedRoute>
+                  <LostFoundPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* ================= TEAMMATE ROUTE PLACEHOLDERS ================= */}
             {/* Aditi: Notes Repository & Group Study Hub */}
             <Route
               path="/notes"
@@ -169,7 +186,11 @@ function App() {
             />
             <Route
               path="/attendance-management"
-              element={<TeammateModulePlaceholder name="Attendance Management" path="/attendance-management" />}
+              element={
+                <ProtectedRoute requiredRole="Faculty">
+                  <AttendanceManagementPage />
+                </ProtectedRoute>
+              }
             />
             <Route path="/teacher/attendance" element={<Navigate to="/attendance-management" replace />} />
             <Route path="/teacher/attendance-management" element={<Navigate to="/attendance-management" replace />} />
