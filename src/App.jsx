@@ -19,6 +19,7 @@ import LostFoundPage from "./pages/LostFoundPage";
 import NotesPage from "./pages/NotesPage";
 import GroupStudyPage from "./pages/GroupStudy/GroupStudyPage";
 import AcademicPerformancePage from "./pages/AcademicPerformancePage";
+import ComplaintsPage from "./pages/ComplaintsPage";
 import AttendanceManagementPage from "./pages/AttendanceManagementPage";
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 
@@ -197,10 +198,14 @@ function App() {
             <Route path="/teacher/performance" element={<Navigate to="/academic-performance" replace />} />
 
             {/* ================= GUNGUN'S MODULES ================= */}
-            {/* Complaints Portal Placeholder (Wired in Step 4) */}
+            {/* Complaints Portal */}
             <Route
               path="/complaints"
-              element={<TeammateModulePlaceholder name="Complaints Portal" path="/complaints" />}
+              element={
+                <ProtectedRoute>
+                  <ComplaintsPage />
+                </ProtectedRoute>
+              }
             />
 
             {/* Attendance Management */}
