@@ -35,6 +35,7 @@ import {
   Image as ImageIcon
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import ThemeToggle from "../components/common/ThemeToggle";
 import "./Home.css";
 
 // Campus imagery assets for editorial hero composition
@@ -378,6 +379,7 @@ function HomePage() {
 
           {/* Navigation CTAs */}
           <div className="unisphere-nav-cta-group">
+            <ThemeToggle />
             {isAuthenticated ? (
               <>
                 <div
@@ -492,6 +494,9 @@ function HomePage() {
               </a>
             </nav>
             <div className="mobile-drawer-actions">
+              <div style={{ padding: "0.5rem 0", display: "flex", justifyContent: "flex-end" }}>
+                <ThemeToggle />
+              </div>
               {isAuthenticated ? (
                 <>
                   <div className="mobile-drawer-user-info">
