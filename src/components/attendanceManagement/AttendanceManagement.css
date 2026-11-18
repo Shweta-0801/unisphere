@@ -4,6 +4,32 @@
    Refined for First-Year B.Tech CSE Viva Presentation
    ========================================================================== */
 
+:root {
+  --unisphere-surface-white: #FAF6F0;
+  --unisphere-surface-card: #FAF6F0;
+  --unisphere-surface-bg: #F7F3EF;
+  --unisphere-border: #E5DFD9;
+  --unisphere-border-light: #EFE9E2;
+  --unisphere-text-dark: #241A1C;
+  --unisphere-text-muted: #73686D;
+  --unisphere-primary: #542D3A;
+  --unisphere-primary-light: #F5EAEF;
+  --unisphere-accent: #D8AEB9;
+}
+
+[data-theme="dark"] {
+  --unisphere-surface-white: #30252D;
+  --unisphere-surface-card: #30252D;
+  --unisphere-surface-bg: #201B20;
+  --unisphere-border: #41343D;
+  --unisphere-border-light: #382B35;
+  --unisphere-text-dark: #F2E8EB;
+  --unisphere-text-muted: #C0ADB5;
+  --unisphere-primary: #A45E77;
+  --unisphere-primary-light: #3D2B35;
+  --unisphere-accent: #D4A3B2;
+}
+
 /* ==========================================================================
    1. PAGE ROOT & GLOBAL VERTICAL SPACING (Compact & Contained)
    ========================================================================== */
@@ -1858,3 +1884,393 @@
   gap: 6px;
   margin-top: 0.35rem;
 }
+
+/* ==========================================================================
+   DARK THEME PALETTE FOR TEACHER ATTENDANCE MANAGEMENT MODULE
+   ========================================================================== */
+[data-theme="dark"] .tchr-subnav-container {
+  background: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .tchr-subnav-btn {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-subnav-btn:hover {
+  color: #F2E8EB;
+  background: rgba(164, 94, 119, 0.18);
+}
+
+[data-theme="dark"] .tchr-subnav-btn.active {
+  color: #F2E8EB;
+  background: #3D2B35;
+}
+
+[data-theme="dark"] .tchr-subnav-btn.active .tchr-subnav-badge {
+  background: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-subnav-badge {
+  background: #271F25;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-hero-card {
+  background: linear-gradient(135deg, #30252D 0%, #271F25 100%);
+  border-color: #41343D;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .tchr-hero-badge {
+  background: #25382B;
+  color: #68A878;
+  border-color: #395540;
+}
+
+[data-theme="dark"] .tchr-hero-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-hero-role {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-hero-subject-pill {
+  background: #271F25;
+  border-color: #41343D;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .tchr-class-chip {
+  background: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-class-chip:hover {
+  background: #382B35;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .tchr-class-chip.active {
+  background: #3D2B35;
+  border-color: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-stat-card {
+  background: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .tchr-stat-label {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-stat-value {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-stat-subtext,
+[data-theme="dark"] .tchr-stat-desc {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .icon-purple { background: #3D2B35; color: #D4A3B2; }
+[data-theme="dark"] .icon-blue { background: #232E3D; color: #7CA1C9; }
+[data-theme="dark"] .icon-teal { background: #213330; color: #6EA89D; }
+[data-theme="dark"] .icon-green { background: #25382B; color: #68A878; }
+[data-theme="dark"] .icon-rose { background: #3D2428; color: #E06C75; }
+
+[data-theme="dark"] .tchr-quick-actions-bar {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-actions-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-btn-secondary {
+  background: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-btn-secondary:hover {
+  background: #382B35;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .tchr-btn-outline {
+  border-color: #5A2B32;
+  color: #E06C75;
+}
+
+[data-theme="dark"] .tchr-btn-outline:hover {
+  background: #3D2428;
+}
+
+[data-theme="dark"] .tchr-section-block {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-block-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-block-subtitle {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-class-card {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-class-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-class-tag {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-metric-row {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-metric-val {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-progress-track {
+  background: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-lecture-item-card {
+  background: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-lec-date-badge {
+  background: #382B35;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-lec-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-lec-desc {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-section-heading {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-section-description {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-deck-card {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-deck-class-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-deck-sub-code {
+  background: #382B35;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .tchr-deck-subject {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-deck-stats-list {
+  background: #271F25;
+}
+
+[data-theme="dark"] .stat-item-lbl {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .stat-item-num {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-deck-btn-secondary {
+  background: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-deck-btn-secondary:hover {
+  background: #382B35;
+}
+
+[data-theme="dark"] .tchr-table-card-container {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-table-header {
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-table-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-table-subtitle {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-table-meta-bar {
+  background: #271F25;
+  border-bottom-color: #41343D;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-data-table thead th {
+  background: #271F25;
+  color: #D4A3B2;
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-data-table tbody tr {
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-data-table tbody tr:hover {
+  background: rgba(164, 94, 119, 0.12);
+}
+
+[data-theme="dark"] .tchr-data-table tbody td {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-roll-badge {
+  background: #382B35;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-avatar-circle {
+  background: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-student-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-student-section {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-cell-bold {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-class-pills-bar {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-pills-label {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-class-pill-btn {
+  background: #271F25;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-class-pill-btn:hover {
+  background: #382B35;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-class-pill-btn.active {
+  background: #3D2B35;
+  border-color: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-chart-card,
+[data-theme="dark"] .tchr-bracket-card,
+[data-theme="dark"] .tchr-attendee-card {
+  background: #30252D;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .bracket-title,
+[data-theme="dark"] .tchr-chart-title,
+[data-theme="dark"] .tchr-attendee-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .bracket-desc,
+[data-theme="dark"] .tchr-chart-sub,
+[data-theme="dark"] .tchr-attendee-sub {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-bar-track-wrap {
+  background: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-modal-card {
+  background: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .tchr-modal-header {
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .tchr-modal-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-modal-close-btn {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .tchr-modal-close-btn:hover {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-form-group label {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .tchr-form-input {
+  background: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .tchr-form-input:focus {
+  border-color: #A45E77;
+  outline: none;
+}
+
+[data-theme="dark"] .tchr-form-input.disabled {
+  background: #201B20;
+  color: #73686D;
+}
+
