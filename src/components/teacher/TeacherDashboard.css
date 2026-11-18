@@ -18,25 +18,25 @@
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  background-color: #FAF9F6;
-  border: 1px solid #D6D0C8;
+  background-color: #FAF6F0;
+  border: 1px solid #E5DFD9;
   border-radius: 14px;
   padding: 16px 22px;
-  box-shadow: 0 2px 6px rgba(33, 29, 26, 0.03);
+  box-shadow: 0 2px 6px rgba(84, 45, 58, 0.03);
 }
 
 .td-header-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.4rem;
   font-weight: 800;
-  color: #211D1A;
+  color: #241A1C;
   margin: 0;
 }
 
 .td-header-subtitle {
   font-size: 12px;
   font-weight: 600;
-  color: #8D857D;
+  color: #73686D;
   margin-top: 3px;
 }
 
@@ -45,7 +45,7 @@
   align-items: center;
   gap: 10px;
   background-color: #FAF6F0;
-  border: 1px solid #D6D0C8;
+  border: 1px solid #E5DFD9;
   border-radius: 10px;
   padding: 6px 12px;
 }
@@ -54,8 +54,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #3B302A;
-  color: #FAF9F6;
+  background-color: #542D3A;
+  color: #FAF6F0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -71,19 +71,19 @@
 .td-profile-name {
   font-size: 12.5px;
   font-weight: 700;
-  color: #211D1A;
+  color: #241A1C;
 }
 
 .td-profile-id {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10.5px;
-  color: #8D857D;
+  color: #73686D;
 }
 
 /* Welcome Card */
 .td-welcome-card {
-  background: linear-gradient(135deg, #3B302A 0%, #2A211C 100%);
-  color: #FAF9F6;
+  background: linear-gradient(135deg, #3D1F29 0%, #542D3A 100%);
+  color: #FAF6F0;
   border-radius: 16px;
   padding: 26px 28px;
   display: flex;
@@ -91,7 +91,7 @@
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
-  box-shadow: 0 8px 24px rgba(33, 29, 26, 0.12);
+  box-shadow: 0 8px 24px rgba(84, 45, 58, 0.12);
 }
 
 .td-welcome-left {
@@ -626,3 +626,282 @@
   color: #3B302A;
   transform: translateX(2px);
 }
+
+/* =============================================================================
+   DARK THEME PALETTE FOR TEACHER DASHBOARD
+   ============================================================================= */
+[data-theme="dark"] .td-header {
+  background-color: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .td-header-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-header-subtitle {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-profile-chip {
+  background-color: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .td-avatar {
+  background-color: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-profile-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-profile-id {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-welcome-card {
+  background: linear-gradient(135deg, #30252D 0%, #271F25 100%);
+  border: 1px solid #41343D;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="dark"] .td-welcome-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-welcome-desc {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-welcome-badge {
+  background-color: rgba(164, 94, 119, 0.2);
+  border-color: rgba(164, 94, 119, 0.4);
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-portal-switch-btn {
+  background-color: rgba(164, 94, 119, 0.2);
+  border-color: rgba(164, 94, 119, 0.35);
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-portal-switch-btn:hover {
+  background-color: rgba(164, 94, 119, 0.35);
+}
+
+[data-theme="dark"] .td-standing-metric-box {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .td-standing-val {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-standing-lbl {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-card-stat {
+  background-color: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .td-card-stat-label {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-card-stat-val {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-card-stat-meta {
+  color: #C0ADB5;
+  border-top-color: #41343D;
+}
+
+[data-theme="dark"] .icon-classes {
+  background-color: #3D2B35;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .icon-students {
+  background-color: #25382B;
+  color: #68A878;
+}
+
+[data-theme="dark"] .icon-eval {
+  background-color: #382E25;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .icon-attend {
+  background-color: #3D2428;
+  color: #E06C75;
+}
+
+[data-theme="dark"] .td-stat-tag {
+  background-color: #271F25;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .tag-success {
+  background-color: #25382B;
+  color: #68A878;
+}
+
+[data-theme="dark"] .tag-amber {
+  background-color: #382E25;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-panel-card {
+  background-color: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .td-panel-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-panel-subtitle {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-ghost-link-btn {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-ghost-link-btn:hover {
+  background-color: #271F25;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-schedule-item {
+  background-color: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .td-schedule-time-box {
+  background-color: #30252D;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-schedule-subject {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-schedule-code-badge {
+  background-color: #382B35;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-schedule-meta-row {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .pill-marked {
+  background-color: #25382B;
+  color: #68A878;
+}
+
+[data-theme="dark"] .pill-pending {
+  background-color: #382E25;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-btn-action {
+  background-color: #A45E77;
+  color: #F2E8EB;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .td-btn-action:hover {
+  background-color: #B8728B;
+}
+
+[data-theme="dark"] .td-alert-card {
+  background-color: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .td-alert-card.severity-danger {
+  border-color: #5A2B32;
+  background-color: #3D2428;
+}
+
+[data-theme="dark"] .td-alert-card.severity-warning {
+  border-color: #5C4528;
+  background-color: #382E25;
+}
+
+[data-theme="dark"] .td-alert-card.severity-info {
+  border-color: #41343D;
+  background-color: #271F25;
+}
+
+[data-theme="dark"] .severity-danger .td-alert-icon {
+  color: #E06C75;
+}
+
+[data-theme="dark"] .severity-warning .td-alert-icon {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .severity-info .td-alert-icon {
+  color: #A45E77;
+}
+
+[data-theme="dark"] .td-alert-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-alert-badge {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-alert-student {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .td-alert-detail {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-nav-module-tile {
+  background-color: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .td-nav-module-tile:hover {
+  background-color: #30252D;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .td-tile-icon-wrap {
+  background-color: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-tile-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .td-tile-desc {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-tile-arrow {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .td-nav-module-tile:hover .td-tile-arrow {
+  color: #F2E8EB;
+}
+
