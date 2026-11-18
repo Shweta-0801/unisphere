@@ -6,8 +6,8 @@
 
 .not-found-root {
   min-height: 100vh;
-  background-color: #EAE8E4;
-  color: #211D1A;
+  background-color: var(--bg-main, #F7F3EF);
+  color: var(--text-main, #241A1C);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   display: flex;
   flex-direction: column;
@@ -15,8 +15,8 @@
 
 .not-found-header {
   padding: 20px 32px;
-  background-color: #FAF9F6;
-  border-bottom: 1px solid #D6D0C8;
+  background-color: var(--bg-card, #FFFFFF);
+  border-bottom: 1px solid var(--border-main, #E5DFD9);
 }
 
 .not-found-brand {
@@ -61,12 +61,12 @@
 .not-found-card {
   max-width: 580px;
   width: 100%;
-  background-color: #FAF9F6;
-  border: 1px solid #D6D0C8;
+  background-color: var(--bg-card, #FFFFFF);
+  border: 1px solid var(--border-main, #E5DFD9);
   border-radius: 24px;
   padding: 48px 36px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(33, 29, 26, 0.06);
+  box-shadow: var(--shadow-lg);
 }
 
 .not-found-error-code {
@@ -134,4 +134,63 @@
 
 .not-found-btn-secondary:hover {
   background-color: #D8C9B9;
+}
+
+/* =============================================================================
+   DARK THEME OVERRIDES FOR 404 NOT FOUND
+   Deep Charcoal & Plum / Rose Velvet Institutional Palette
+   ============================================================================= */
+
+[data-theme="dark"] .not-found-root {
+  background-color: #201B20;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .not-found-header {
+  background-color: #271F25;
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .not-found-brand-text {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .not-found-card {
+  background-color: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .not-found-error-code {
+  color: #A45E77;
+}
+
+[data-theme="dark"] .not-found-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .not-found-desc {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .not-found-btn-primary {
+  background-color: #A45E77;
+  border-color: #A45E77;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .not-found-btn-primary:hover {
+  background-color: #B86E87;
+  border-color: #B86E87;
+}
+
+[data-theme="dark"] .not-found-btn-secondary {
+  background-color: #291F26;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .not-found-btn-secondary:hover {
+  background-color: #352932;
+  border-color: #A45E77;
 }
