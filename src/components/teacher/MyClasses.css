@@ -33,8 +33,8 @@
 
 /* 1. Header Card */
 .mc-header-card {
-  background-color: #FAF9F6;
-  border: 1px solid #D6D0C8;
+  background-color: #FAF6F0;
+  border: 1px solid #E5DFD9;
   border-radius: 14px;
   padding: 20px 24px;
   display: flex;
@@ -48,8 +48,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #EFEAE4;
-  color: #3B302A;
+  background-color: #F5EAEF;
+  color: #542D3A;
   border-radius: 9999px;
   padding: 3px 10px;
   font-size: 11px;
@@ -63,13 +63,13 @@
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.45rem;
   font-weight: 800;
-  color: #211D1A;
+  color: #241A1C;
   margin: 0 0 4px 0;
 }
 
 .mc-subtitle {
   font-size: 13px;
-  color: #8D857D;
+  color: #73686D;
   margin: 0;
   max-width: 680px;
   line-height: 1.5;
@@ -90,22 +90,22 @@
 }
 
 .mc-btn-primary {
-  background-color: #3B302A;
-  color: #FAF9F6;
+  background-color: #542D3A;
+  color: #FAF6F0;
 }
 
 .mc-btn-primary:hover {
-  background-color: #211D1A;
+  background-color: #3D1F29;
 }
 
 .mc-btn-secondary {
   background-color: #FAF6F0;
-  color: #3B302A;
-  border-color: #D6D0C8;
+  color: #542D3A;
+  border-color: #E5DFD9;
 }
 
 .mc-btn-secondary:hover {
-  background-color: #EFEAE4;
+  background-color: #F5EAEF;
 }
 
 .mc-btn-sm {
@@ -716,74 +716,98 @@
    ============================================================================= */
 
 [data-theme="dark"] .mc-header-card {
-  background-color: #1A1513;
-  border-color: #2E2724;
+  background-color: #30252D;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .mc-badge {
-  background-color: #261E1A;
-  color: #D8C9B9;
-  border: 1px solid #382E28;
+  background-color: #382B35;
+  color: #D4A3B2;
+  border: 1px solid #41343D;
 }
 
 [data-theme="dark"] .mc-title {
-  color: #FAF8F5;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .mc-subtitle {
-  color: #A89F96;
+  color: #C0ADB5;
 }
 
 [data-theme="dark"] .mc-stat-card {
-  background-color: #1C1715;
-  border-color: #2E2724;
+  background-color: #30252D;
+  border-color: #41343D;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] .mc-stat-label {
-  color: #A89F96;
+  color: #C0ADB5;
 }
 
 [data-theme="dark"] .mc-stat-val {
-  color: #FAF8F5;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .mc-filter-bar {
-  background-color: #1A1513;
-  border-color: #2E2724;
+  background-color: #30252D;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .mc-search-input,
 [data-theme="dark"] .mc-select {
-  background-color: #221B18;
-  border-color: #382E28;
-  color: #FAF8F5;
+  background-color: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .mc-search-input:focus,
+[data-theme="dark"] .mc-select:focus {
+  border-color: #A45E77;
 }
 
 [data-theme="dark"] .mc-table-card {
-  background-color: #1C1715;
-  border-color: #2E2724;
+  background-color: #30252D;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .mc-table-header th {
-  background-color: #1E1815;
-  color: #D8C9B9;
-  border-color: #2E2724;
+  background-color: #271F25;
+  color: #D4A3B2;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .mc-table-row td {
-  border-color: #261F1C;
-  color: #FAF8F5;
+  border-color: #41343D;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .mc-table-row:hover td {
-  background-color: #241D1A;
+  background-color: rgba(164, 94, 119, 0.15);
 }
 
 [data-theme="dark"] .mc-modal-content {
-  background-color: #1C1715;
-  border-color: #382E28;
+  background-color: #30252D;
+  border-color: #41343D;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .mc-btn-primary {
+  background-color: #A45E77;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .mc-btn-primary:hover {
+  background-color: #B8728B;
+}
+
+[data-theme="dark"] .mc-btn-secondary {
+  background-color: #271F25;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .mc-btn-secondary:hover {
+  background-color: #382B35;
 }
 
 /* Danger Actions & Remove Student Confirmation */
@@ -819,9 +843,9 @@
 }
 
 [data-theme="dark"] .mc-btn-danger {
-  background-color: rgba(140, 42, 62, 0.22);
-  color: #F8B4B4;
-  border-color: rgba(140, 42, 62, 0.45);
+  background-color: rgba(164, 94, 119, 0.22);
+  color: #F2E8EB;
+  border-color: rgba(164, 94, 119, 0.45);
 }
 
 [data-theme="dark"] .mc-btn-danger:hover {
@@ -830,8 +854,8 @@
 }
 
 [data-theme="dark"] .mc-btn-danger-sm {
-  color: #F8B4B4;
-  border-color: rgba(140, 42, 62, 0.4);
+  color: #E06C75;
+  border-color: rgba(224, 108, 117, 0.4);
 }
 
 [data-theme="dark"] .mc-btn-danger-sm:hover {
