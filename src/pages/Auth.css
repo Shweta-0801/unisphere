@@ -5,13 +5,13 @@
 
 .auth-page-root {
   min-height: 100vh;
-  background-color: #EAE8E4;
+  background-color: var(--bg-main, #F7F3EF);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
-  color: #211D1A;
+  color: var(--text-main, #241A1C);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -150,10 +150,10 @@
 }
 
 .auth-split-card {
-  background-color: #FAF9F6;
+  background-color: var(--bg-card, #FFFFFF);
   border-radius: 24px;
-  box-shadow: 0 20px 25px -5px rgba(33, 29, 26, 0.05), 0 8px 10px -6px rgba(33, 29, 26, 0.05);
-  border: 1px solid #D6D0C8;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-main, #E5DFD9);
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr;
@@ -167,7 +167,7 @@
 
 /* Left Showcase Panel */
 .auth-showcase-panel {
-  background: linear-gradient(135deg, #211D1A 0%, #3B302A 60%, #2A211C 100%);
+  background: linear-gradient(135deg, #3D1F29 0%, #542D3A 60%, #43222D 100%);
   padding: 32px;
   color: #FAF9F6;
   display: flex;
@@ -658,4 +658,133 @@
   font-size: 12px;
   color: #8D857D;
   border-top: 1px solid rgba(214, 208, 200, 0.6);
+}
+
+/* =============================================================================
+   DARK THEME OVERRIDES FOR AUTHENTICATION
+   Deep Charcoal & Plum / Rose Velvet Institutional Palette
+   ============================================================================= */
+
+[data-theme="dark"] .auth-page-root {
+  background-color: #201B20;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-split-card {
+  background-color: #30252D;
+  border-color: #41343D;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .auth-showcase-panel {
+  background: linear-gradient(135deg, #271F25 0%, #3D2D37 60%, #4D3845 100%);
+}
+
+[data-theme="dark"] .auth-form-panel {
+  background-color: #30252D;
+}
+
+[data-theme="dark"] .auth-role-header-banner {
+  background-color: #291F26;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .role-header-icon {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .role-header-text {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .role-switch-link {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .faculty-notice-box {
+  background-color: #291F26;
+  border-color: #41343D;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .faculty-notice-icon {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .auth-tabs-toggle {
+  background-color: #291F26;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .auth-tab-btn {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .auth-tab-btn:hover {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-tab-btn.active {
+  background-color: #A45E77;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .auth-input {
+  background-color: #291F26;
+  border-color: #4A3A46;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-input:focus {
+  background-color: #30252D;
+  border-color: #A45E77;
+  box-shadow: 0 0 0 3px rgba(164, 94, 119, 0.25);
+}
+
+[data-theme="dark"] .auth-input::placeholder {
+  color: #8C7B83;
+}
+
+[data-theme="dark"] .auth-label {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-forgot-link {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .auth-submit-btn {
+  background-color: #A45E77;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .auth-submit-btn:hover {
+  background-color: #B86E87;
+}
+
+[data-theme="dark"] .auth-info-card {
+  background-color: #291F26;
+  border-color: #41343D;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .auth-info-card strong {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-back-btn {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .auth-back-btn:hover {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-brand-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .auth-footer {
+  border-top-color: #41343D;
+  color: #C0ADB5;
 }
