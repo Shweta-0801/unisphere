@@ -112,9 +112,9 @@ function AddSubjectModal({ isOpen, onClose, onSave, subjectToEdit = null }) {
               gap: "0.5rem",
               padding: "0.75rem",
               fontSize: "0.8125rem",
-              color: "#9f1239",
-              background: "#fff1f2",
-              border: "1px solid #fecdd3",
+              color: "var(--att-danger-text)",
+              background: "var(--att-danger-light)",
+              border: "1px solid var(--att-danger-border)",
               borderRadius: "0.75rem"
             }}>
               <AlertCircle style={{ width: "1rem", height: "1rem", flexShrink: 0 }} />
