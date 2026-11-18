@@ -6,29 +6,29 @@
    ============================================================================= */
 
 :root {
-  --unisphere-bg-main: #EAE8E4;
-  --unisphere-card-dark: #3B302A;
-  --unisphere-warm-brown: #B7A594;
-  --unisphere-light-beige: #D8C9B9;
-  --unisphere-surface-white: #FAF9F6;
-  --unisphere-text-dark: #211D1A;
-  --unisphere-text-light: #FAF9F6;
-  --unisphere-text-muted: #8D857D;
-  --unisphere-border: #D6D0C8;
+  --unisphere-bg-main: #F7F3EF;
+  --unisphere-card-dark: #542D3A;
+  --unisphere-warm-brown: #542D3A;
+  --unisphere-light-beige: #EFE9E2;
+  --unisphere-surface-white: #FFFFFF;
+  --unisphere-text-dark: #241A1C;
+  --unisphere-text-light: #FFFFFF;
+  --unisphere-text-muted: #73686D;
+  --unisphere-border: #E5DFD9;
 
   /* Aliases for compatibility */
-  --unisphere-bg-secondary: #D8C9B9;
-  --unisphere-bg-card: #FAF9F6;
-  --unisphere-dark-brown: #3B302A;
-  --unisphere-dark-brown-hover: #2A211C;
-  --unisphere-taupe: #B7A594;
-  --unisphere-taupe-dark: #917F71;
-  --unisphere-main-text: #211D1A;
-  --unisphere-secondary-text: #8D857D;
-  --unisphere-border-neutral: #D6D0C8;
-  --unisphere-border-subtle: #E5E0D8;
-  --unisphere-accent-gold: #C2A278;
-  --unisphere-accent-sage: #4F7A5A;
+  --unisphere-bg-secondary: #FAF6F0;
+  --unisphere-bg-card: #FFFFFF;
+  --unisphere-dark-brown: #542D3A;
+  --unisphere-dark-brown-hover: #43222D;
+  --unisphere-taupe: #D8AEB9;
+  --unisphere-taupe-dark: #73686D;
+  --unisphere-main-text: #241A1C;
+  --unisphere-secondary-text: #73686D;
+  --unisphere-border-neutral: #E5DFD9;
+  --unisphere-border-subtle: #EFE9E2;
+  --unisphere-accent-gold: #C7A7B0;
+  --unisphere-accent-sage: #3E6B48;
   --unisphere-accent-crimson: #8C2A3E;
 
   --unisphere-font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
@@ -4495,4 +4495,184 @@ body.modal-open {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* =============================================================================
+   DARK THEME SYSTEM FOR UNISPHERE HOMEPAGE
+   Deep Charcoal & Plum / Rose Velvet Institutional Palette
+   ============================================================================= */
+
+[data-theme="dark"] {
+  --unisphere-bg-main: #201B20;
+  --unisphere-card-dark: #30252D;
+  --unisphere-warm-brown: #D4A3B2;
+  --unisphere-light-beige: #291F26;
+  --unisphere-surface-white: #30252D;
+  --unisphere-text-dark: #F2E8EB;
+  --unisphere-text-light: #201B20;
+  --unisphere-text-muted: #C0ADB5;
+  --unisphere-border: #41343D;
+
+  --unisphere-bg-secondary: #291F26;
+  --unisphere-bg-card: #30252D;
+  --unisphere-dark-brown: #A45E77;
+  --unisphere-dark-brown-hover: #B86E87;
+  --unisphere-taupe: #D4A3B2;
+  --unisphere-taupe-dark: #C0ADB5;
+  --unisphere-main-text: #F2E8EB;
+  --unisphere-secondary-text: #C0ADB5;
+  --unisphere-border-neutral: #41343D;
+  --unisphere-border-subtle: #362A33;
+}
+
+[data-theme="dark"] .unisphere-root {
+  background-color: #201B20;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .unisphere-ticker {
+  background-color: #271F25;
+  border-bottom-color: #41343D;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .ticker-text-primary {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .ticker-text-secondary {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .ticker-action-link {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .ticker-action-link:hover {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .unisphere-navbar {
+  background-color: rgba(39, 31, 37, 0.95);
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .brand-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .brand-name-serif {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .brand-sub {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .nav-item-link {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .nav-item-link:hover {
+  color: #F2E8EB;
+  background-color: #352932;
+}
+
+[data-theme="dark"] .nav-item-link.active {
+  color: #FFFFFF;
+  background-color: #A45E77;
+}
+
+[data-theme="dark"] .btn-nav-login {
+  color: #F2E8EB;
+  border-color: #41343D;
+  background-color: #291F26;
+}
+
+[data-theme="dark"] .btn-nav-login:hover {
+  background-color: #352932;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .btn-nav-primary {
+  background-color: #A45E77;
+  color: #FFFFFF;
+  border-color: #B86E87;
+}
+
+[data-theme="dark"] .btn-nav-primary:hover {
+  background-color: #B86E87;
+}
+
+[data-theme="dark"] .nav-user-badge {
+  background-color: #291F26;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .nav-user-name {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .nav-user-role-chip {
+  background-color: #3D2D37;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .editorial-lead-card,
+[data-theme="dark"] .announcement-card,
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .module-preview-panel,
+[data-theme="dark"] .academic-metric-card,
+[data-theme="dark"] .accordion-item,
+[data-theme="dark"] .role-card-item {
+  background-color: #30252D;
+  border-color: #41343D;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .feature-card:hover,
+[data-theme="dark"] .announcement-card:hover,
+[data-theme="dark"] .role-card-item:hover {
+  border-color: #A45E77;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .reference-hero-cta {
+  background: #30252D;
+  color: #F2E8EB;
+  border: 1px solid #41343D;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .reference-hero-cta:hover {
+  background: #382A34;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .unisphere-footer {
+  background-color: #1A151A;
+  border-top-color: #41343D;
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .footer-nav-link {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .footer-nav-link:hover {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .mobile-nav-drawer {
+  background-color: #271F25;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .mobile-nav-link {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .mobile-nav-link:hover {
+  background-color: #352932;
+  color: #F2E8EB;
 }
