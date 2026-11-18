@@ -270,7 +270,7 @@ function OverallStats({ totalClasses, attendedClasses, targetPercentage = 75 }) 
       {/* Smart Academic Advisor Banner */}
       <div className={`att-advisor-banner ${advisorType}`}>
         <div className="att-advisor-icon" style={{
-          background: "#ffffff",
+          background: "var(--att-surface)",
           color: advisorType === "safe" ? "var(--att-success)" : advisorType === "warning" ? "var(--att-accent)" : "var(--att-danger)",
           border: `1px solid ${advisorType === "safe" ? "var(--att-success-border)" : advisorType === "warning" ? "var(--att-warning-border)" : "var(--att-danger-border)"}`,
           width: "2.5rem",
