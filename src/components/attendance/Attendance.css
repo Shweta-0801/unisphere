@@ -5,54 +5,54 @@
    ========================================================================== */
 
 :root {
-  --att-primary: #3B302A;
-  --att-primary-hover: #211D1A;
-  --att-primary-light: #EFEAE4;
-  --att-primary-border: #D6D0C8;
-  --att-primary-gradient: linear-gradient(135deg, #211D1A 0%, #3B302A 50%, #4A3E36 100%);
-  --att-primary-glow: rgba(59, 48, 42, 0.16);
+  --att-primary: #542D3A;
+  --att-primary-hover: #43222D;
+  --att-primary-light: #F4ECEF;
+  --att-primary-border: #E5DFD9;
+  --att-primary-gradient: linear-gradient(135deg, #3D1F29 0%, #542D3A 50%, #6E3A4B 100%);
+  --att-primary-glow: rgba(84, 45, 58, 0.16);
 
-  --att-accent: #B7A594;
-  --att-accent-light: #D8C9B9;
-  --att-accent-subtle: #EAE8E4;
+  --att-accent: #D8AEB9;
+  --att-accent-light: #F7EDF0;
+  --att-accent-subtle: #FAF3F5;
 
-  --att-indigo-gradient: linear-gradient(135deg, #211D1A 0%, #3B302A 100%);
-  --att-emerald-gradient: linear-gradient(135deg, #3A5F44 0%, #4F7A5A 100%);
-  --att-rose-gradient: linear-gradient(135deg, #6B1E2D 0%, #8C2A3E 100%);
+  --att-indigo-gradient: linear-gradient(135deg, #3D1F29 0%, #542D3A 100%);
+  --att-emerald-gradient: linear-gradient(135deg, #2D4C35 0%, #3E6B48 100%);
+  --att-rose-gradient: linear-gradient(135deg, #611524 0%, #8C2A3E 100%);
 
-  --att-success: #4F7A5A;
-  --att-success-hover: #3A5F44;
-  --att-success-light: #EBF3ED;
-  --att-success-border: #C8DACD;
-  --att-success-text: #2D4C35;
+  --att-success: #3E6B48;
+  --att-success-hover: #2D4C35;
+  --att-success-light: #EDF5EF;
+  --att-success-border: #C2DEC8;
+  --att-success-text: #284E31;
 
   --att-danger: #8C2A3E;
-  --att-danger-hover: #6B1E2D;
-  --att-danger-light: #FAF0F0;
-  --att-danger-border: #ECCBCB;
-  --att-danger-text: #5A1623;
+  --att-danger-hover: #611524;
+  --att-danger-light: #FDF2F4;
+  --att-danger-border: #F3CAD1;
+  --att-danger-text: #611524;
 
-  --att-warning: #B7A594;
-  --att-warning-light: #FAF6F0;
-  --att-warning-border: #D8C9B9;
-  --att-warning-text: #73685F;
+  --att-warning: #94682A;
+  --att-warning-light: #FCF7EE;
+  --att-warning-border: #E8D5B8;
+  --att-warning-text: #634316;
 
-  --att-bg: #EAE8E4;
-  --att-surface: #FAF9F6;
-  --att-surface-subtle: #F2EFEA;
-  --att-surface-alt: #D8C9B9;
-  --att-border: #D6D0C8;
-  --att-border-subtle: #E5E0D8;
+  --att-bg: #F7F3EF;
+  --att-surface: #FFFFFF;
+  --att-surface-subtle: #FAF6F0;
+  --att-surface-alt: #F4ECEF;
+  --att-border: #E5DFD9;
+  --att-border-subtle: #EFE9E2;
 
-  --att-text-main: #211D1A;
-  --att-text-muted: #8D857D;
-  --att-text-subtle: #B7A594;
+  --att-text-main: #241A1C;
+  --att-text-muted: #73686D;
+  --att-text-subtle: #988D92;
 
-  --att-shadow-xs: 0 1px 2px rgba(33, 29, 26, 0.04);
-  --att-shadow-sm: 0 2px 4px rgba(33, 29, 26, 0.06);
-  --att-shadow-md: 0 6px 14px -2px rgba(33, 29, 26, 0.08), 0 2px 4px -1px rgba(33, 29, 26, 0.04);
-  --att-shadow-lg: 0 14px 28px -4px rgba(33, 29, 26, 0.1), 0 4px 8px -2px rgba(33, 29, 26, 0.05);
-  --att-shadow-xl: 0 24px 38px -6px rgba(33, 29, 26, 0.12), 0 8px 16px -4px rgba(33, 29, 26, 0.06);
+  --att-shadow-xs: 0 1px 2px rgba(84, 45, 58, 0.04);
+  --att-shadow-sm: 0 2px 4px rgba(84, 45, 58, 0.06);
+  --att-shadow-md: 0 6px 14px -2px rgba(84, 45, 58, 0.08), 0 2px 4px -1px rgba(84, 45, 58, 0.04);
+  --att-shadow-lg: 0 14px 28px -4px rgba(84, 45, 58, 0.1), 0 4px 8px -2px rgba(84, 45, 58, 0.05);
+  --att-shadow-xl: 0 24px 38px -6px rgba(84, 45, 58, 0.12), 0 8px 16px -4px rgba(84, 45, 58, 0.06);
 
   --att-radius-xs: 6px;
   --att-radius-sm: 10px;
@@ -87,7 +87,7 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--bg-header, rgba(247, 243, 239, 0.95));
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--att-border);
@@ -306,7 +306,7 @@
 
 .att-target-select option {
   color: var(--att-text-main);
-  background: #ffffff;
+  background: var(--att-surface);
 }
 
 .att-btn-primary-white {
@@ -1241,7 +1241,7 @@
 }
 
 .att-cal-nav-arrow:hover {
-  background: #ffffff;
+  background: var(--att-surface);
   color: var(--att-text-main);
 }
 
@@ -1396,7 +1396,7 @@
 }
 
 .att-register-subject-item:hover {
-  background: #ffffff;
+  background: var(--att-surface);
   box-shadow: var(--att-shadow-sm);
 }
 
@@ -1412,7 +1412,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   border: 1px solid var(--att-border);
-  background: #ffffff;
+  background: var(--att-surface);
   color: var(--att-text-muted);
   display: inline-flex;
   align-items: center;
@@ -1475,7 +1475,7 @@
 
 .att-form-control:focus {
   border-color: var(--att-primary);
-  background: #ffffff;
+  background: var(--att-surface);
   box-shadow: 0 0 0 3px var(--att-primary-glow);
 }
 
@@ -1520,11 +1520,11 @@
 .att-modal-window {
   width: 100%;
   max-width: 32rem;
-  background: #ffffff;
+  background: var(--att-surface);
   border-radius: var(--att-radius-xl);
   overflow: hidden;
   box-shadow: var(--att-shadow-xl);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--att-border);
   animation: attSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1728,206 +1728,207 @@
 
 /* ==========================================================================
    DARK THEME PALETTE OVERRIDES FOR ATTENDANCE MODULE
+   Luxury Deep Charcoal & Plum / Rose Velvet Institutional Aesthetic
    ========================================================================== */
 
 [data-theme="dark"] {
-  --att-primary: #C4B3A2;
-  --att-primary-hover: #D8C9B9;
-  --att-primary-light: #2A211D;
-  --att-primary-border: #3A302A;
-  --att-primary-gradient: linear-gradient(135deg, #1C1513 0%, #2E231E 50%, #251D18 100%);
-  --att-primary-glow: rgba(196, 179, 162, 0.16);
+  --att-primary: #A45E77;
+  --att-primary-hover: #B86E87;
+  --att-primary-light: #3D2D37;
+  --att-primary-border: #41343D;
+  --att-primary-gradient: linear-gradient(135deg, #271F25 0%, #3D2D37 50%, #4D3845 100%);
+  --att-primary-glow: rgba(164, 94, 119, 0.22);
 
-  --att-accent: #C4B3A2;
-  --att-accent-light: #332822;
-  --att-accent-subtle: #1F1916;
+  --att-accent: #D4A3B2;
+  --att-accent-light: #3D2D37;
+  --att-accent-subtle: #291F26;
 
-  --att-indigo-gradient: linear-gradient(135deg, #1A1412 0%, #2A201B 100%);
-  --att-emerald-gradient: linear-gradient(135deg, #2D4C35 0%, #3A5F44 100%);
-  --att-rose-gradient: linear-gradient(135deg, #5A1623 0%, #6B1E2D 100%);
+  --att-indigo-gradient: linear-gradient(135deg, #271F25 0%, #352932 100%);
+  --att-emerald-gradient: linear-gradient(135deg, #2D4C35 0%, #3E6B48 100%);
+  --att-rose-gradient: linear-gradient(135deg, #611524 0%, #8C2A3E 100%);
 
-  --att-success: #78B587;
-  --att-success-hover: #8EC89C;
-  --att-success-light: rgba(79, 122, 90, 0.2);
-  --att-success-border: rgba(120, 181, 135, 0.35);
-  --att-success-text: #A8DEB4;
+  --att-success: #67A875;
+  --att-success-hover: #7DBB8B;
+  --att-success-light: rgba(62, 107, 72, 0.22);
+  --att-success-border: rgba(103, 168, 117, 0.35);
+  --att-success-text: #96CCA1;
 
   --att-danger: #E57388;
   --att-danger-hover: #F08E9F;
-  --att-danger-light: rgba(140, 42, 62, 0.22);
-  --att-danger-border: rgba(229, 115, 136, 0.35);
-  --att-danger-text: #F8B4C0;
+  --att-danger-light: rgba(140, 42, 62, 0.24);
+  --att-danger-border: rgba(229, 115, 136, 0.38);
+  --att-danger-text: #F5A3B2;
 
-  --att-warning: #D8C9B9;
-  --att-warning-light: rgba(183, 165, 148, 0.18);
-  --att-warning-border: rgba(216, 201, 185, 0.3);
-  --att-warning-text: #FAF8F5;
+  --att-warning: #D9A85B;
+  --att-warning-light: rgba(148, 104, 42, 0.22);
+  --att-warning-border: rgba(217, 168, 91, 0.35);
+  --att-warning-text: #F0C988;
 
-  --att-bg: #141110;
-  --att-surface: #1C1715;
-  --att-surface-subtle: #221B18;
-  --att-surface-alt: #2A221E;
-  --att-border: #2E2724;
-  --att-border-subtle: #261F1C;
+  --att-bg: #201B20;
+  --att-surface: #30252D;
+  --att-surface-subtle: #291F26;
+  --att-surface-alt: #382A34;
+  --att-border: #41343D;
+  --att-border-subtle: #362A33;
 
-  --att-text-main: #FAF8F5;
-  --att-text-muted: #A89F96;
-  --att-text-subtle: #7E736B;
+  --att-text-main: #F2E8EB;
+  --att-text-muted: #C0ADB5;
+  --att-text-subtle: #9E8C94;
 }
 
 [data-theme="dark"] .att-header-panel {
-  background: linear-gradient(135deg, #1C1513 0%, #2A211D 50%, #221915 100%);
-  border-color: #382E28;
+  background: linear-gradient(135deg, #271F25 0%, #3A2A34 50%, #30232B 100%);
+  border-color: #41343D;
   box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] .att-header-desc {
-  color: #C8BAAC;
+  color: #C0ADB5;
 }
 
 [data-theme="dark"] .att-pill-badge.normal {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.15);
-  color: #D8C9B9;
+  color: #D4A3B2;
 }
 
 [data-theme="dark"] .att-target-select {
-  background-color: #241C1A;
-  border-color: #382E28;
-  color: #FAF8F5;
+  background-color: #291F26;
+  border-color: #41343D;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-target-select option {
-  background: #201A18;
-  color: #FAF8F5;
+  background: #291F26;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-btn-primary-white {
-  background: #3B2E28;
-  color: #FAF8F5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  background: #A45E77;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(164, 94, 119, 0.35);
 }
 
 [data-theme="dark"] .att-btn-primary-white:hover {
-  background: #4A3A33;
+  background: #B86E87;
 }
 
 [data-theme="dark"] .att-nav-bar {
-  background-color: #1A1513;
-  border-color: #2E2724;
+  background-color: #271F25;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .att-nav-tab {
-  color: #A89F96;
+  color: #C0ADB5;
 }
 
 [data-theme="dark"] .att-nav-tab:hover {
-  background-color: #241C1A;
-  color: #FAF8F5;
+  background-color: #352932;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-nav-tab.active {
-  background-color: #2C221D;
-  color: #FAF8F5;
+  background-color: #30252D;
+  color: #F2E8EB;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] .att-metric-card-clean,
 [data-theme="dark"] .att-card {
-  background-color: #1C1715;
-  border-color: #2E2724;
+  background-color: #30252D;
+  border-color: #41343D;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 [data-theme="dark"] .att-card:hover {
-  border-color: #4A3C34;
+  border-color: #A45E77;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="dark"] .att-card-subj-name {
-  color: #FAF8F5;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-dropdown-menu {
-  background-color: #1E1815;
-  border-color: #382E28;
+  background-color: #30252D;
+  border-color: #41343D;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
 }
 
 [data-theme="dark"] .att-dropdown-item {
-  color: #FAF8F5;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-dropdown-item:hover {
-  background-color: #28201C;
+  background-color: #3D2D37;
 }
 
 [data-theme="dark"] .att-cal-nav-arrow {
-  background-color: #221B18;
-  border-color: #382E28;
-  color: #FAF8F5;
+  background-color: #291F26;
+  border-color: #41343D;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-cal-nav-arrow:hover {
-  background: #2E2420;
-  color: #FAF8F5;
+  background: #352932;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-register-subject-item:hover {
-  background: #241D1A;
+  background: #382A34;
 }
 
 [data-theme="dark"] .att-toggle-btn {
-  background: #221B18;
-  border-color: #382E28;
-  color: #C8BAAC;
+  background: #291F26;
+  border-color: #41343D;
+  color: #C0ADB5;
 }
 
 [data-theme="dark"] .att-toggle-btn:hover {
-  background: #2C231F;
-  color: #FAF8F5;
+  background: #352932;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-form-control {
-  background-color: #221B18;
-  border-color: #3A312C;
-  color: #FAF8F5;
+  background-color: #291F26;
+  border-color: #4A3A46;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-form-control:focus {
-  background: #28201D;
-  border-color: #C4B3A2;
+  background: #30252D;
+  border-color: #A45E77;
 }
 
 [data-theme="dark"] .att-modal-window {
-  background: #1C1715;
-  border-color: #382E28;
+  background: #30252D;
+  border-color: #41343D;
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
 }
 
 [data-theme="dark"] .att-modal-body {
-  background: #1C1715;
-  color: #FAF8F5;
+  background: #30252D;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-quick-session-bar {
-  background-color: #221B18;
-  border-color: #382E28;
+  background-color: #291F26;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .att-table-header th {
-  background-color: #1E1815;
-  color: #D8C9B9;
-  border-color: #2E2724;
+  background-color: #271F25;
+  color: #D4A3B2;
+  border-color: #41343D;
 }
 
 [data-theme="dark"] .att-table-row td {
-  border-color: #261F1C;
-  color: #FAF8F5;
+  border-color: #362A33;
+  color: #F2E8EB;
 }
 
 [data-theme="dark"] .att-table-row:hover td {
-  background-color: #241C1A;
+  background-color: #352932;
 }
 
 .att-advice-status-tag {
