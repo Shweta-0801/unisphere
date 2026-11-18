@@ -18,10 +18,11 @@ export function ThemeProvider({ children }) {
     }
   });
 
-  // 2. Apply data-theme attribute on <html> element on state change
+  // 2. Apply data-theme attribute and color-scheme on <html> element on state change
   useEffect(() => {
     try {
       document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.style.colorScheme = theme;
       localStorage.setItem("unisphere_theme", theme);
     } catch (err) {
       console.warn("Unable to save theme to localStorage", err);
