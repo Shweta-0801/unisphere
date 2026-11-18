@@ -6,16 +6,16 @@
 
 .role-selection-root {
   min-height: 100vh;
-  background-color: #EAE8E4;
-  color: #211D1A;
+  background-color: var(--bg-main, #F7F3EF);
+  color: var(--text-main, #241A1C);
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   display: flex;
   flex-direction: column;
 }
 
 .role-selection-header {
-  background-color: #FAF9F6;
-  border-bottom: 1px solid #D6D0C8;
+  background-color: var(--bg-card, #FFFFFF);
+  border-bottom: 1px solid var(--border-main, #E5DFD9);
   padding: 18px 0;
 }
 
@@ -157,13 +157,13 @@
 }
 
 .role-card {
-  background-color: #FAF9F6;
+  background-color: var(--bg-card, #FFFFFF);
   border-radius: 24px;
-  border: 1px solid #D6D0C8;
+  border: 1px solid var(--border-main, #E5DFD9);
   padding: 38px 32px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 6px 20px rgba(33, 29, 26, 0.05);
+  box-shadow: 0 6px 20px rgba(84, 45, 58, 0.05);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -344,4 +344,109 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
+}
+
+/* =============================================================================
+   DARK THEME OVERRIDES FOR ROLE SELECTION
+   Deep Charcoal & Plum / Rose Velvet Institutional Palette
+   ============================================================================= */
+
+[data-theme="dark"] .role-selection-root {
+  background-color: #201B20;
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .role-selection-header {
+  background-color: #271F25;
+  border-bottom-color: #41343D;
+}
+
+[data-theme="dark"] .role-brand-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .role-brand-title-accent {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .role-brand-sub {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .role-btn-back-home {
+  color: #C0ADB5;
+  border-color: #41343D;
+}
+
+[data-theme="dark"] .role-btn-back-home:hover {
+  background-color: #352932;
+  color: #F2E8EB;
+  border-color: #A45E77;
+}
+
+[data-theme="dark"] .role-eyebrow {
+  background-color: #3D2D37;
+  border-color: #4A3A46;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .role-eyebrow-icon {
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .role-heading {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .role-subheading {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .role-card {
+  background-color: #30252D;
+  border-color: #41343D;
+  color: #F2E8EB;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .role-card:hover {
+  border-color: #A45E77;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .role-card-badge {
+  background-color: #3D2D37;
+  color: #D4A3B2;
+  border-color: #4A3A46;
+}
+
+[data-theme="dark"] .role-icon-halo {
+  background-color: #3D2D37;
+  color: #D4A3B2;
+}
+
+[data-theme="dark"] .role-title {
+  color: #F2E8EB;
+}
+
+[data-theme="dark"] .role-desc {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .role-feature-item {
+  color: #C0ADB5;
+}
+
+[data-theme="dark"] .role-btn-primary {
+  background-color: #A45E77;
+  color: #FFFFFF;
+}
+
+[data-theme="dark"] .role-btn-primary:hover {
+  background-color: #B86E87;
+}
+
+[data-theme="dark"] .role-phase-note,
+[data-theme="dark"] .role-footer-help {
+  color: #9E8C94;
 }
