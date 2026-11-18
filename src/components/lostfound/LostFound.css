@@ -1,35 +1,35 @@
 :root {
-  --color-accent-taupe: #B8A08A;
-  --color-accent-light: #D8CBBE;
+  --color-accent-taupe: #D8AEB9;
+  --color-accent-light: #EFE9E2;
 
   /* Light Mode Palette */
-  --bg-page: #F8F3EA;
-  --bg-card: #FFFDF8;
+  --bg-page: #F7F3EF;
+  --bg-card: #FAF6F0;
   --bg-card-subtle: #FAF6F0;
-  --bg-input: #FFFDF8;
+  --bg-input: #FFFFFF;
 
-  --color-primary: #6B1E2D;          /* Muted deep blue */
-  --color-primary-hover: #48121E;
-  --color-primary-light: #F8F3EA;
+  --color-primary: #542D3A;          /* Deep burgundy */
+  --color-primary-hover: #3D1F29;
+  --color-primary-light: #F5EAEF;
 
-  --color-success: #4F7A5A;          /* Soft academic green */
-  --color-success-hover: #3A5E44;
-  --color-success-light: #F0F6F2;
+  --color-success: #3E6B48;          /* Soft academic green */
+  --color-success-hover: #2F5338;
+  --color-success-light: #EBF3ED;
 
-  --color-danger: #A63D40;           /* Controlled red (Lost items & errors only) */
-  --color-danger-light: #FDF2F2;
-  --color-danger-border: #EBC8C9;
+  --color-danger: #8C2A3E;           /* Burgundy red */
+  --color-danger-light: #FBEBED;
+  --color-danger-border: #ECCBCB;
 
-  --text-main: #241A1C;              /* Dark charcoal */
-  --text-muted: #75666A;             /* Soft grey */
-  --text-inverse: #FFFDF8;
+  --text-main: #241A1C;              /* Deep charcoal/burgundy */
+  --text-muted: #73686D;             /* Soft grey */
+  --text-inverse: #FAF6F0;
 
-  --border-color: #E5DCD4;          
-  --border-subtle: #EFE8DC;
+  --border-color: #E5DFD9;          
+  --border-subtle: #EFE9E2;
 
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
+  --shadow-sm: 0 1px 2px rgba(84, 45, 58, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(84, 45, 58, 0.06), 0 2px 4px -2px rgba(84, 45, 58, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(84, 45, 58, 0.08), 0 4px 6px -4px rgba(84, 45, 58, 0.03);
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -42,30 +42,34 @@
 }
 
 
+[data-theme="dark"],
 .dark-theme {
-  --bg-page: #241A1C;               /* Deep slate dark background */
-  --bg-card: #241A1C;               /* Slightly lighter dark card */
-  --bg-card-subtle: #2B141A;
-  --bg-input: #2B141A;
+  --bg-page: #201B20;               /* Deep charcoal */
+  --bg-card: #30252D;               /* Slightly lighter charcoal/plum */
+  --bg-card-subtle: #271F25;
+  --bg-input: #271F25;
 
-  --color-primary: #6B1E2D;          /* Recognizable muted blue in dark mode */
-  --color-primary-hover: #B8A08A;
-  --color-primary-light: #351019;
+  --color-primary: #A45E77;          /* Muted burgundy/rose */
+  --color-primary-hover: #B8728B;
+  --color-primary-light: #3D2B35;
 
-  --color-success: #4F7A5A;          /* Soft recognizable green in dark mode */
-  --color-success-hover: #4F7A5A;
-  --color-success-light: #27422E;
+  --color-success: #68A878;          /* Muted soft green */
+  --color-success-hover: #7BB88A;
+  --color-success-light: #25382B;
 
-  --color-danger: #A63D40;
-  --color-danger-light: #351019;
-  --color-danger-border: #48121E;
+  --color-danger: #E06C75;
+  --color-danger-light: #3D2428;
+  --color-danger-border: #5A2B32;
 
-  --text-main: #FAF6F0;              /* Light crisp readable text */
-  --text-muted: #9C8E92;             /* Muted dark mode grey */
-  --text-inverse: #241A1C;
+  --color-accent-taupe: #D4A3B2;
+  --color-accent-light: #41343D;
 
-  --border-color: #48121E;
-  --border-subtle: #243042;
+  --text-main: #F2E8EB;              /* Soft white */
+  --text-muted: #C0ADB5;             /* Light grey */
+  --text-inverse: #201B20;
+
+  --border-color: #41343D;
+  --border-subtle: #382B35;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35);
@@ -883,8 +887,9 @@ input, select, textarea {
   border: 1px solid var(--border-color);
 }
 
+[data-theme="dark"] .campus-map-canvas,
 .dark-theme .campus-map-canvas {
-  background-color: #152220; /* Dark muted green lawn */
+  background-color: #1a221f; /* Dark muted green lawn */
 }
 
 /* Pathways & Plaza */
@@ -894,8 +899,9 @@ input, select, textarea {
   pointer-events: none;
 }
 
+[data-theme="dark"] .map-pathway,
 .dark-theme .map-pathway {
-  background-color: #1e312d;
+  background-color: #273631;
 }
 
 .path-horizontal {
@@ -931,10 +937,11 @@ input, select, textarea {
   pointer-events: none;
 }
 
+[data-theme="dark"] .map-central-plaza,
 .dark-theme .map-central-plaza {
-  background-color: #233a35;
-  border-color: #2f4f48;
-  color: #7da59a;
+  background-color: #273832;
+  border-color: #39554c;
+  color: #92b8ad;
 }
 
 /* Campus Buildings */
